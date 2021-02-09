@@ -1,0 +1,7 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "xinke:block/blade_crop_1"
+    }
+}
+

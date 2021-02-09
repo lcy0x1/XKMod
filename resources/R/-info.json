@@ -1,0 +1,22 @@
+{
+    "": {
+        "merge": {
+            "": [
+                {
+                    "-name": "xinke_steel_ingot_to_block",
+                    "i": "xinke:xinke_steel_ingot",
+                    "r": "xinke:xinke_steel_block"
+                }
+            ]
+        },
+        "single": {
+            "": [
+                {
+                    "-name": "xinke_steel_block_to_ingot",
+                    "i": "xinke:xinke_steel_block",
+                    "r": "xinke:xinke_steel_ingot"
+                }
+            ]
+        }
+    }
+}

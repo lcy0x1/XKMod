@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "age=0": { "model": "xinke:block/^_0" },
+        "age=1": { "model": "xinke:block/^_0" },
+        "age=2": { "model": "xinke:block/^_1" },
+        "age=3": { "model": "xinke:block/^_1" },
+        "age=4": { "model": "xinke:block/^_2" },
+        "age=5": { "model": "xinke:block/^_2" },
+        "age=6": { "model": "xinke:block/^_2" },
+        "age=7": { "model": "xinke:block/^_3" }
+    }
+}

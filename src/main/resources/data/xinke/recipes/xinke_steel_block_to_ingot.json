@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "xinke:xinke_steel_block"
+        }
+    ],
+    "result": {
+        "item": "xinke:xinke_steel_ingot",
+        "count": 9
+    }
+}
+

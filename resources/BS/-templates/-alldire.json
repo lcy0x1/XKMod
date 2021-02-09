@@ -1,0 +1,27 @@
+{
+    "variants": {
+      "facing=north": {
+        "model": "xinke:block/^"
+      },
+      "facing=east": {
+        "model": "xinke:block/^",
+        "y": 90
+      },
+      "facing=south": {
+        "model": "xinke:block/^",
+        "y": 180
+      },
+      "facing=west": {
+        "model": "xinke:block/^",
+        "y": 270
+      },
+      "facing=up": {
+        "model": "xinke:block/^",
+        "x": 270
+      },
+      "facing=down": {
+        "model": "xinke:block/^",
+        "x": 90
+      }
+    }
+  }

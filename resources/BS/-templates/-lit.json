@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "lit=true": {
+            "model": "xinke:block/^_a"
+        },
+        "lit=false": {
+            "model": "xinke:block/^"
+        }
+    }
+}
