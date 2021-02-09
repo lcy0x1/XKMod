@@ -1,0 +1,15 @@
+{
+    "group":"xinke:blade_crop",
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "xinke:xinke_steel_nugget"
+        },
+        {
+            "item": "minecraft:carrot"
+        }
+    ],
+    "result": {
+        "item": "xinke:blade_crop"
+    }
+}

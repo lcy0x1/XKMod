@@ -1,0 +1,28 @@
+{
+    "group": "xinke:xinke_crystal",
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "#*#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:blade_crop"
+        },
+        "/": [
+            {
+                "item": "minecraft:diamond"
+            },
+            {
+                "item": "minecraft:emerald"
+            },
+            {
+                "item": "minecraft:ender_pearl"
+            }
+        ]
+    },
+    "result": {
+        "item": "xinke:xinke_crystal"
+    }
+}

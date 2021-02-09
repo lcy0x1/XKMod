@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "###",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:xinke_steel_nugget"
+        }
+    },
+    "result": {
+        "item": "xinke:xinke_steel_ingot"
+    }
+}
+

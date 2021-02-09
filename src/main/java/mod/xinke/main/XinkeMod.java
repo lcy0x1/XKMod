@@ -3,6 +3,7 @@ package mod.xinke.main;
 import java.util.function.Supplier;
 
 import mod.xinke.block.BladeCrop;
+import mod.xinke.item.XKSteelSword;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -32,7 +33,10 @@ public class XinkeMod implements ModInitializer {
 	public static final Block B_XKSTEEL_BLOCK = new Block(FabricBlockSettings.of(Material.METAL).hardness(3f).resistance(8f));
 	public static final BlockItem BI_XKSTEEL_BLOCK = new BlockItem(B_XKSTEEL_BLOCK, new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_BLADE = new AliasedBlockItem(B_BLADE_CROP,new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_INGOT = new Item(new FabricItemSettings().group(IG_GENERAL));	
+	public static final Item I_XKSTEEL_NUGGET = new Item(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_INGOT = new Item(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_SWORD = new XKSteelSword(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKCRYSTAL = new XKSteelSword(new FabricItemSettings().group(IG_GENERAL));
 	
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -52,8 +56,11 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "blade_crop"), B_BLADE_CROP);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "xinke_steel_block"), B_XKSTEEL_BLOCK);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_block"),BI_XKSTEEL_BLOCK);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_nugget"), I_XKSTEEL_NUGGET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_ingot"), I_XKSTEEL_INGOT);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "blade_crop"), I_BLADE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_crystal"), I_XKCRYSTAL);
 		
 		BlockRenderLayerMap.INSTANCE.putBlock(B_BLADE_CROP, RenderLayer.getCutout());
 	}
