@@ -3,6 +3,7 @@ package mod.xinke.block.xkec;
 import mod.xinke.block.CTESReg;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 
 @SerialClass
@@ -17,6 +18,18 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 
 	@Override
 	public void activate() {
+	}
+
+	public void setConnected(BlockPos pos) {
+		if (core != null) {
+			BlockEntity be = this.getWorld().getBlockEntity(core);
+			if (be instanceof XKECCoreEntity) {
+				XKECCoreEntity ce = (XKECCoreEntity) be;
+				ce.disConnect(getPos());
+			}
+		}
+		core = pos;
+		markDirty();
 	}
 
 }

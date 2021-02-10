@@ -2,8 +2,6 @@ package mod.xinke.block.xkec;
 
 import mod.xinke.block.CTESReg;
 import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
-import net.minecraft.util.math.BlockPos;
 
 @SerialClass
 public class XKNodeEntity extends AbstractXKECBlockEntity<XKNodeEntity> {

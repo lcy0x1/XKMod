@@ -8,6 +8,9 @@ import net.minecraft.util.math.BlockPos;
 @SerialClass
 public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> {
 
+	@SerialField
+	public BlockPos[] conn = new BlockPos[0];
+	
 	public XKITEntity() {
 		super(CTESReg.BET_XKIT);
 	}

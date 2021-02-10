@@ -4,7 +4,6 @@ import mod.xinke.block.BaseBlockEntity;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -29,7 +28,6 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 			return false;
 		return player.squaredDistanceTo(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D,
 				this.pos.getZ() + 0.5D) <= 64.0D;
-
 	}
 
 	@Override
