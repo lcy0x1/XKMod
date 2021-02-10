@@ -13,7 +13,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		implements Inventory {
 
 	@SerialField
-	protected ItemStack inv = ItemStack.EMPTY;
+	public ItemStack inv = ItemStack.EMPTY;
 
 	protected AbstractXKECBlockEntity(BlockEntityType<T> blockEntityType) {
 		super(blockEntityType);

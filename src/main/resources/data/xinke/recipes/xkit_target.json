@@ -6,7 +6,7 @@
     ],
     "key": {
         "#": {
-            "item": "xinke:network_node"
+            "item": "xinke:xk_node"
         },
         ".":{
             "item":"minecraft:hopper"

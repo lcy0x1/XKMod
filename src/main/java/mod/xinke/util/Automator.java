@@ -78,6 +78,10 @@ public class Automator {
 	}
 
 	public static Object fromTagRaw(Tag tag, Class<?> cls) throws Exception {
+		if(tag == null)
+			if(cls == ItemStack.class)
+				return ItemStack.EMPTY;
+			else return null;
 		if (MAP.containsKey(cls))
 			return MAP.get(cls).fromTag.apply(tag);
 		if (cls.isArray()) {

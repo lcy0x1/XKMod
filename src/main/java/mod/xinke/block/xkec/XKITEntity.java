@@ -6,10 +6,10 @@ import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.util.math.BlockPos;
 
 @SerialClass
-public class XKNodeEntity extends AbstractXKECBlockEntity<XKNodeEntity> {
+public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> {
 
-	public XKNodeEntity() {
-		super(CTESReg.BET_XK_NODE);
+	public XKITEntity() {
+		super(CTESReg.BET_XKIT);
 	}
 
 	@Override

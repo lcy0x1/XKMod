@@ -2,23 +2,24 @@ package mod.xinke.main;
 
 import java.util.function.Supplier;
 
-import mod.xinke.block.BaseBlock;
 import mod.xinke.block.BladeCrop;
 import mod.xinke.block.BlockProp;
+import mod.xinke.block.CTESReg;
+import mod.xinke.block.BaseBlock.STE;
 import mod.xinke.block.xkec.XKECBlock;
+import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;
+import mod.xinke.block.xkec.XKITEntity;
 import mod.xinke.block.xkec.XKNodeEntity;
 import mod.xinke.item.XKSteelSword;
 import mod.xinke.recipe.RecReg;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -40,14 +41,14 @@ public class XinkeMod implements ModInitializer {
 	public static final Block B_XKSTEEL_BLOCK = new Block(
 			FabricBlockSettings.of(Material.METAL).hardness(3f).resistance(8f));
 
-	public static final Block B_XK_NODE = new XKECBlock(BlockProp.FBC_XKN, XKNodeEntity::new);
-	public static final Block B_XKIT_SOURCE = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKIT_MIDDLE = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKIT_TARGET = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKEC_CORE_0 = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKEC_CORE_1 = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKEC_CORE_2 = new BaseBlock(BlockProp.FBC_XKN);
-	public static final Block B_XKEC_SIDE = new XKECBlock(BlockProp.FBC_XKN, XKECSideEntity::new);
+	public static final Block B_XK_NODE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKNodeEntity::new);
+	public static final Block B_XKIT_SOURCE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKIT_MIDDLE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKIT_TARGET = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKEC_CORE_0 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_CORE_1 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_CORE_2 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_SIDE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECSideEntity::new);
 
 	public static final BlockItem BI_XKSTEEL_BLOCK = toBI(B_XKSTEEL_BLOCK);
 	public static final BlockItem BI_XK_NODE = toBI(B_XK_NODE);
@@ -86,7 +87,7 @@ public class XinkeMod implements ModInitializer {
 
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "blade_crop"), B_BLADE_CROP);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "xinke_steel_block"), B_XKSTEEL_BLOCK);
-		Registry.register(Registry.BLOCK, new Identifier(MODID, "network_node"), B_XK_NODE);
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "xk_node"), B_XK_NODE);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "xkit_source"), B_XKIT_SOURCE);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "xkit_middle"), B_XKIT_MIDDLE);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "xkit_target"), B_XKIT_TARGET);
@@ -102,7 +103,7 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_crystal"), I_XKCRYSTAL);
 
-		Registry.register(Registry.ITEM, new Identifier(MODID, "network_node"), BI_XK_NODE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xk_node"), BI_XK_NODE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkit_source"), BI_XKIT_SOURCE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkit_middle"), BI_XKIT_MIDDLE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkit_target"), BI_XKIT_TARGET);
@@ -111,17 +112,8 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkec_core_2"), BI_XKEC_CORE_2);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkec_side"), BI_XKEC_SIDE);
 
-		BlockRenderLayerMap.INSTANCE.putBlock(B_BLADE_CROP, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XK_NODE, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKEC_CORE_0, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKEC_CORE_1, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKEC_CORE_2, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKEC_SIDE, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKIT_SOURCE, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKIT_MIDDLE, RenderLayer.getCutout());
-		BlockRenderLayerMap.INSTANCE.putBlock(B_XKIT_TARGET, RenderLayer.getCutout());
-
 		new RecReg();
+		CTESReg.register();
 	}
 
 }

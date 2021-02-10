@@ -1,4 +1,4 @@
-package mod.xinke.dev;
+package dev.xinke;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -187,7 +187,10 @@ public class ResourceManager {
 				for (String str : map.get(key))
 					config.get(key).run(str);
 			}
-			map.forEach((k, v) -> blocks.addAll(v));
+			map.forEach((k, v) -> {
+				if (!k.startsWith("-"))
+					blocks.addAll(v);
+			});
 			for (String block : blocks)
 				if (!ignore.contains(block))
 					AssetGen.addLootTable(block);

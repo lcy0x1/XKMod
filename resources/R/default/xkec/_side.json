@@ -2,7 +2,7 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "xinke:network_node"
+            "item": "xinke:xk_node"
         },
         {
             "item": "minecraft:crafting_table"

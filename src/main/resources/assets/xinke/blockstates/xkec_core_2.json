@@ -1,7 +1,7 @@
 {
     "variants": {
-        "a=false": { "model": "xinke:block/xkec_core_2_0" },
-        "a=true": { "model": "xinke:block/xkec_core_2_1" }
+        "lit=false": { "model": "xinke:block/xkec_core_2_0" },
+        "lit=true": { "model": "xinke:block/xkec_core_2_1" }
     }
 }
 

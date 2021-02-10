@@ -1,7 +1,7 @@
 {
     "variants": {
-        "a=false": { "model": "xinke:block/xkit_target_0" },
-        "a=true": { "model": "xinke:block/xkit_target_1" }
+        "lit=false": { "model": "xinke:block/xkit_target_0" },
+        "lit=true": { "model": "xinke:block/xkit_target_1" }
     }
 }
 

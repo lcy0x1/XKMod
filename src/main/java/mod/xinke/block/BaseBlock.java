@@ -99,7 +99,7 @@ public class BaseBlock extends Block {
 				ite = (ITE) impl;
 			if (impl instanceof IPower)
 				power = (IPower) impl;
-			if (impl instanceof IClick && (!(impl instanceof ITE) || click == null))
+			if (impl instanceof IClick && (!(impl instanceof TEPvd) || click == null))
 				click = (IClick) impl;
 			return this;
 		}
@@ -140,6 +140,7 @@ public class BaseBlock extends Block {
 
 	}
 
+	@FunctionalInterface
 	public static interface STE extends IImpl, Supplier<BlockEntity> {
 
 		@Override
