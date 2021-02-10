@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.item.ItemStack;
@@ -63,21 +64,21 @@ public class Automator {
 
 	}
 
-	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj) throws Exception {
+	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred) throws Exception {
 		if (obj == null)
 			obj = cls.newInstance();
 		while (cls.getAnnotation(SerialClass.class) != null) {
 			for (Field f : cls.getDeclaredFields()) {
-				if (f.getAnnotation(SerialField.class) == null)
+				if (!pred.test(f.getAnnotation(SerialField.class)))
 					continue;
-				f.set(obj, fromTagRaw(tag.get(f.getName()), f.getType()));
+				f.set(obj, fromTagRaw(tag.get(f.getName()), f.getType(), pred));
 			}
 			cls = cls.getSuperclass();
 		}
 		return obj;
 	}
 
-	public static Object fromTagRaw(Tag tag, Class<?> cls) throws Exception {
+	public static Object fromTagRaw(Tag tag, Class<?> cls, Predicate<SerialField> pred) throws Exception {
 		if(tag == null)
 			if(cls == ItemStack.class)
 				return ItemStack.EMPTY;
@@ -90,31 +91,31 @@ public class Automator {
 			Class<?> com = cls.getComponentType();
 			Object ans = Array.newInstance(com, n);
 			for (int i = 0; i < n; i++) {
-				Array.set(ans, i, fromTagRaw(list.get(i), com));
+				Array.set(ans, i, fromTagRaw(list.get(i), com, pred));
 			}
 			return ans;
 		}
 		if (cls.getAnnotation(SerialClass.class) != null)
-			return fromTag((CompoundTag) tag, cls, null);
+			return fromTag((CompoundTag) tag, cls, null, pred);
 		throw new Exception("unsupported class " + cls);
 	}
 
-	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, Object obj) throws Exception {
+	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred) throws Exception {
 		if (obj == null)
 			return tag;
 		while (cls.getAnnotation(SerialClass.class) != null) {
 			for (Field f : cls.getDeclaredFields()) {
-				if (f.getAnnotation(SerialField.class) == null)
+				if (!pred.test(f.getAnnotation(SerialField.class)))
 					continue;
 				if (f.get(obj) != null)
-					tag.put(f.getName(), toTagRaw(f.getType(), f.get(obj)));
+					tag.put(f.getName(), toTagRaw(f.getType(), f.get(obj), pred));
 			}
 			cls = cls.getSuperclass();
 		}
 		return tag;
 	}
 
-	public static Tag toTagRaw(Class<?> cls, Object obj) throws Exception {
+	public static Tag toTagRaw(Class<?> cls, Object obj, Predicate<SerialField> pred) throws Exception {
 		if (MAP.containsKey(cls))
 			return MAP.get(cls).toTag.apply(obj);
 		if (cls.isArray()) {
@@ -122,12 +123,12 @@ public class Automator {
 			int n = Array.getLength(obj);
 			Class<?> com = cls.getComponentType();
 			for (int i = 0; i < n; i++) {
-				list.add(toTagRaw(com, Array.get(obj, i)));
+				list.add(toTagRaw(com, Array.get(obj, i), pred));
 			}
 			return list;
 		}
 		if (cls.getAnnotation(SerialClass.class) != null)
-			return toTag(new CompoundTag(), cls, obj);
+			return toTag(new CompoundTag(), cls, obj, pred);
 		throw new Exception("unsupported class " + cls);
 	}
 

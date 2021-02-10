@@ -52,6 +52,8 @@ public @interface SerialClass {
 	@Retention(RUNTIME)
 	@Target(FIELD)
 	public @interface SerialField {
+		
+		boolean toClient() default false;
 
 	}
 

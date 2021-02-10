@@ -3,6 +3,8 @@ package mod.xinke.block.xkec;
 import mod.xinke.block.BaseBlockEntity;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -10,9 +12,9 @@ import net.minecraft.item.ItemStack;
 
 @SerialClass
 public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<T>> extends BaseBlockEntity<T>
-		implements Inventory {
+		implements Inventory, BlockEntityClientSerializable {
 
-	@SerialField
+	@SerialField(toClient = true)
 	public ItemStack inv = ItemStack.EMPTY;
 
 	protected AbstractXKECBlockEntity(BlockEntityType<T> blockEntityType) {

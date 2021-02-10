@@ -16,14 +16,22 @@ public class BaseBlockEntity<T extends BaseBlockEntity<T>> extends BlockEntity {
 	@Override
 	public final void fromTag(BlockState state, CompoundTag tag) {
 		super.fromTag(state, tag);
-		ExceptionHandler.get(() -> Automator.fromTag(tag, getClass(), this));
+		ExceptionHandler.get(() -> Automator.fromTag(tag, getClass(), this, f -> f != null));
 	}
 
 	@Override
 	public final CompoundTag toTag(CompoundTag tag) {
 		super.toTag(tag);
-		ExceptionHandler.get(() -> Automator.toTag(tag, getClass(), this));
+		ExceptionHandler.get(() -> Automator.toTag(tag, getClass(), this, f -> f != null));
 		return tag;
+	}
+
+	public CompoundTag toClientTag(CompoundTag tag) {
+		return ExceptionHandler.get(() -> Automator.toTag(tag, getClass(), this, f -> f != null && f.toClient()));
+	}
+
+	public void fromClientTag(CompoundTag tag) {
+		ExceptionHandler.get(() -> Automator.fromTag(tag, getClass(), this, f -> f != null && f.toClient()));
 	}
 
 }
