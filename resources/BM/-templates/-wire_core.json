@@ -1,6 +1,0 @@
-{
-    "parent": "xinke:block/ab_wire_core",
-    "textures": {
-        "wire": "xinke:block/^"
-    }
-}

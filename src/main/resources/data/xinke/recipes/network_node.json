@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "#*#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:xinke_steel_ingot"
+        },
+        "*": [
+            {
+                "item": "xinke:xinke_crystal"
+            }
+        ]
+    },
+    "result": {
+        "item": "xinke:network_node"
+    }
+}

@@ -28,13 +28,14 @@ public class BladeCrop extends CropBlock {
 		super(settings);
 	}
 
+	public VoxelShape getShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
+		return SHAPES[state.get(this.getAgeProperty())];
+	}
+
+	@Override
 	@Environment(EnvType.CLIENT)
 	protected ItemConvertible getSeedsItem() {
 		return XinkeMod.I_BLADE;
-	}
-
-	public VoxelShape getShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
-		return SHAPES[state.get(this.getAgeProperty())];
 	}
 
 }

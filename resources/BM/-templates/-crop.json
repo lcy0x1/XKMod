@@ -1,6 +1,6 @@
 {
     "parent": "block/crop",
     "textures": {
-        "crop": "xinke:block/^n_^i"
+        "crop": "xinke:block/^"
     }
 }

@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#",
+        "."
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:network_node"
+        },
+        ".":{
+            "item":"minecraft:hopper"
+        }
+    },
+    "result": {
+        "item": "xinke:xkit_target"
+    }
+}

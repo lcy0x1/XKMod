@@ -1,29 +1,48 @@
 {
     "": {
+        "-setup": {
+            "": [
+                {
+                    "-name": "xkec",
+                    "-bs": "xkec",
+                    "-bm": [
+                        "node",
+                        ""
+                    ],
+                    "-im": "xkec"
+                },
+                {
+                    "-name": "crop",
+                    "-bs": "crop",
+                    "-bm": [
+                        "crop",
+                        "crop",
+                        "crop",
+                        "crop"
+                    ]
+                }
+            ]
+        },
         "": {
             "": [
                 "xinke_steel_block"
             ]
         },
-        "air": {
-        },
-        "lit": {
-        },
-        "alldire": {
+        "crop": {
             "": [
-            ]
-        },
-        "face": {
-            "": [
-            ]
-        },
-        "wire": {
-            "": [
-            ]
-        },
-        "crop":{
-            "":[
                 "blade_crop"
+            ]
+        },
+        "xkec": {
+            "": [
+                "xk_node",
+                "xkec_core_0",
+                "xkec_core_1",
+                "xkec_core_2",
+                "xkec_side",
+                "xkit_source",
+                "xkit_middle",
+                "xkit_target"
             ]
         }
     }

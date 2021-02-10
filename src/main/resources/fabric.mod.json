@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "mod.xinke.main.XinkeMod"
+    ],
+    "client": [
+      "mod.xinke.main.XinkeClient"
     ]
   },
   "mixins": [

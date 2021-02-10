@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "xinke:block/xkec_core_0_1"
+    }
+}
+

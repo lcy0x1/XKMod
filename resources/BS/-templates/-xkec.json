@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "a=false": { "model": "xinke:block/^_0" },
+        "a=true": { "model": "xinke:block/^_1" }
+    }
+}

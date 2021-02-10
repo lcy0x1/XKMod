@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "xinke:network_node"
+        },
+        {
+            "item": "minecraft:crafting_table"
+        }
+    ],
+    "result": {
+        "item": "xinke:xkec_side"
+    }
+}

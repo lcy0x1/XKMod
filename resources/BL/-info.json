@@ -1,18 +1,17 @@
 {
     "": {
-        "ignore": {
+        "-ignore": {
             "": [
-                "blade_crop"
             ]
         },
         "crop": {
             "": [
                 {
-                    "block": "blade_crop",
-                    "item": "blade_crop"
+                    "-name": "blade_corp",
+                    "b": "blade_crop",
+                    "i": "blade_crop"
                 }
             ]
         }
     }
-    
 }

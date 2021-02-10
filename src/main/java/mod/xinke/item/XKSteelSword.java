@@ -21,13 +21,14 @@ public class XKSteelSword extends SwordItem {
 		super(XKSteelToolMaterial.INSTANCE, 3, -2.4f, settings);
 	}
 
+	@Override
 	public boolean postHit(ItemStack is, LivingEntity target, LivingEntity attacker) {
-		if (target.getHealth() <= 0 && EnchantmentHelper.getLooting(attacker) >= Math.random() * 4 - 1) {
+		if (target.getHealth() <= 0 && EnchantmentHelper.getLooting(attacker) + 5 >= Math.random() * 64) {
 			if (target.getClass() == ZombieEntity.class)
 				target.dropItem(Items.ZOMBIE_HEAD);
 			if (target.getClass() == SkeletonEntity.class)
 				target.dropItem(Items.SKELETON_SKULL);
-			if(target.getClass()==CreeperEntity.class)
+			if (target.getClass() == CreeperEntity.class)
 				target.dropItem(Items.CREEPER_HEAD);
 			if (target.getClass() == WitherSkeletonEntity.class)
 				target.dropItem(Items.WITHER_SKELETON_SKULL);

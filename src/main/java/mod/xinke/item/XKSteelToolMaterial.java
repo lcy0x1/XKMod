@@ -5,8 +5,13 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
 public class XKSteelToolMaterial implements ToolMaterial {
-	
+
 	public static final XKSteelToolMaterial INSTANCE = new XKSteelToolMaterial();
+
+	@Override
+	public float getAttackDamage() {
+		return 0;
+	}
 
 	@Override
 	public int getDurability() {
@@ -14,13 +19,8 @@ public class XKSteelToolMaterial implements ToolMaterial {
 	}
 
 	@Override
-	public float getMiningSpeedMultiplier() {
-		return 6f;
-	}
-
-	@Override
-	public float getAttackDamage() {
-		return 0;
+	public int getEnchantability() {
+		return 5;
 	}
 
 	@Override
@@ -29,8 +29,8 @@ public class XKSteelToolMaterial implements ToolMaterial {
 	}
 
 	@Override
-	public int getEnchantability() {
-		return 5;
+	public float getMiningSpeedMultiplier() {
+		return 6f;
 	}
 
 	@Override

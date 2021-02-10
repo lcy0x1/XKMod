@@ -1,0 +1,15 @@
+{
+    "group":"xinke:blade_crop",
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "xinke:network_node"
+        },
+        {
+            "item": "minecraft:chest"
+        }
+    ],
+    "result": {
+        "item": "xinke:xkit_middle"
+    }
+}

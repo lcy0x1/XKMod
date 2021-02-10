@@ -1,0 +1,36 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "0#0",
+        "#*#",
+        "0#0"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:xkec_side"
+        },
+        "0": {
+            "item": "minecraft:obsidian"
+        },
+        "*": [
+            {
+                "item": "minecraft:skeleton_skull"
+            },
+            {
+                "item": "minecraft:wither_skeleton_skull"
+            },
+            {
+                "item": "minecraft:zombie_head"
+            },
+            {
+                "item": "minecraft:creeper_head"
+            },
+            {
+                "item": "minecraft:player_head"
+            }
+        ]
+    },
+    "result": {
+        "item": "xinke:xkec_core_0"
+    }
+}

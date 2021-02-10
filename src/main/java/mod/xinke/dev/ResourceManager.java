@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 
 import com.google.common.io.Files;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,30 +27,15 @@ public class ResourceManager {
 
 	private static class AssetGen {
 
-		private static final String BS_L, BS_, BS_C, BM_C, BS_A, BS_AD, IM_, BM_, IM_B, BS_F, BS_W, LT_, LT_C, IM_W,
-				BM_WS, BM_WC;
+		private static final String BS_, IM_, BM_, IM_B, LT_;
 
 		static {
 			String path = "./resources/";
 			BS_ = readFile(path + "BS/-templates/-.json");
-			BS_A = readFile(path + "BS/-templates/-air.json");
-			BS_L = readFile(path + "BS/-templates/-lit.json");
-			BS_AD = readFile(path + "BS/-templates/-alldire.json");
-			BS_F = readFile(path + "BS/-templates/-face.json");
-			BS_W = readFile(path + "BS/-templates/-wire.json");
-			BS_C = readFile(path + "BS/-templates/-crop.json");
-
 			BM_ = readFile(path + "BM/-templates/-.json");
-			BM_WS = readFile(path + "BM/-templates/-wire_side.json");
-			BM_WC = readFile(path + "BM/-templates/-wire_core.json");
-			BM_C = readFile(path + "BM/-templates/-crop.json");
-
 			IM_ = readFile(path + "IM/-templates/-.json");
 			IM_B = readFile(path + "IM/-templates/-block.json");
-			IM_W = readFile(path + "IM/-templates/-wire.json");
-
 			LT_ = readFile(path + "BL/-templates/-.json");
-			LT_C = readFile(path + "BL/-templates/-crop.json");
 
 		}
 
@@ -57,41 +43,6 @@ public class ResourceManager {
 			write(BS + block + ".json", BS_.replaceAll("\\^", block));
 			write(BM + block + ".json", BM_.replaceAll("\\^", block));
 			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
-		}
-
-		private static void addBlockAssetsCrop(String block) throws IOException {
-			write(BS + block + ".json", BS_C.replaceAll("\\^", block));
-			for (int i = 0; i < 4; i++) {
-				write(BM + block + "_" + i + ".json", BM_C.replaceAll("\\^n", block).replaceAll("\\^i", "" + i));
-			}
-		}
-
-		private static void addBlockAssetsAir(String block) throws IOException {
-			write(BS + block + ".json", BS_A);
-		}
-
-		private static void addBlockAssetsAllDire(String block) throws IOException {
-			write(BS + block + ".json", BS_AD.replaceAll("\\^", block));
-			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
-		}
-
-		private static void addBlockAssetsFace(String block) throws IOException {
-			write(BS + block + ".json", BS_F.replaceAll("\\^", block));
-			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
-		}
-
-		private static void addBlockAssetsLit(String block) throws IOException {
-			write(BS + block + ".json", BS_L.replaceAll("\\^", block));
-			write(BM + block + ".json", BM_.replaceAll("\\^", block));
-			write(BM + block + "_a.json", BM_.replaceAll("\\^", block + "_a"));
-			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
-		}
-
-		private static void addBlockAssetsWire(String block) throws IOException {
-			write(BS + block + ".json", BS_W.replaceAll("\\^", block));
-			write(BM + block + "_core.json", BM_WC.replaceAll("\\^", block));
-			write(BM + block + "_side.json", BM_WS.replaceAll("\\^", block));
-			write(IM + block + ".json", IM_W.replaceAll("\\^", block));
 		}
 
 		private static void addBlockItemAssets(String block) throws IOException {
@@ -108,10 +59,6 @@ public class ResourceManager {
 
 		private static void addLootTable(String block) throws IOException {
 			write(BL + block + ".json", LT_.replaceAll("\\^", block));
-		}
-
-		private static void addLootTableCrop(String block, String item) throws IOException {
-			write(BL + block + ".json", LT_C.replaceAll("\\^b", block).replaceAll("\\^i", item));
 		}
 
 		private static String readFile(String path) {
@@ -139,6 +86,40 @@ public class ResourceManager {
 	}
 
 	private static class AssetMove {
+
+		private static class BSConfig {
+
+			public final String name;
+			public final String bs, im;
+			public final String[] bm;
+
+			public BSConfig(String str, Map<String, BSConfig> map) {
+				JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
+				name = obj.get("-name").getAsString();
+				bs = AssetGen.readFile("./resources/BS/-templates/-" + obj.get("-bs").getAsString() + ".json");
+				JsonArray arr = obj.get("-bm").getAsJsonArray();
+				bm = new String[arr.size()];
+				for (int i = 0; i < bm.length; i++) {
+					bm[i] = AssetGen.readFile("./resources/BM/-templates/-" + arr.get(i).getAsString() + ".json");
+				}
+				im = obj.has("-im")
+						? AssetGen.readFile("./resources/IM/-templates/-" + obj.get("-im").getAsString() + ".json")
+						: null;
+				map.put(name, this);
+			}
+
+			public void run(String block) throws IOException {
+				AssetGen.write(BS + block + ".json", bs.replaceAll("\\^", block));
+				if (bm.length == 1)
+					AssetGen.write(BM + block + ".json", bm[0].replaceAll("\\^", block));
+				else
+					for (int i = 0; i < bm.length; i++)
+						AssetGen.write(BM + block + "_" + i + ".json", bm[i].replaceAll("\\^", block + "_" + i));
+				if (im != null)
+					AssetGen.write(IM + block + ".json", im.replaceAll("\\^", block));
+			}
+
+		}
 
 		private static final Map<String, String> PATHMAP = new HashMap<>();
 
@@ -175,12 +156,22 @@ public class ResourceManager {
 			orgImpl("BT");
 			Map<String, List<String>> map;
 			map = readJson("./resources/BL/-info.json");
-			List<String> ignore = map.get("ignore");
-			for (String pair : map.get("crop")) {
-				JsonElement e = new JsonParser().parse(pair);
-				String block = e.getAsJsonObject().get("block").getAsString();
-				String item = e.getAsJsonObject().get("item").getAsString();
-				AssetGen.addLootTableCrop(block, item);
+			List<String> ignore = map.get("-ignore");
+			for (String key : map.keySet()) {
+				if (key.startsWith("-"))
+					continue;
+				String template = AssetGen.readFile("./resources/BL/-templates/-" + key + ".json");
+				for (String str : map.get(key)) {
+					JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
+					String ans = template;
+					for (Entry<String, JsonElement> ent : obj.entrySet()) {
+						if (ent.getKey().startsWith("-"))
+							continue;
+						ans = ans.replaceAll("\\^" + ent.getKey(), ent.getValue().getAsString());
+					}
+					AssetGen.write(BL + obj.get("-name").getAsString() + ".json", ans);
+					ignore.add(obj.get("-name").getAsString());
+				}
 			}
 			map = readJson("./resources/BS/-info.json");
 			List<String> blocks = orgImpl("BS");
@@ -188,18 +179,14 @@ public class ResourceManager {
 				AssetGen.addBlockItemAssets(block);
 			for (String block : map.get(""))
 				AssetGen.addBlockAssets(block);
-			for (String block : map.get("air"))
-				AssetGen.addBlockAssetsAir(block);
-			for (String block : map.get("lit"))
-				AssetGen.addBlockAssetsLit(block);
-			for (String block : map.get("alldire"))
-				AssetGen.addBlockAssetsAllDire(block);
-			for (String block : map.get("face"))
-				AssetGen.addBlockAssetsFace(block);
-			for (String block : map.get("wire"))
-				AssetGen.addBlockAssetsWire(block);
-			for (String block : map.get("crop"))
-				AssetGen.addBlockAssetsCrop(block);
+			Map<String, BSConfig> config = new HashMap<>();
+			map.get("-setup").forEach(str -> new BSConfig(str, config));
+			for (String key : map.keySet()) {
+				if (key.startsWith("-") || key.length() == 0)
+					continue;
+				for (String str : map.get(key))
+					config.get(key).run(str);
+			}
 			map.forEach((k, v) -> blocks.addAll(v));
 			for (String block : blocks)
 				if (!ignore.contains(block))
@@ -469,28 +456,28 @@ public class ResourceManager {
 	}
 
 	private static class RecipeGen {
-		
+
 		private static void gen() throws IOException {
-			Map<String,List<String>> map = AssetMove.readJson("./resources/R/-info.json");
-			for(String template : map.keySet()) {
-				String tmpl = AssetGen.readFile("./resources/R/-templates/-"+template+".json");
-				for(String str : map.get(template)) {
+			Map<String, List<String>> map = AssetMove.readJson("./resources/R/-info.json");
+			for (String template : map.keySet()) {
+				String tmpl = AssetGen.readFile("./resources/R/-templates/-" + template + ".json");
+				for (String str : map.get(template)) {
 					JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
 					String rec = tmpl;
-					for(Entry<String,JsonElement> ent : obj.entrySet()) {
+					for (Entry<String, JsonElement> ent : obj.entrySet()) {
 						String key = ent.getKey();
-						if(key.startsWith("-"))
+						if (key.startsWith("-"))
 							continue;
 						String val = ent.getValue().getAsString();
-						rec = rec.replaceAll("\\^"+key, val);
+						rec = rec.replaceAll("\\^" + key, val);
 					}
-					AssetGen.write(R+obj.get("-name").getAsString()+".json", rec);
+					AssetGen.write(R + obj.get("-name").getAsString() + ".json", rec);
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private static final String PATH_PRE = "./src/main/resources/";
 	private static final String PATH_ASSET = PATH_PRE + "assets/xinke/";
 	private static final String PATH_DATA = PATH_PRE + "data/xinke/";

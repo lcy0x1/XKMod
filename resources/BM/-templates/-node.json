@@ -1,0 +1,6 @@
+{
+    "parent": "xinke:block/ab_xkec_0",
+    "textures": {
+        "spr": "xinke:block/^"
+    }
+}

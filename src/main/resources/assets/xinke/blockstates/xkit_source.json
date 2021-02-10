@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "a=false": { "model": "xinke:block/xkit_source_0" },
+        "a=true": { "model": "xinke:block/xkit_source_1" }
+    }
+}
+
