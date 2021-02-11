@@ -4,6 +4,7 @@ import mod.xinke.block.CTESReg;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
 @SerialClass
@@ -17,11 +18,28 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 	}
 
 	@Override
-	public void activate() {
+	public void activate(PlayerEntity pl) {
+	}
+
+	public void disConnect() {
+		core = null;
+		markDirty();
+	}
+
+	@Override
+	public void onDestroy() {
+		System.out.println("on destroy: " + core);// TODO
+		if (getWorld().isClient() || core == null)
+			return;
+		BlockEntity be = getWorld().getBlockEntity(core);
+		if (be instanceof XKECCoreEntity) {
+			XKECCoreEntity ce = (XKECCoreEntity) be;
+			ce.disConnect(getPos());
+		}
 	}
 
 	public void setConnected(BlockPos pos) {
-		if(pos.equals(core))
+		if (pos.equals(core))
 			return;
 		if (core != null) {
 			BlockEntity be = this.getWorld().getBlockEntity(core);
@@ -32,22 +50,6 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 		}
 		core = pos;
 		markDirty();
-	}
-
-	public void disConnect() {
-		core = null;
-		markDirty();
-	}
-
-	public void onDestroy() {
-		System.out.println("on destroy: " + core);//TODO
-		if (getWorld().isClient() || core == null)
-			return;
-		BlockEntity be = getWorld().getBlockEntity(core);
-		if (be instanceof XKECCoreEntity) {
-			XKECCoreEntity ce = (XKECCoreEntity) be;
-			ce.disConnect(getPos());
-		}
 	}
 
 }

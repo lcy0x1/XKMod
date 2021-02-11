@@ -2,10 +2,10 @@ package mod.xinke.main;
 
 import java.util.function.Supplier;
 
+import mod.xinke.block.BaseBlock.STE;
 import mod.xinke.block.BladeCrop;
 import mod.xinke.block.BlockProp;
 import mod.xinke.block.CTESReg;
-import mod.xinke.block.BaseBlock.STE;
 import mod.xinke.block.xkec.XKECBlock;
 import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;

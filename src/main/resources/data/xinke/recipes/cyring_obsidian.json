@@ -1,0 +1,17 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:obsidian"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:ghast_tear"
+            },
+            "count": 12
+        }
+    ],
+    "output": {
+        "item": "minecraft:crying_obsedian"
+    }
+}

@@ -26,11 +26,11 @@ public class XKECRecipe implements Recipe<XKECRecipe.Inv> {
 
 	public static class InvLayer {
 
+		public ItemStack[] is;
+
 		public InvLayer(List<ItemStack> cur) {
 			is = cur.toArray(new ItemStack[0]);
 		}
-
-		public ItemStack[] is;
 
 	}
 

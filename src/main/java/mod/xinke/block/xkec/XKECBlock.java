@@ -21,25 +21,22 @@ import net.minecraft.world.World;
 
 public class XKECBlock extends BaseBlockWithEntity {
 
-	private static class XKState implements IState, ILight {
-
-		public static final XKState INSTANCE = new XKState();
-
-		@Override
-		public int getLightValue(BlockState bs) {
-			return bs.get(Properties.LIT) ? 15 : 7;
-		}
-
-		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
-			builder.add(Properties.LIT);
-		}
-
-	}
-
 	private static class XKECUse implements IClick, IRep {
 
 		private static XKECUse INSTANCE = new XKECUse();
+
+		@Override
+		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+			if (worldIn.isClient)
+				return;
+			if (state.getBlock() == newState.getBlock())
+				return;
+			BlockEntity be = worldIn.getBlockEntity(pos);
+			if (be instanceof AbstractXKECBlockEntity) {
+				AbstractXKECBlockEntity<?> abe = (AbstractXKECBlockEntity<?>) be;
+				abe.onDestroy();
+			}
+		}
 
 		@Override
 		public ActionResult onUse(BlockState bs, World w, BlockPos pos, PlayerEntity pl, Hand h, BlockHitResult hit) {
@@ -50,7 +47,7 @@ public class XKECBlock extends BaseBlockWithEntity {
 				AbstractXKECBlockEntity<?> xkec = (AbstractXKECBlockEntity<?>) be;
 				if (xkec.isEmpty())
 					if (pl.getMainHandStack().isEmpty())
-						xkec.activate();
+						xkec.activate(pl);
 					else {
 						xkec.setStack(0, pl.getMainHandStack());
 						w.setBlockState(pos, bs.with(Properties.LIT, true));
@@ -59,22 +56,25 @@ public class XKECBlock extends BaseBlockWithEntity {
 					pl.giveItemStack(xkec.removeStack(0));
 					w.setBlockState(pos, bs.with(Properties.LIT, false));
 				} else
-					xkec.activate();
+					xkec.activate(pl);
 			}
 			return ActionResult.CONSUME;
 		}
 
+	}
+
+	private static class XKState implements IState, ILight {
+
+		public static final XKState INSTANCE = new XKState();
+
 		@Override
-		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-			if (worldIn.isClient)
-				return;
-			if (state.getBlock() == newState.getBlock())
-				return;
-			BlockEntity be = worldIn.getBlockEntity(pos);
-			if(be instanceof AbstractXKECBlockEntity) {
-				AbstractXKECBlockEntity<?> abe = (AbstractXKECBlockEntity<?>)be;
-				abe.onDestroy();
-			}
+		public void fillStateContainer(Builder<Block, BlockState> builder) {
+			builder.add(Properties.LIT);
+		}
+
+		@Override
+		public int getLightValue(BlockState bs) {
+			return bs.get(Properties.LIT) ? 15 : 7;
 		}
 
 	}

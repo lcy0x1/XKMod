@@ -14,6 +14,7 @@ import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
@@ -28,7 +29,7 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 	}
 
 	@Override
-	public void activate() {
+	public void activate(PlayerEntity pl) {
 		if (this.getWorld().isClient())
 			return;
 		BlockPos self = this.getPos();
@@ -74,28 +75,6 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 		sync();
 	}
 
-	public void disConnect(BlockPos pos) {
-		List<BlockPos> list = new ArrayList<>();
-		for (BlockPos p : conn)
-			list.add(p);
-		list.remove(pos);
-		conn = list.toArray(new BlockPos[0]);
-		markDirty();
-		sync();
-	}
-
-	public void onDestroy() {
-		if (getWorld().isClient())
-			return;
-		for (BlockPos p : conn) {
-			BlockEntity be = getWorld().getBlockEntity(p);
-			if (be instanceof XKECSideEntity) {
-				XKECSideEntity se = (XKECSideEntity) be;
-				se.disConnect();
-			}
-		}
-	}
-
 	@Override
 	public void clearAll() {
 		for (BlockPos p : conn) {
@@ -105,6 +84,15 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 				se.clear();
 			}
 		}
+	}
+
+	public void disConnect(BlockPos pos) {
+		List<BlockPos> list = new ArrayList<>();
+		for (BlockPos p : conn)
+			list.add(p);
+		list.remove(pos);
+		conn = list.toArray(new BlockPos[0]);
+		markDirty();
 	}
 
 	@Override
@@ -133,6 +121,19 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 		if (cur != null)
 			list.add(new InvLayer(cur));
 		return list.toArray(new InvLayer[0]);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (getWorld().isClient())
+			return;
+		for (BlockPos p : conn) {
+			BlockEntity be = getWorld().getBlockEntity(p);
+			if (be instanceof XKECSideEntity) {
+				XKECSideEntity se = (XKECSideEntity) be;
+				se.disConnect();
+			}
+		}
 	}
 
 }

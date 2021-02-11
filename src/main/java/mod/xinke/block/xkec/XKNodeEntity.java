@@ -2,6 +2,7 @@ package mod.xinke.block.xkec;
 
 import mod.xinke.block.CTESReg;
 import mod.xinke.util.SerialClass;
+import net.minecraft.entity.player.PlayerEntity;
 
 @SerialClass
 public class XKNodeEntity extends AbstractXKECBlockEntity<XKNodeEntity> {
@@ -11,7 +12,7 @@ public class XKNodeEntity extends AbstractXKECBlockEntity<XKNodeEntity> {
 	}
 
 	@Override
-	public void activate() {
+	public void activate(PlayerEntity pl) {
 	}
 
 }

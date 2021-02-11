@@ -14,16 +14,15 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3i;
 
 public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> extends BlockEntityRenderer<T> {
 
-	private static class BeamRenderer {
+	public static class BeamRenderer {
 
-		private float red, blue, green, alpha;
+		private float sr, sb, sg, sa;
+		private float er, eb, eg, ea;
 		private float u0, u1, v0, v1, y0, y1;
 
 		private Matrix3f m3;
@@ -32,22 +31,6 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 
 		public BeamRenderer() {
 
-		}
-
-		public BeamRenderer setColor(float r, float b, float g, float a) {
-			red = r;
-			blue = b;
-			green = g;
-			alpha = a;
-			return this;
-		}
-
-		public BeamRenderer setUV(float u0, float u1, float v0, float v1) {
-			this.u0 = u0;
-			this.u1 = u1;
-			this.v0 = v0;
-			this.v1 = v1;
-			return this;
 		}
 
 		public void drawCube(MatrixStack mat, VertexConsumer vc, float y0, float y1, float h) {
@@ -63,16 +46,46 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 			drawRect(-h, 0, 0, h);
 		}
 
-		private void drawRect(float x0, float z0, float x1, float z1) {
-			drawVertex(y1, x0, z0, u1, v0);
-			drawVertex(y0, x0, z0, u1, v1);
-			drawVertex(y0, x1, z1, u0, v1);
-			drawVertex(y1, x1, z1, u0, v0);
+		public BeamRenderer setColor(float hue) {
+			int col = Color.HSBtoRGB(hue, 1, 1);
+			setColor((col >> 16 & 0xFF) / 256f, (col >> 8 & 0xFF) / 256f, (col & 0xFF) / 256f, 1f);
+			return this;
 		}
 
-		private void drawVertex(float y, float x, float z, float u, float v) {
+		public BeamRenderer setColor(float r, float b, float g, float a) {
+			sr = er = r;
+			sb = eb = b;
+			sg = eg = g;
+			sa = ea = a;
+			return this;
+		}
+
+		public BeamRenderer setEndcolor(float r, float b, float g, int a) {
+			er = r;
+			eb = b;
+			eg = g;
+			ea = a;
+			return this;
+		}
+
+		public BeamRenderer setUV(float u0, float u1, float v0, float v1) {
+			this.u0 = u0;
+			this.u1 = u1;
+			this.v0 = v0;
+			this.v1 = v1;
+			return this;
+		}
+
+		private void drawRect(float x0, float z0, float x1, float z1) {
+			drawVertex(er, eg, eb, ea, y1, x0, z0, u1, v0);
+			drawVertex(sr, sg, sb, sa, y0, x0, z0, u1, v1);
+			drawVertex(sr, sg, sb, sa, y0, x1, z1, u0, v1);
+			drawVertex(er, eg, eb, ea, y1, x1, z1, u0, v0);
+		}
+
+		private void drawVertex(float r, float g, float b, float a, float y, float x, float z, float u, float v) {
 			vc.vertex(m4, z, x, y);
-			vc.color(red, green, blue, alpha);
+			vc.color(r, g, b, a);
 			vc.texture(u, v);
 			vc.overlay(OverlayTexture.DEFAULT_UV);
 			vc.light(15728880);
@@ -84,7 +97,19 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 
 	public static final Identifier BEAM_TEXTURE = new Identifier("textures/entity/beacon_beam.png");
 
-	private static final int[] HUE = { 0, 30, 60, 120, 180, 240, 300 };
+	public static void renderLightBeam(MatrixStack mat, VertexConsumerProvider vcp, Identifier id, float t1,
+			BeamRenderer br, float x, float y, float z) {
+		float xz = (float) Math.sqrt(x * x + z * z);
+		float len = (float) Math.sqrt(xz * xz + y * y);
+		mat.push();
+		mat.multiply(Vector3f.NEGATIVE_Y.getRadialQuaternion((float) (Math.atan2(z, x) - Math.PI / 2)));
+		mat.multiply(Vector3f.NEGATIVE_X.getRadialQuaternion((float) (Math.atan2(y, xz))));
+		mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
+
+		br.setUV(0, 1, 0, len);
+		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(id, false)), 0, len, 0.02f);
+		mat.pop();
+	}
 
 	public XKECBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
 		super(dispatcher);
@@ -103,47 +128,6 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 					overlay, mat, vc);
 			mat.pop();
 		}
-		if (be instanceof XKECCoreEntity) {
-			XKECCoreEntity core = (XKECCoreEntity) be;
-			mat.push();
-			mat.translate(0.5D, 0.5D, 0.5D);
-			BeamRenderer br = new BeamRenderer();
-			int color = -1;
-			int prev = -1;
-			if (core.conn != null)
-				for (BlockPos i : core.conn) {
-					BlockPos p = i.subtract(core.getPos());
-					int x = p.getX();
-					int y = p.getY();
-					int z = p.getZ();
-					int sqdis = x * x + z * z + y * y;
-					if (sqdis != prev) {
-						prev = sqdis;
-						color++;
-					}
-					int col = Color.HSBtoRGB(-HUE[color] / 360f, 1, 1);
-					br.setColor((col >> 16 & 0xFF) / 256f, (col >> 8 & 0xFF) / 256f, (col & 0xFF) / 256f, 1f);
-					renderLightBeam(mat, vc, BEAM_TEXTURE, time, br, p);
-				}
-			mat.pop();
-		}
 	}
 
-	public static void renderLightBeam(MatrixStack mat, VertexConsumerProvider vcp, Identifier identifier, float t1,
-			BeamRenderer br, Vec3i pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		float xz = (float) Math.sqrt(x * x + z * z);
-		float len = (float) Math.sqrt(xz * xz + y * y);
-		mat.push();
-		mat.multiply(Vector3f.NEGATIVE_Y.getRadialQuaternion((float) (Math.atan2(z, x) - Math.PI / 2)));
-		mat.multiply(Vector3f.NEGATIVE_X.getRadialQuaternion((float) (Math.atan2(y, xz))));
-		mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
-
-		br.setUV(0, 1, 0, len);
-		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(identifier, false)), 0, len, 0.02f);
-		mat.pop();
-	}
-	
 }

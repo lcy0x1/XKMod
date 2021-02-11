@@ -24,8 +24,7 @@ public class CTESReg {
 		BET_XKEC_SIDE = reg("xkec_side", XKECSideEntity::new, XinkeMod.B_XKEC_SIDE);
 		BET_XKEC_CORE = reg("xkec_core", XKECCoreEntity::new, XinkeMod.B_XKEC_CORE_0, XinkeMod.B_XKEC_CORE_1,
 				XinkeMod.B_XKEC_CORE_2);
-		BET_XKIT = reg("xkit", XKITEntity::new, XinkeMod.B_XKIT_SOURCE, XinkeMod.B_XKIT_MIDDLE,
-				XinkeMod.B_XKIT_TARGET);
+		BET_XKIT = reg("xkit", XKITEntity::new, XinkeMod.B_XKIT_SOURCE, XinkeMod.B_XKIT_MIDDLE, XinkeMod.B_XKIT_TARGET);
 
 	}
 

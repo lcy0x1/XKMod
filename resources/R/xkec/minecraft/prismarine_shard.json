@@ -1,0 +1,17 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:scute"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:nautilus_shell"
+            },
+            "count": 24
+        }
+    ],
+    "output": {
+        "item": "minecraft:prismarine_crystal"
+    }
+}

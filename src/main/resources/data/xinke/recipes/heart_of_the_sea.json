@@ -1,0 +1,23 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:trident"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:scute"
+            },
+            "count": 6
+        },
+        {
+            "in": {
+                "item": "minecraft:prismarine_crystal"
+            },
+            "count": 48
+        }
+    ],
+    "output": {
+        "item": "minecraft:heart_of_the_sea"
+    }
+}

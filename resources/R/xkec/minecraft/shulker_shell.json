@@ -1,0 +1,17 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:turtle_helmet"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:chrus_fruit"
+            },
+            "count": 240
+        }
+    ],
+    "output": {
+        "item": "minecraft:shulker_shell"
+    }
+}

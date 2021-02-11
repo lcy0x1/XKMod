@@ -1,0 +1,28 @@
+{
+    "type": "xinke:xkec",
+    "core": [
+        {
+            "item": "minecraft:nether_star"
+        },
+        {
+            "item": "minecraft:conduit"
+        }
+    ],
+    "layers": [
+        {
+            "in": {
+                "item": "xinke:xkec_core_0"
+            },
+            "count": 6
+        },
+        {
+            "in": {
+                "item": "xinke:xinke_crystal"
+            },
+            "count": 12
+        }
+    ],
+    "output": {
+        "item": "xinke_xkec_core_1"
+    }
+}

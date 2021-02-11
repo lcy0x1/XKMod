@@ -1,0 +1,17 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:chainmail_chestplate"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:phantom_membrane"
+            },
+            "count": 240
+        }
+    ],
+    "output": {
+        "item": "minecraft:elytra"
+    }
+}

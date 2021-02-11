@@ -1,0 +1,29 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:totem_of_undying"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:gold_block"
+            },
+            "count": 8
+        },
+        {
+            "in": {
+                "item": "minecraft:golden_apple"
+            },
+            "count": 12
+        },
+        {
+            "in": {
+                "item": "minecraft:ghast_tear"
+            },
+            "count": 24
+        }
+    ],
+    "output": {
+        "item": "minecraft:enchanted_golden_apple"
+    }
+}

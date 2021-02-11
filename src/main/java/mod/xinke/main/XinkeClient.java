@@ -2,6 +2,8 @@ package mod.xinke.main;
 
 import mod.xinke.block.CTESReg;
 import mod.xinke.block.xkec.XKECBlockEntityRenderer;
+import mod.xinke.block.xkec.XKECCoreEntityRenderer;
+import mod.xinke.block.xkec.XKITEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
@@ -13,8 +15,8 @@ public class XinkeClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKEC_SIDE, XKECBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XK_NODE, XKECBlockEntityRenderer::new);
-		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKEC_CORE, XKECBlockEntityRenderer::new);
-		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKIT, XKECBlockEntityRenderer::new);
+		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKEC_CORE, XKECCoreEntityRenderer::new);
+		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKIT, XKITEntityRenderer::new);
 
 		BlockRenderLayerMap.INSTANCE.putBlock(XinkeMod.B_BLADE_CROP, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(XinkeMod.B_XK_NODE, RenderLayer.getCutout());

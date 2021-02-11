@@ -20,7 +20,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		super(blockEntityType);
 	}
 
-	public abstract void activate();
+	public abstract void activate(PlayerEntity pl);
 
 	@Override
 	public boolean canPlayerUse(PlayerEntity player) {
@@ -51,6 +51,9 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		return inv.isEmpty();
 	}
 
+	public void onDestroy() {
+	}
+
 	@Override
 	public ItemStack removeStack(int slot) {
 		ItemStack is = inv;
@@ -78,9 +81,6 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 	@Override
 	public int size() {
 		return 1;
-	}
-
-	public void onDestroy() {
 	}
 
 }

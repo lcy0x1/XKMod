@@ -1,0 +1,23 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:gilded_blackstone"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:crying_obsidian"
+            },
+            "count": 48
+        },
+        {
+            "in": {
+                "item": "minecraft:nether_brick"
+            },
+            "count": 240
+        }
+    ],
+    "output": {
+        "item": "minecraft:ancient_debris"
+    }
+}

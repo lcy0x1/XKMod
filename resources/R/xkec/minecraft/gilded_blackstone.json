@@ -1,0 +1,17 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:blackstone"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:gold_nugget"
+            },
+            "count": 240
+        }
+    ],
+    "output": {
+        "item": "minecraft:gilded_blackstone"
+    }
+}

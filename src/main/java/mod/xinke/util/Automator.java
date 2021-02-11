@@ -4,12 +4,26 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongArrayTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -61,10 +75,11 @@ public class Automator {
 			tag.putInt("z", obj.getZ());
 			return tag;
 		});
-
+		new ClassHandler<IntArrayTag, UUID>(UUID.class, NbtHelper::toUuid, NbtHelper::fromUuid);
 	}
 
-	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred) throws Exception {
+	public static Object fromTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred)
+			throws Exception {
 		if (obj == null)
 			obj = cls.newInstance();
 		while (cls.getAnnotation(SerialClass.class) != null) {
@@ -79,10 +94,11 @@ public class Automator {
 	}
 
 	public static Object fromTagRaw(Tag tag, Class<?> cls, Predicate<SerialField> pred) throws Exception {
-		if(tag == null)
-			if(cls == ItemStack.class)
+		if (tag == null)
+			if (cls == ItemStack.class)
 				return ItemStack.EMPTY;
-			else return null;
+			else
+				return null;
 		if (MAP.containsKey(cls))
 			return MAP.get(cls).fromTag.apply(tag);
 		if (cls.isArray()) {
@@ -100,7 +116,8 @@ public class Automator {
 		throw new Exception("unsupported class " + cls);
 	}
 
-	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred) throws Exception {
+	public static CompoundTag toTag(CompoundTag tag, Class<?> cls, Object obj, Predicate<SerialField> pred)
+			throws Exception {
 		if (obj == null)
 			return tag;
 		while (cls.getAnnotation(SerialClass.class) != null) {

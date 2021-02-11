@@ -1,0 +1,29 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:prismarine_shard"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "minecraft:scute"
+            },
+            "count": 6
+        },
+        {
+            "in": {
+                "item": "minecraft:glowstone_dust"
+            },
+            "count": 24
+        },
+        {
+            "in": {
+                "item": "minecraft:nautilus_shell"
+            },
+            "count": 48
+        }
+    ],
+    "output": {
+        "item": "minecraft:prismarine_crystal"
+    }
+}
