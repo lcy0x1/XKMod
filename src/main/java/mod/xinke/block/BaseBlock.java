@@ -329,6 +329,8 @@ public class BaseBlock extends Block {
 	@Override
 	public final void onStateReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState,
 			boolean isMoving) {
+		for (IRep irep : impl.repList)
+			irep.onReplaced(state, worldIn, pos, newState, isMoving);
 		if (impl.ite != null && state.getBlock() != newState.getBlock()) {
 			BlockEntity blockentity = worldIn.getBlockEntity(pos);
 			if (blockentity != null) {
@@ -339,8 +341,6 @@ public class BaseBlock extends Block {
 				worldIn.removeBlockEntity(pos);
 			}
 		}
-		for (IRep irep : impl.repList)
-			irep.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override

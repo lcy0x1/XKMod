@@ -80,4 +80,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		return 1;
 	}
 
+	public void onDestroy() {
+	}
+
 }

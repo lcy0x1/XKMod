@@ -1,5 +1,7 @@
 package mod.xinke.recipe;
 
+import java.util.List;
+
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.inventory.Inventory;
@@ -24,7 +26,10 @@ public class XKECRecipe implements Recipe<XKECRecipe.Inv> {
 
 	public static class InvLayer {
 
-		public int id;
+		public InvLayer(List<ItemStack> cur) {
+			is = cur.toArray(new ItemStack[0]);
+		}
+
 		public ItemStack[] is;
 
 	}

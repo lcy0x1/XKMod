@@ -21,6 +21,8 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 	}
 
 	public void setConnected(BlockPos pos) {
+		if(pos.equals(core))
+			return;
 		if (core != null) {
 			BlockEntity be = this.getWorld().getBlockEntity(core);
 			if (be instanceof XKECCoreEntity) {
@@ -30,6 +32,22 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 		}
 		core = pos;
 		markDirty();
+	}
+
+	public void disConnect() {
+		core = null;
+		markDirty();
+	}
+
+	public void onDestroy() {
+		System.out.println("on destroy: " + core);//TODO
+		if (getWorld().isClient() || core == null)
+			return;
+		BlockEntity be = getWorld().getBlockEntity(core);
+		if (be instanceof XKECCoreEntity) {
+			XKECCoreEntity ce = (XKECCoreEntity) be;
+			ce.disConnect(getPos());
+		}
 	}
 
 }

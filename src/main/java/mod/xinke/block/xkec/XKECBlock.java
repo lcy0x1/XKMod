@@ -37,7 +37,7 @@ public class XKECBlock extends BaseBlockWithEntity {
 
 	}
 
-	private static class XKECUse implements IClick {
+	private static class XKECUse implements IClick, IRep {
 
 		private static XKECUse INSTANCE = new XKECUse();
 
@@ -62,6 +62,19 @@ public class XKECBlock extends BaseBlockWithEntity {
 					xkec.activate();
 			}
 			return ActionResult.CONSUME;
+		}
+
+		@Override
+		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+			if (worldIn.isClient)
+				return;
+			if (state.getBlock() == newState.getBlock())
+				return;
+			BlockEntity be = worldIn.getBlockEntity(pos);
+			if(be instanceof AbstractXKECBlockEntity) {
+				AbstractXKECBlockEntity<?> abe = (AbstractXKECBlockEntity<?>)be;
+				abe.onDestroy();
+			}
 		}
 
 	}

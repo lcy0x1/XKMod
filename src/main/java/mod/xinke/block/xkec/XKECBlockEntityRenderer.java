@@ -1,5 +1,7 @@
 package mod.xinke.block.xkec;
 
+import java.awt.Color;
+
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -69,7 +71,7 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		}
 
 		private void drawVertex(float y, float x, float z, float u, float v) {
-			vc.vertex(m4, x, y, z);
+			vc.vertex(m4, z, x, y);
 			vc.color(red, green, blue, alpha);
 			vc.texture(u, v);
 			vc.overlay(OverlayTexture.DEFAULT_UV);
@@ -82,19 +84,21 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 
 	public static final Identifier BEAM_TEXTURE = new Identifier("textures/entity/beacon_beam.png");
 
+	private static final int[] HUE = { 0, 30, 60, 120, 180, 240, 300 };
+
 	public XKECBlockEntityRenderer(BlockEntityRenderDispatcher dispatcher) {
 		super(dispatcher);
 	}
 
 	@Override
 	public void render(T be, float dt, MatrixStack mat, VertexConsumerProvider vc, int light, int overlay) {
-		float time = Math.floorMod(be.getWorld().getTime(), 40L) + dt;
+		float time = Math.floorMod(be.getWorld().getTime(), 80L) + dt;
 		ItemStack is = be.inv;
 		if (!is.isEmpty()) {
 			mat.push();
-			double offset = Math.sin(time / 8.0) / 4.0;
+			double offset = (Math.sin(time * 2 * Math.PI / 40.0) - 3) / 16;
 			mat.translate(0.5, 0.5 + offset, 0.5);
-			mat.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(time * 4));
+			mat.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(time * 4.5f));
 			MinecraftClient.getInstance().getItemRenderer().renderItem(is, ModelTransformation.Mode.GROUND, light,
 					overlay, mat, vc);
 			mat.pop();
@@ -104,9 +108,23 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 			mat.push();
 			mat.translate(0.5D, 0.5D, 0.5D);
 			BeamRenderer br = new BeamRenderer();
-			for (BlockPos i : core.conn) {
-				renderLightBeam(mat, vc, BEAM_TEXTURE, time, br, i.subtract(core.getPos()));
-			}
+			int color = -1;
+			int prev = -1;
+			if (core.conn != null)
+				for (BlockPos i : core.conn) {
+					BlockPos p = i.subtract(core.getPos());
+					int x = p.getX();
+					int y = p.getY();
+					int z = p.getZ();
+					int sqdis = x * x + z * z + y * y;
+					if (sqdis != prev) {
+						prev = sqdis;
+						color++;
+					}
+					int col = Color.HSBtoRGB(-HUE[color] / 360f, 1, 1);
+					br.setColor((col >> 16 & 0xFF) / 256f, (col >> 8 & 0xFF) / 256f, (col & 0xFF) / 256f, 1f);
+					renderLightBeam(mat, vc, BEAM_TEXTURE, time, br, p);
+				}
 			mat.pop();
 		}
 	}
@@ -117,14 +135,15 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		int y = pos.getY();
 		int z = pos.getZ();
 		float xz = (float) Math.sqrt(x * x + z * z);
-		float len = (float) Math.sqrt(pos.getSquaredDistance(Vec3i.ZERO));
+		float len = (float) Math.sqrt(xz * xz + y * y);
 		mat.push();
-		mat.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((float) Math.atan2(z, x)));
-		mat.multiply(Vector3f.POSITIVE_Z.getRadialQuaternion((float) Math.atan2(y, xz)));
-		mat.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(t1 * 2.25F - 45.0F));
+		mat.multiply(Vector3f.NEGATIVE_Y.getRadialQuaternion((float) (Math.atan2(z, x) - Math.PI / 2)));
+		mat.multiply(Vector3f.NEGATIVE_X.getRadialQuaternion((float) (Math.atan2(y, xz))));
+		mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
+
 		br.setUV(0, 1, 0, len);
-		br.setColor(1, 0, 0, 1);
-		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(identifier, false)), 0, len, 0.2f);
+		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(identifier, false)), 0, len, 0.02f);
 		mat.pop();
 	}
+	
 }
