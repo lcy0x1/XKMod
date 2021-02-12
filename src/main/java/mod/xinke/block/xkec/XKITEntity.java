@@ -12,10 +12,13 @@ import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -56,6 +59,15 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				source.source = null;
 			}
 			return ans;
+		}
+
+		public String toString() {
+			return "ItemToken from " + inv.getClass() + " at slot " + slot + " with item {" + stack + "} fullfilled = "
+					+ fullfilled;
+		}
+
+		public void kill() {
+			source.source = null;
 		}
 
 	}
@@ -161,12 +173,11 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				}
 			}
 			markDirty();
-		} else if (playerID.equals(pl.getUuid()))
-
-		{
+		} else if (playerID.equals(pl.getUuid())) {
 			playerID = null;
 			markDirty();
 		}
+		sync();
 	}
 
 	public void disConnect(BlockPos pos) {
@@ -176,11 +187,13 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		list.remove(pos);
 		conn = list.toArray(new BlockPos[0]);
 		markDirty();
+		sync();
 	}
 
 	public void finishConn() {
 		playerID = null;
 		markDirty();
+		sync();
 	}
 
 	@Override
@@ -194,6 +207,8 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				se.disConnect(getPos());
 			}
 		}
+		if (token != null)
+			token.kill();
 	}
 
 	public void setConnect(BlockPos pos) {
@@ -203,11 +218,14 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		list.add(pos);
 		conn = list.toArray(new BlockPos[0]);
 		markDirty();
+		sync();
 	}
 
 	@Override
 	public void tick() {
 		validatePlayer();
+		if (conn == null)
+			return;
 		updateTemperature();
 		updateItemMove();
 	}
@@ -224,7 +242,11 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				Inventory i = (Inventory) be;
 				if (getAvailableSlots(i, d.getOpposite()).anyMatch((slot) -> {
 					ItemStack itemStack = i.getStack(slot);
-					if (!itemStack.isEmpty() && canExtract(i, itemStack, slot, d.getOpposite())) {
+					if (itemStack.isEmpty())
+						return false;
+					if (!isItemValid(itemStack))
+						return false;
+					if (canExtract(i, itemStack, slot, d.getOpposite())) {
 						source = token = new ItemToken(this, i, slot, itemStack);
 						cooldown = COOLDOWN;
 						return true;
@@ -234,6 +256,20 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 					break;
 			}
 		}
+	}
+
+	private boolean isItemValid(ItemStack item) {
+		if (inv == null)
+			return true;
+		if (inv.getItem() == Items.SHULKER_BOX && inv.getSubTag("BlockEntityTag") != null) {
+			DefaultedList<ItemStack> list = DefaultedList.of();
+			Inventories.fromTag(inv.getSubTag("BlockEntityTag"), list);
+			for (ItemStack is : list)
+				if (!is.isEmpty() && is.getItem() == item.getItem())
+					return true;
+			return false;
+		}
+		return item.getItem() == inv.getItem();
 	}
 
 	private BlockPos getNearby(UUID id) {
@@ -272,9 +308,10 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				Inventory i = (Inventory) be;
 				if (getAvailableSlots(i, d.getOpposite()).anyMatch((slot) -> {
 					if (canInsert(i, token.stack, slot, d.getOpposite())) {
-						transfer(i, token, token.slot, d.getOpposite());
+						transfer(i, token, slot, d.getOpposite());
 						if (token.fullfilled) {
 							cooldown = COOLDOWN;
+							token = null;
 							return true;
 						}
 					}
@@ -282,6 +319,10 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				}))
 					break;
 			}
+		}
+		if (token != null) {
+			token.kill();
+			token = null;
 		}
 	}
 
@@ -299,8 +340,11 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				BlockEntity be = getWorld().getBlockEntity(pos);
 				if (be instanceof XKITEntity) {
 					XKITEntity xkit = (XKITEntity) be;
-					if (temperature - xkit.temperature > THRESHOD && xkit.token == null)
-						count++;
+					if (temperature - xkit.temperature < THRESHOD || xkit.token == null)
+						continue;
+					if (!xkit.isItemValid(token.stack))
+						continue;
+					count++;
 				}
 			}
 			int ran = (int) (Math.random() * count);
@@ -308,14 +352,16 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				BlockEntity be = getWorld().getBlockEntity(pos);
 				if (be instanceof XKITEntity) {
 					XKITEntity xkit = (XKITEntity) be;
-					if (temperature - xkit.temperature > THRESHOD && xkit.token == null) {
-						if (ran == 0) {
-							xkit.token = token;
-							token = null;
-							break;
-						}
-						ran--;
+					if (temperature - xkit.temperature < THRESHOD || xkit.token == null)
+						continue;
+					if (!xkit.isItemValid(token.stack))
+						continue;
+					if (ran == 0) {
+						xkit.token = token;
+						token = null;
+						break;
 					}
+					ran--;
 				}
 			}
 		}
@@ -349,6 +395,7 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		if (pl == null || pl.getEntityWorld() != getWorld() || !getPos().isWithinDistance(pl.getTrackedPosition(), 8)) {
 			playerID = null;
 			markDirty();
+			sync();
 		}
 
 	}

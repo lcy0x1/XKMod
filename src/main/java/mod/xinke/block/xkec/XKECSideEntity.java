@@ -28,7 +28,6 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 
 	@Override
 	public void onDestroy() {
-		System.out.println("on destroy: " + core);// TODO
 		if (getWorld().isClient() || core == null)
 			return;
 		BlockEntity be = getWorld().getBlockEntity(core);

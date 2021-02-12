@@ -21,8 +21,7 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 
 	public static class BeamRenderer {
 
-		private float sr, sb, sg, sa;
-		private float er, eb, eg, ea;
+		private float r, b, g, a;
 		private float u0, u1, v0, v1, y0, y1;
 
 		private Matrix3f m3;
@@ -53,18 +52,10 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		}
 
 		public BeamRenderer setColor(float r, float b, float g, float a) {
-			sr = er = r;
-			sb = eb = b;
-			sg = eg = g;
-			sa = ea = a;
-			return this;
-		}
-
-		public BeamRenderer setEndcolor(float r, float b, float g, int a) {
-			er = r;
-			eb = b;
-			eg = g;
-			ea = a;
+			this.r = r;
+			this.b = b;
+			this.g = g;
+			this.a = a;
 			return this;
 		}
 
@@ -77,19 +68,19 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		}
 
 		private void drawRect(float x0, float z0, float x1, float z1) {
-			drawVertex(er, eg, eb, ea, y1, x0, z0, u1, v0);
-			drawVertex(sr, sg, sb, sa, y0, x0, z0, u1, v1);
-			drawVertex(sr, sg, sb, sa, y0, x1, z1, u0, v1);
-			drawVertex(er, eg, eb, ea, y1, x1, z1, u0, v0);
+			drawVertex(y1, x0, z0, u1, v0, 1);
+			drawVertex(y0, x0, z0, u1, v1, 1);
+			drawVertex(y0, x1, z1, u0, v1, 1);
+			drawVertex(y1, x1, z1, u0, v0, 1);
 		}
 
-		private void drawVertex(float r, float g, float b, float a, float y, float x, float z, float u, float v) {
+		private void drawVertex(float y, float x, float z, float u, float v, int normal) {
 			vc.vertex(m4, z, x, y);
 			vc.color(r, g, b, a);
 			vc.texture(u, v);
 			vc.overlay(OverlayTexture.DEFAULT_UV);
 			vc.light(15728880);
-			vc.normal(m3, 0, 1, 0);
+			vc.normal(m3, 0, normal, 0);
 			vc.next();
 		}
 
@@ -104,7 +95,7 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		mat.push();
 		mat.multiply(Vector3f.NEGATIVE_Y.getRadialQuaternion((float) (Math.atan2(z, x) - Math.PI / 2)));
 		mat.multiply(Vector3f.NEGATIVE_X.getRadialQuaternion((float) (Math.atan2(y, xz))));
-		mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
+		//mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
 
 		br.setUV(0, 1, 0, len);
 		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(id, false)), 0, len, 0.02f);

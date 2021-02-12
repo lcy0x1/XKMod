@@ -86,7 +86,9 @@ public class Automator {
 			for (Field f : cls.getDeclaredFields()) {
 				if (!pred.test(f.getAnnotation(SerialField.class)))
 					continue;
-				f.set(obj, fromTagRaw(tag.get(f.getName()), f.getType(), pred));
+				Object fa = fromTagRaw(tag.get(f.getName()), f.getType(), pred);
+				if (fa != null || !f.getType().isPrimitive())
+					f.set(obj, fa);
 			}
 			cls = cls.getSuperclass();
 		}

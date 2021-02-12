@@ -93,6 +93,7 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 		list.remove(pos);
 		conn = list.toArray(new BlockPos[0]);
 		markDirty();
+		sync();
 	}
 
 	@Override
