@@ -4,10 +4,12 @@ import mod.xinke.block.BaseBlockEntity;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.property.Properties;
 
 @SerialClass
 public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<T>> extends BaseBlockEntity<T>
@@ -34,6 +36,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 	public void clear() {
 		inv = ItemStack.EMPTY;
 		markDirty();
+		updateState();
 	}
 
 	@Override
@@ -59,6 +62,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		ItemStack is = inv;
 		inv = ItemStack.EMPTY;
 		markDirty();
+		updateState();
 		return is;
 	}
 
@@ -69,6 +73,7 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 		ItemStack is = inv;
 		inv = ItemStack.EMPTY;
 		markDirty();
+		updateState();
 		return is;
 	}
 
@@ -76,11 +81,17 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 	public void setStack(int slot, ItemStack stack) {
 		inv = stack.split(1);
 		markDirty();
+		updateState();
 	}
 
 	@Override
 	public int size() {
 		return 1;
+	}
+
+	public void updateState() {
+		BlockState bs = getWorld().getBlockState(getPos()).with(Properties.LIT, inv == null || inv.isEmpty());
+		getWorld().setBlockState(getPos(), bs);
 	}
 
 }

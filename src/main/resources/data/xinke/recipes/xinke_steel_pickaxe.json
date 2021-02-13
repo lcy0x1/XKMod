@@ -1,9 +1,9 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "#",
-        "o",
-        "/"
+        "#o#",
+        " / ",
+        " / "
     ],
     "key": {
         "#": {
@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "xinke:xinke_steel_sword",
+        "item": "xinke:xinke_steel_pickaxe",
         "data": {
             "Damage": 60
         }

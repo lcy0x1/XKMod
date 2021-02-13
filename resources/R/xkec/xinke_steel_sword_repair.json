@@ -1,23 +1,23 @@
 {
     "type": "xinke:xkec",
     "core": {
-        "item": "minecraft:trident"
+        "item": "xinke:xinke_steel_sword"
     },
     "layers": [
         {
             "in": {
-                "item": "minecraft:scute"
+                "item": "xinke:xkec_crystal"
             },
             "count": 6
         },
         {
             "in": {
-                "item": "minecraft:prismarine_crystals"
+                "item": "xinke:xinke_steel"
             },
-            "count": 48
+            "count": 12
         }
     ],
     "output": {
-        "item": "minecraft:heart_of_the_sea"
+        "item": "xinke:xinke_steel_sword"
     }
 }

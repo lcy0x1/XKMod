@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "#o#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:xinke_steel_ingot"
+        },
+        "o":{
+            "item":"xinke:xinke_crystal"
+        }
+    },
+    "result": {
+        "item": "xinke:xinke_steel_chestplate",
+        "data":{
+            "Damage":60
+        }
+    }
+}

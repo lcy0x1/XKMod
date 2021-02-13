@@ -11,6 +11,8 @@ import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;
 import mod.xinke.block.xkec.XKITEntity;
 import mod.xinke.block.xkec.XKNodeEntity;
+import mod.xinke.item.XKSteelArmor;
+import mod.xinke.item.XKSteelPickaxe;
 import mod.xinke.item.XKSteelSword;
 import mod.xinke.recipe.RecReg;
 import net.fabricmc.api.ModInitializer;
@@ -20,6 +22,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -63,8 +66,17 @@ public class XinkeMod implements ModInitializer {
 	public static final Item I_BLADE = new AliasedBlockItem(B_BLADE_CROP, new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_XKSTEEL_NUGGET = new Item(new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_XKSTEEL_INGOT = new Item(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKCRYSTAL = new Item(new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_XKSTEEL_SWORD = new XKSteelSword(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKCRYSTAL = new XKSteelSword(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_PICKAXE = new XKSteelPickaxe(new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_HELMET = new XKSteelArmor(EquipmentSlot.HEAD,
+			new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_CHESTPLATE = new XKSteelArmor(EquipmentSlot.CHEST,
+			new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_LEGGINGS = new XKSteelArmor(EquipmentSlot.LEGS,
+			new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_XKSTEEL_BOOTS = new XKSteelArmor(EquipmentSlot.FEET,
+			new FabricItemSettings().group(IG_GENERAL));
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -100,8 +112,13 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_nugget"), I_XKSTEEL_NUGGET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_ingot"), I_XKSTEEL_INGOT);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_block"), BI_XKSTEEL_BLOCK);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_crystal"), I_XKCRYSTAL);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_pickaxe"), I_XKSTEEL_PICKAXE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_helmet"), I_XKSTEEL_HELMET);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_chestplate"), I_XKSTEEL_CHESTPLATE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_leggings"), I_XKSTEEL_LEGGINGS);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
 
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xk_node"), BI_XK_NODE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkit_source"), BI_XKIT_SOURCE);

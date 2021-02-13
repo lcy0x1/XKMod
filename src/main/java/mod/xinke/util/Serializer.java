@@ -17,8 +17,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
 /**
@@ -62,9 +62,7 @@ public class Serializer {
 
 		new Serializer.ClassHandler<Item>(Item.class, e -> Registry.ITEM.get(new Identifier(e.getAsString())),
 				p -> Item.byRawId(p.readVarInt()), (p, o) -> p.writeVarInt(Item.getRawId(o)));
-		new Serializer.ClassHandler<ItemStack>(ItemStack.class,
-				e -> new ItemStack(Registry.ITEM.get(new Identifier(e.getAsJsonObject().get("item").getAsString())),
-						JsonHelper.getInt(e.getAsJsonObject(), "count", 1)),
+		new Serializer.ClassHandler<ItemStack>(ItemStack.class, (e) -> ShapedRecipe.getItemStack(e.getAsJsonObject()),
 				p -> p.readItemStack(), (p, o) -> p.writeItemStack(o));
 		new Serializer.ClassHandler<Ingredient>(Ingredient.class, e -> Ingredient.fromJson(e),
 				p -> Ingredient.fromPacket(p), (p, o) -> o.write(p));

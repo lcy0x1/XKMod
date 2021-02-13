@@ -61,18 +61,19 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 			return ans;
 		}
 
+		public void kill() {
+			source.source = null;
+		}
+
+		@Override
 		public String toString() {
 			return "ItemToken from " + inv.getClass() + " at slot " + slot + " with item {" + stack + "} fullfilled = "
 					+ fullfilled;
 		}
 
-		public void kill() {
-			source.source = null;
-		}
-
 	}
 
-	public static final double FACTOR = 0.01;
+	public static final double FACTOR = 0.02;
 	public static final double THRESHOD = 1e-3;
 	public static final int COOLDOWN = 4;
 
@@ -258,20 +259,6 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		}
 	}
 
-	private boolean isItemValid(ItemStack item) {
-		if (inv == null)
-			return true;
-		if (inv.getItem() == Items.SHULKER_BOX && inv.getSubTag("BlockEntityTag") != null) {
-			DefaultedList<ItemStack> list = DefaultedList.of();
-			Inventories.fromTag(inv.getSubTag("BlockEntityTag"), list);
-			for (ItemStack is : list)
-				if (!is.isEmpty() && is.getItem() == item.getItem())
-					return true;
-			return false;
-		}
-		return item.getItem() == inv.getItem();
-	}
-
 	private BlockPos getNearby(UUID id) {
 		BlockPos.Mutable bs = new BlockPos.Mutable();
 		int range = 16;
@@ -326,6 +313,20 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		}
 	}
 
+	private boolean isItemValid(ItemStack item) {
+		if ((inv == null || inv.isEmpty()) && !item.isEmpty())
+			return true;
+		if (inv.getItem() == Items.SHULKER_BOX && inv.getSubTag("BlockEntityTag") != null) {
+			DefaultedList<ItemStack> list = DefaultedList.ofSize(27, ItemStack.EMPTY);
+			Inventories.fromTag(inv.getSubTag("BlockEntityTag"), list);
+			for (ItemStack is : list)
+				if (!is.isEmpty() && is.getItem() == item.getItem())
+					return true;
+			return false;
+		}
+		return item.getItem() == inv.getItem();
+	}
+
 	private void updateItemMove() {
 		if (getWorld().isClient())
 			return;
@@ -340,7 +341,7 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				BlockEntity be = getWorld().getBlockEntity(pos);
 				if (be instanceof XKITEntity) {
 					XKITEntity xkit = (XKITEntity) be;
-					if (temperature - xkit.temperature < THRESHOD || xkit.token == null)
+					if (temperature - xkit.temperature < THRESHOD || xkit.token != null)
 						continue;
 					if (!xkit.isItemValid(token.stack))
 						continue;
@@ -352,7 +353,7 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 				BlockEntity be = getWorld().getBlockEntity(pos);
 				if (be instanceof XKITEntity) {
 					XKITEntity xkit = (XKITEntity) be;
-					if (temperature - xkit.temperature < THRESHOD || xkit.token == null)
+					if (temperature - xkit.temperature < THRESHOD || xkit.token != null)
 						continue;
 					if (!xkit.isItemValid(token.stack))
 						continue;

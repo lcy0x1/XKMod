@@ -1,6 +1,6 @@
 package mod.xinke.item;
 
-import mod.xinke.main.XinkeMod;
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
@@ -15,7 +15,7 @@ public class XKSteelToolMaterial implements ToolMaterial {
 
 	@Override
 	public int getDurability() {
-		return 80;
+		return 60;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class XKSteelToolMaterial implements ToolMaterial {
 
 	@Override
 	public Ingredient getRepairIngredient() {
-		return Ingredient.ofItems(XinkeMod.I_XKSTEEL_INGOT);
+		return Ingredient.ofItems(Items.BEDROCK);
 	}
 
 }

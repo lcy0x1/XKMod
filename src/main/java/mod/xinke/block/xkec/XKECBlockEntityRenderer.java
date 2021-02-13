@@ -95,7 +95,7 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 		mat.push();
 		mat.multiply(Vector3f.NEGATIVE_Y.getRadialQuaternion((float) (Math.atan2(z, x) - Math.PI / 2)));
 		mat.multiply(Vector3f.NEGATIVE_X.getRadialQuaternion((float) (Math.atan2(y, xz))));
-		//mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
+		// mat.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(t1 * 4.5f));
 
 		br.setUV(0, 1, 0, len);
 		br.drawCube(mat, vcp.getBuffer(RenderLayer.getBeaconBeam(id, false)), 0, len, 0.02f);

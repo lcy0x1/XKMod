@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "xinke:item/xinke_steel_pickaxe"
+    }
+}

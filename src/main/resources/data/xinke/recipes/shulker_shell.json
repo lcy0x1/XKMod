@@ -6,7 +6,7 @@
     "layers": [
         {
             "in": {
-                "item": "minecraft:chrus_fruit"
+                "item": "minecraft:chorus_fruit"
             },
             "count": 240
         }

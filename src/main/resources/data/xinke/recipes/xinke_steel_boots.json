@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "o o"
+    ],
+    "key": {
+        "#": {
+            "item": "xinke:xinke_steel_ingot"
+        },
+        "o":{
+            "item":"xinke:xinke_crystal"
+        }
+    },
+    "result": {
+        "item": "xinke:xinke_steel_boots",
+        "data":{
+            "Damage":60
+        }
+    }
+}

@@ -1,19 +1,25 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "  #",
-        " # ",
-        "/  "
+        "#",
+        "o",
+        "/"
     ],
     "key": {
         "#": {
             "item": "xinke:xinke_steel_ingot"
         },
-        "/":{
-            "item":"minecraft:stick"
+        "o": {
+            "item": "xinke:xinke_crystal"
+        },
+        "/": {
+            "item": "minecraft:stick"
         }
     },
     "result": {
-        "item": "xinke:xinke_steel_sword"
+        "item": "xinke:xinke_steel_sword",
+        "data": {
+            "Damage": 60
+        }
     }
 }
