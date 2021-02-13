@@ -29,7 +29,7 @@ public class ItemRendererMixin {
 			BufferBuilder bufferBuilder = tessellator.getBuffer();
 			float f = XinkeEnergyItem.getEnergy(stack);
 			float g = XinkeEnergyItem.getMaxEnergy(stack);
-			int i = Math.round(13.0F - f * 13.0F / g);
+			int i = Math.round(f * 13.0F / g);
 			self.invokeRenderGuiQuad(bufferBuilder, x + 2, y + 12, 13, 1, 255, 128, 128, 255);
 			self.invokeRenderGuiQuad(bufferBuilder, x + 2, y + 12, i, 1, 255, 0, 0, 255);
 			RenderSystem.enableBlend();

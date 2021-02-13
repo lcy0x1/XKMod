@@ -16,15 +16,6 @@ import net.minecraft.world.World;
 
 public class LavaFrozingEnchantment extends Enchantment {
 
-	public LavaFrozingEnchantment() {
-		super(Rarity.VERY_RARE, EnchantmentTarget.ARMOR_FEET, new EquipmentSlot[] { EquipmentSlot.FEET });
-	}
-
-	@Override
-	public boolean isTreasure() {
-		return true;
-	}
-
 	public static void freezeLava(LivingEntity entity, World world, BlockPos blockPos, int level) {
 		if (entity.isOnGround()) {
 			BlockState magma = Blocks.OBSIDIAN.getDefaultState();
@@ -47,6 +38,15 @@ public class LavaFrozingEnchantment extends Enchantment {
 			}
 
 		}
+	}
+
+	public LavaFrozingEnchantment() {
+		super(Rarity.VERY_RARE, EnchantmentTarget.ARMOR_FEET, new EquipmentSlot[] { EquipmentSlot.FEET });
+	}
+
+	@Override
+	public boolean isTreasure() {
+		return true;
 	}
 
 }
