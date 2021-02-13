@@ -85,10 +85,13 @@ public class Serializer {
 			throw new Exception("invalid class " + cls + " with object " + obj.toString());
 		if (ans == null)
 			ans = cls.newInstance();
-		for (Field f : cls.getDeclaredFields()) {
-			if (f.getAnnotation(SerialField.class) != null) {
-				f.set(ans, fromRaw(obj.get(f.getName()), f.getType()));
+		while (cls.getAnnotation(SerialClass.class) != null) {
+			for (Field f : cls.getDeclaredFields()) {
+				if (f.getAnnotation(SerialField.class) != null) {
+					f.set(ans, fromRaw(obj.get(f.getName()), f.getType()));
+				}
 			}
+			cls = cls.getSuperclass();
 		}
 		return ans;
 	}
@@ -98,14 +101,17 @@ public class Serializer {
 			throw new Exception("cannot deserialize " + cls);
 		if (ans == null)
 			ans = cls.newInstance();
-		TreeMap<String, Field> map = new TreeMap<>();
-		for (Field f : cls.getDeclaredFields()) {
-			if (f.getAnnotation(SerialField.class) != null) {
-				map.put(f.getName(), f);
+		while (cls.getAnnotation(SerialClass.class) != null) {
+			TreeMap<String, Field> map = new TreeMap<>();
+			for (Field f : cls.getDeclaredFields()) {
+				if (f.getAnnotation(SerialField.class) != null) {
+					map.put(f.getName(), f);
+				}
 			}
-		}
-		for (Field f : map.values()) {
-			f.set(ans, fromRaw(buf, f.getType()));
+			for (Field f : map.values()) {
+				f.set(ans, fromRaw(buf, f.getType()));
+			}
+			cls = cls.getSuperclass();
 		}
 		return ans;
 	}

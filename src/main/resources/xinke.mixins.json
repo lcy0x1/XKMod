@@ -4,9 +4,12 @@
   "package": "mod.xinke.main.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "LivingEntityMixin"
   ],
   "client": [
-    "MainMixin"
+    "MainMixin",
+    "ItemRendererMixin",
+    "ItemRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

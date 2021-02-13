@@ -51,4 +51,16 @@ public class XKECSideEntity extends AbstractXKECBlockEntity<XKECSideEntity> {
 		markDirty();
 	}
 
+	@Override
+	public void updateState() {
+		super.updateState();
+		if (core != null) {
+			BlockEntity be = this.getWorld().getBlockEntity(core);
+			if (be instanceof XKECCoreEntity) {
+				XKECCoreEntity ce = (XKECCoreEntity) be;
+				ce.notifyChange();
+			}
+		}
+	}
+
 }

@@ -10,4 +10,8 @@ public class RecReg {
 	public static final RecipeSerializer<XKECRecipe> RS_XKEC = RecipeSerializer.register("xinke:xkec",
 			new SerialClass.RecSerializer<>(XKECRecipe.class));
 
+	public static final RecipeType<XKFillRecipe> RT_XKFILL = RecipeType.register("xinke:fill");
+	public static final RecipeSerializer<XKFillRecipe> RS_XKFILL = RecipeSerializer.register("xinke:fill",
+			new SerialClass.RecSerializer<>(XKFillRecipe.class));
+
 }

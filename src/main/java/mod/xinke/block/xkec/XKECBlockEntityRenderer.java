@@ -109,7 +109,7 @@ public class XKECBlockEntityRenderer<T extends AbstractXKECBlockEntity<T>> exten
 	@Override
 	public void render(T be, float dt, MatrixStack mat, VertexConsumerProvider vc, int light, int overlay) {
 		float time = Math.floorMod(be.getWorld().getTime(), 80L) + dt;
-		ItemStack is = be.inv;
+		ItemStack is = be.getStack(0);
 		if (!is.isEmpty()) {
 			mat.push();
 			double offset = (Math.sin(time * 2 * Math.PI / 40.0) - 3) / 16;

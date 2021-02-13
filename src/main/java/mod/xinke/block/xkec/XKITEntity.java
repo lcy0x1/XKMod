@@ -106,14 +106,18 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 	private static void transfer(Inventory to, ItemToken token, int slot, Direction direction) {
 		ItemStack itemStack = to.getStack(slot);
 		if (canInsert(to, token.stack, slot, direction)) {
+			int max = Math.min(token.stack.getMaxCount(), to.getMaxCountPerStack());
 			if (itemStack.isEmpty()) {
-				ItemStack tok = token.fullfill(token.stack.getCount());
+				int min = Math.min(max, token.stack.getCount());
+				ItemStack tok = token.fullfill(min);
 				if (tok != null) {
 					to.setStack(slot, tok);
 					to.markDirty();
 				}
 			} else if (canMergeItems(itemStack, token.stack)) {
-				int i = itemStack.getMaxCount() - itemStack.getCount();
+				int i = max - itemStack.getCount();
+				if (i <= 0)
+					return;
 				int j = Math.min(i, token.stack.getCount());
 				ItemStack tok = token.fullfill(j);
 				if (tok != null) {
@@ -314,6 +318,7 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 	}
 
 	private boolean isItemValid(ItemStack item) {
+		ItemStack inv = getStack(0);
 		if ((inv == null || inv.isEmpty()) && !item.isEmpty())
 			return true;
 		if (inv.getItem() == Items.SHULKER_BOX && inv.getSubTag("BlockEntityTag") != null) {

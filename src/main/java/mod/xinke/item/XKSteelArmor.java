@@ -12,7 +12,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class XKSteelArmor extends ArmorItem {
+public class XKSteelArmor extends ArmorItem implements XinkeEnergyItem {
 
 	private static final int TIME_REF = 300, TIME = 500;
 
@@ -26,7 +26,7 @@ public class XKSteelArmor extends ArmorItem {
 				return;
 		}
 		if (e.addStatusEffect(new StatusEffectInstance(eff, TIME, lv)))
-			stack.setDamage(stack.getDamage() + 1);
+			XinkeEnergyItem.setEnergy(stack, XinkeEnergyItem.getEnergy(stack) - 1);
 	}
 
 	private static boolean isWearing(ItemStack stack, Entity entity) {
@@ -48,16 +48,16 @@ public class XKSteelArmor extends ArmorItem {
 			return;
 		if (!isWearing(stack, entity))
 			return;
-		if (stack.getDamage() >= stack.getMaxDamage() * 0.75)
+		if (XinkeEnergyItem.getEnergy(stack) == 0)
 			return;
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.HEAD)
-			addEffect(stack, (LivingEntity) entity, 1, StatusEffects.NIGHT_VISION);
+			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.NIGHT_VISION);
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.CHEST)
-			addEffect(stack, (LivingEntity) entity, 1, StatusEffects.RESISTANCE);
+			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.RESISTANCE);
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.LEGS)
-			addEffect(stack, (LivingEntity) entity, 1, StatusEffects.SPEED);
+			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.SPEED);
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.FEET)
-			addEffect(stack, (LivingEntity) entity, 1, StatusEffects.JUMP_BOOST);
+			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.SLOW_FALLING);
 	}
 
 }

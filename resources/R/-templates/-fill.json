@@ -1,0 +1,24 @@
+{
+    "type": "xinke:fill",
+    "core": {
+        "item": "^i"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "xinke:xinke_crystal"
+            },
+            "count": 6
+        },
+        {
+            "in": {
+                "item": "xinke:xinke_steel_ingot"
+            },
+            "count": 12
+        }
+    ],
+    "output": {
+        "item": "^i"
+    },
+    "energy": 100
+}

@@ -1,23 +1,25 @@
 {
-    "type": "xinke:xkec",
+    "type": "xinke:fill",
     "core": {
         "item": "xinke:xinke_steel_sword"
     },
     "layers": [
         {
             "in": {
-                "item": "xinke:xkec_crystal"
+                "item": "xinke:xinke_crystal"
             },
             "count": 6
         },
         {
             "in": {
-                "item": "xinke:xinke_steel"
+                "item": "xinke:xinke_steel_ingot"
             },
             "count": 12
         }
     ],
     "output": {
         "item": "xinke:xinke_steel_sword"
-    }
+    },
+    "energy": 100
 }
+

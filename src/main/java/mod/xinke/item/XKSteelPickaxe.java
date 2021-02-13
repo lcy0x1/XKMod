@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 
-public class XKSteelPickaxe extends PickaxeItem {
+public class XKSteelPickaxe extends PickaxeItem implements XinkeEnergyItem {
 
 	private static boolean chain(World world, BlockPos pos, ServerPlayerEntity player) {
 		BlockState blockState = world.getBlockState(pos);
@@ -52,16 +52,24 @@ public class XKSteelPickaxe extends PickaxeItem {
 		}
 	}
 
-	private static void chainAll(BlockState state, BlockPos pos, World world, ServerPlayerEntity miner, int radius) {
+	private static void chainAll(ItemStack stack, BlockState state, BlockPos pos, World world, ServerPlayerEntity miner,
+			int radius) {
+		int max = XinkeEnergyItem.getEnergy(stack);
 		BlockPos.Mutable m = new BlockPos.Mutable();
 		for (int i = -radius; i <= radius; i++)
 			for (int j = -radius; j <= radius; j++)
 				for (int k = -radius; k <= radius; k++) {
+					if (max == 0)
+						return;
+					if (i == 0 && j == 0 && k == 0)
+						continue;
 					m.set(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
 					if (world.getBlockState(m).getBlock() != state.getBlock())
 						continue;
-					chain(world, m.toImmutable(), miner);
+					if (chain(world, m.toImmutable(), miner))
+						max--;
 				}
+		XinkeEnergyItem.setEnergy(stack, max);
 	}
 
 	public XKSteelPickaxe(Settings settings) {
@@ -72,7 +80,7 @@ public class XKSteelPickaxe extends PickaxeItem {
 	public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner) {
 		super.postMine(stack, world, state, pos, miner);
 		if (miner instanceof ServerPlayerEntity)
-			chainAll(state, pos, world, (ServerPlayerEntity) miner, 1);
+			chainAll(stack, state, pos, world, (ServerPlayerEntity) miner, 1);
 		return true;
 	}
 

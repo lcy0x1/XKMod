@@ -11,6 +11,8 @@ import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;
 import mod.xinke.block.xkec.XKITEntity;
 import mod.xinke.block.xkec.XKNodeEntity;
+import mod.xinke.enchantment.LavaFrozingEnchantment;
+import mod.xinke.item.AutoAimBow;
 import mod.xinke.item.XKSteelArmor;
 import mod.xinke.item.XKSteelPickaxe;
 import mod.xinke.item.XKSteelSword;
@@ -22,6 +24,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.AliasedBlockItem;
 import net.minecraft.item.BlockItem;
@@ -77,6 +80,10 @@ public class XinkeMod implements ModInitializer {
 			new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_XKSTEEL_BOOTS = new XKSteelArmor(EquipmentSlot.FEET,
 			new FabricItemSettings().group(IG_GENERAL));
+	public static final Item I_AUTOAIM_BOW = new AutoAimBow(new FabricItemSettings().group(IG_GENERAL));
+
+	public static final Enchantment LAVA_FROST = Registry.register(Registry.ENCHANTMENT,
+			new Identifier(MODID, "lava_frost"), new LavaFrozingEnchantment());
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -113,12 +120,6 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_ingot"), I_XKSTEEL_INGOT);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_block"), BI_XKSTEEL_BLOCK);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_crystal"), I_XKCRYSTAL);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_pickaxe"), I_XKSTEEL_PICKAXE);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_helmet"), I_XKSTEEL_HELMET);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_chestplate"), I_XKSTEEL_CHESTPLATE);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_leggings"), I_XKSTEEL_LEGGINGS);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
 
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xk_node"), BI_XK_NODE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkit_source"), BI_XKIT_SOURCE);
@@ -128,6 +129,13 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkec_core_1"), BI_XKEC_CORE_1);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkec_core_2"), BI_XKEC_CORE_2);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xkec_side"), BI_XKEC_SIDE);
+
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_sword"), I_XKSTEEL_SWORD);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_pickaxe"), I_XKSTEEL_PICKAXE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_helmet"), I_XKSTEEL_HELMET);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_chestplate"), I_XKSTEEL_CHESTPLATE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_leggings"), I_XKSTEEL_LEGGINGS);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
 
 		new RecReg();
 		CTESReg.register();

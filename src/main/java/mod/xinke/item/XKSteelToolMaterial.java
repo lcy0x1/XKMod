@@ -15,7 +15,7 @@ public class XKSteelToolMaterial implements ToolMaterial {
 
 	@Override
 	public int getDurability() {
-		return 60;
+		return 120;
 	}
 
 	@Override

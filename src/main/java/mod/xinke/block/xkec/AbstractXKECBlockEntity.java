@@ -90,8 +90,9 @@ public abstract class AbstractXKECBlockEntity<T extends AbstractXKECBlockEntity<
 	}
 
 	public void updateState() {
-		BlockState bs = getWorld().getBlockState(getPos()).with(Properties.LIT, inv == null || inv.isEmpty());
+		BlockState bs = getWorld().getBlockState(getPos()).with(Properties.LIT, inv != null && !inv.isEmpty());
 		getWorld().setBlockState(getPos(), bs);
+		sync();
 	}
 
 }

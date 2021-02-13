@@ -15,7 +15,7 @@ public class XKSteelArmorMaterial implements ArmorMaterial {
 
 	@Override
 	public int getDurability(EquipmentSlot slot) {
-		return 60;
+		return 120;
 	}
 
 	@Override

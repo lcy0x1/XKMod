@@ -93,6 +93,8 @@ public class XKECRecipe implements Recipe<XKECRecipe.Inv> {
 
 	@Override
 	public boolean matches(Inv inv, World world) {
+		if (!core.test(inv.getStack(0)))
+			return false;
 		InvLayer[] invl = inv.getLayers();
 		int i = 0;
 		for (InvLayer il : invl) {

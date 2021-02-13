@@ -1,0 +1,25 @@
+{
+    "type": "xinke:fill",
+    "core": {
+        "item": "xinke:xinke_steel_boots"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "xinke:xinke_crystal"
+            },
+            "count": 6
+        },
+        {
+            "in": {
+                "item": "xinke:xinke_steel_ingot"
+            },
+            "count": 12
+        }
+    ],
+    "output": {
+        "item": "xinke:xinke_steel_boots"
+    },
+    "energy": 100
+}
+

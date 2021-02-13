@@ -8,21 +8,29 @@ import java.util.TreeMap;
 
 import mod.xinke.block.CTESReg;
 import mod.xinke.main.XinkeMod;
+import mod.xinke.recipe.RecReg;
 import mod.xinke.recipe.XKECRecipe;
 import mod.xinke.recipe.XKECRecipe.InvLayer;
+import mod.xinke.recipe.XKFillRecipe;
 import mod.xinke.util.SerialClass;
 import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 
 @SerialClass
-public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> implements XKECRecipe.Inv {
+public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> implements XKECRecipe.Inv, Tickable {
 
 	@SerialField(toClient = true)
 	public BlockPos[] conn = new BlockPos[0];
+
+	@SerialField
+	public boolean mayCraft = false;
+
+	private InvLayer[] cachedLayers = null;
 
 	public XKECCoreEntity() {
 		super(CTESReg.BET_XKEC_CORE);
@@ -73,6 +81,7 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 		}
 		markDirty();
 		sync();
+		notifyChange();
 	}
 
 	@Override
@@ -94,10 +103,60 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 		conn = list.toArray(new BlockPos[0]);
 		markDirty();
 		sync();
+		notifyChange();
 	}
 
 	@Override
 	public InvLayer[] getLayers() {
+		return cachedLayers;
+	}
+
+	public void notifyChange() {
+		mayCraft = true;
+	}
+
+	@Override
+	public void onDestroy() {
+		if (getWorld().isClient())
+			return;
+		for (BlockPos p : conn) {
+			BlockEntity be = getWorld().getBlockEntity(p);
+			if (be instanceof XKECSideEntity) {
+				XKECSideEntity se = (XKECSideEntity) be;
+				se.disConnect();
+			}
+		}
+	}
+
+	@Override
+	public void tick() {
+		if (getWorld().isClient())
+			return;
+		if (mayCraft) {
+			generateLayers();
+			XKECRecipe rec = null;
+			List<XKECRecipe> list = getWorld().getRecipeManager().getAllMatches(RecReg.RT_XKEC, this, getWorld());
+			if (!list.isEmpty())
+				rec = list.get(0);
+			else {
+				List<XKFillRecipe> lf = getWorld().getRecipeManager().getAllMatches(RecReg.RT_XKFILL, this, getWorld());
+				if (!lf.isEmpty())
+					rec = lf.get(0);
+			}
+			if (rec != null)
+				setStack(0, rec.craft(this));
+			mayCraft = false;
+			cachedLayers = null;
+		}
+	}
+
+	@Override
+	public void updateState() {
+		super.updateState();
+		notifyChange();
+	}
+
+	private void generateLayers() {
 		List<InvLayer> list = new ArrayList<>();
 		List<ItemStack> cur = null;
 		int prev = -1;
@@ -113,28 +172,15 @@ public class XKECCoreEntity extends AbstractXKECBlockEntity<XKECCoreEntity> impl
 				cur = new ArrayList<>();
 				prev = sqdis;
 			}
-			BlockEntity be = getWorld().getBlockEntity(p);
+			BlockEntity be = getWorld().getBlockEntity(i);
 			if (be instanceof XKECSideEntity) {
 				XKECSideEntity se = (XKECSideEntity) be;
-				cur.add(se.inv);
+				cur.add(se.getStack(0));
 			}
 		}
 		if (cur != null)
 			list.add(new InvLayer(cur));
-		return list.toArray(new InvLayer[0]);
-	}
-
-	@Override
-	public void onDestroy() {
-		if (getWorld().isClient())
-			return;
-		for (BlockPos p : conn) {
-			BlockEntity be = getWorld().getBlockEntity(p);
-			if (be instanceof XKECSideEntity) {
-				XKECSideEntity se = (XKECSideEntity) be;
-				se.disConnect();
-			}
-		}
+		cachedLayers = list.toArray(new InvLayer[0]);
 	}
 
 }

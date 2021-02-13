@@ -27,6 +27,34 @@
                     "r": "xinke:xinke_steel_nugget"
                 }
             ]
+        },
+        "fill": {
+            "": [
+                {
+                    "-name": "xinke_steel_sword_fill",
+                    "i": "xinke:xinke_steel_sword"
+                },
+                {
+                    "-name": "xinke_steel_pickaxe_fill",
+                    "i": "xinke:xinke_steel_pickaxe"
+                },
+                {
+                    "-name": "xinke_steel_helmet_fill",
+                    "i": "xinke:xinke_steel_helmet"
+                },
+                {
+                    "-name": "xinke_steel_chestplate_fill",
+                    "i": "xinke:xinke_steel_chestplate"
+                },
+                {
+                    "-name": "xinke_steel_leggings_fill",
+                    "i": "xinke:xinke_steel_leggings"
+                },
+                {
+                    "-name": "xinke_steel_boots_fill",
+                    "i": "xinke:xinke_steel_boots"
+                }
+            ]
         }
     }
 }

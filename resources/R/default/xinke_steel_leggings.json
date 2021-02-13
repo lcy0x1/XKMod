@@ -14,9 +14,6 @@
         }
     },
     "result": {
-        "item": "xinke:xinke_steel_leggings",
-        "data":{
-            "Damage":60
-        }
+        "item": "xinke:xinke_steel_leggings"
     }
 }
