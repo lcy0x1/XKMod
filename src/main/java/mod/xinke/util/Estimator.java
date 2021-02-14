@@ -193,6 +193,8 @@ public class Estimator {
 	}
 
 	public EstiResult getAnswer() {
+		if (v * v - 2 * g * dp.y < 0)
+			return EstiType.CLOSE;
 		EstiResult ans = getIdeal();
 		double[] data = new double[] { ans.getA(), ans.getT() };
 		if (estimate(data, 0.1, 0.2, 3))

@@ -26,7 +26,7 @@ public class XKSteelArmor extends ArmorItem implements XinkeEnergyItem {
 				return;
 		}
 		if (e.addStatusEffect(new StatusEffectInstance(eff, TIME, lv)))
-			XinkeEnergyItem.setEnergy(stack, XinkeEnergyItem.getEnergy(stack) - 1);
+			XinkeEnergyItem.raiseEnergy(stack, XinkeEnergyItem.getEnergy(stack) - 1);
 	}
 
 	private static boolean isWearing(ItemStack stack, Entity entity) {
@@ -57,7 +57,7 @@ public class XKSteelArmor extends ArmorItem implements XinkeEnergyItem {
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.LEGS)
 			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.SPEED);
 		if (stack.getItem() == this && this.getSlotType() == EquipmentSlot.FEET)
-			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.SLOW_FALLING);
+			addEffect(stack, (LivingEntity) entity, 0, StatusEffects.JUMP_BOOST);
 	}
 
 }

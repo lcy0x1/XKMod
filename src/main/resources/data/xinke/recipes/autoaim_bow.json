@@ -1,0 +1,37 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:bow"
+    },
+    "layers": [
+        {
+            "in": [
+                {
+                    "item": "minecraft:skeleton_skull"
+                },
+                {
+                    "item": "minecraft:wither_skeleton_skull"
+                },
+                {
+                    "item": "minecraft:zombie_head"
+                },
+                {
+                    "item": "minecraft:creeper_head"
+                },
+                {
+                    "item": "minecraft:player_head"
+                }
+            ],
+            "count": 12
+        },
+        {
+            "in": {
+                "item": "xinke:xinke_crystal"
+            },
+            "count": 48
+        }
+    ],
+    "output": {
+        "item": "xinke:autoaim_bow"
+    }
+}

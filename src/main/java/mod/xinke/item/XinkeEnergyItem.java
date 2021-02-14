@@ -16,11 +16,11 @@ public interface XinkeEnergyItem {
 		return is.getItem() instanceof XinkeEnergyItem;
 	}
 
-	public static void setEnergy(ItemStack is, int max) {
+	public static void raiseEnergy(ItemStack is, int max) {
 		is.getOrCreateSubTag("xinke_energy").putInt("energy", max);
 	}
 
-	public static void setMaxEnergy(ItemStack is, int max) {
+	public static void raiseMaxEnergy(ItemStack is, int max) {
 		is.getOrCreateSubTag("xinke_energy").putInt("max_energy", max);
 	}
 

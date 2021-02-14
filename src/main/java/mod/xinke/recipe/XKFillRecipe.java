@@ -23,8 +23,8 @@ public class XKFillRecipe extends XKECRecipe {
 		ItemStack core = inv.getStack(0).copy();
 		inv.clearAll();
 		core.setDamage(0);
-		XinkeEnergyItem.setMaxEnergy(core, energy);
-		XinkeEnergyItem.setEnergy(core, energy);
+		XinkeEnergyItem.raiseMaxEnergy(core, energy);
+		XinkeEnergyItem.raiseEnergy(core, energy);
 		return core;
 	}
 

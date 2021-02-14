@@ -1,0 +1,23 @@
+{
+    "type": "xinke:xkec",
+    "core": {
+        "item": "minecraft:carrot"
+    },
+    "layers": [
+        {
+            "in": {
+                "item": "xinke:xinke_crystal"
+            },
+            "count": 48
+        },
+        {
+            "in": {
+                "item": "xinke:xinke_steel_block"
+            },
+            "count": 12
+        }
+    ],
+    "output": {
+        "item": "xinke:xinke_carrot"
+    }
+}

@@ -39,11 +39,11 @@ public class XKSteelSword extends SwordItem implements XinkeEnergyItem {
 					stack.getOrCreateTag().put("SkullOwner", NbtHelper.fromGameProfile(new CompoundTag(), gameProfile));
 					target.dropStack(stack);
 				}
-				XinkeEnergyItem.setEnergy(is, XinkeEnergyItem.getEnergy(is) - 9);
+				XinkeEnergyItem.raiseEnergy(is, XinkeEnergyItem.getEnergy(is) - 9);
 			} else
-				XinkeEnergyItem.setEnergy(is, XinkeEnergyItem.getEnergy(is) - 3);
+				XinkeEnergyItem.raiseEnergy(is, XinkeEnergyItem.getEnergy(is) - 3);
 		} else
-			XinkeEnergyItem.setEnergy(is, Math.max(0, XinkeEnergyItem.getEnergy(is) - 1));
+			XinkeEnergyItem.raiseEnergy(is, Math.max(0, XinkeEnergyItem.getEnergy(is) - 1));
 		return super.postHit(is, target, attacker);
 	}
 

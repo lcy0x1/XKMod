@@ -69,7 +69,7 @@ public class XKSteelPickaxe extends PickaxeItem implements XinkeEnergyItem {
 					if (chain(world, m.toImmutable(), miner))
 						max--;
 				}
-		XinkeEnergyItem.setEnergy(stack, max);
+		XinkeEnergyItem.raiseEnergy(stack, max);
 	}
 
 	public XKSteelPickaxe(Settings settings) {

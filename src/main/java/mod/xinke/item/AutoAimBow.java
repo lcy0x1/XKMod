@@ -62,7 +62,7 @@ public class AutoAimBow extends BowItem implements XinkeEnergyItem {
 	}
 
 	private static Entity getEntity(ShootConfig config) {
-		config.velo = MathHelper.clamp(config.pullProgress / 20f, 0f, 1f) * 3;
+		config.velo = MathHelper.clamp(config.pullProgress, 0f, 1f) * 3;
 		if (config.ammo.getItem() == Items.TNT)
 			return getTNTEntity(config);
 		return getProcessedPE(config);
@@ -100,9 +100,8 @@ public class AutoAimBow extends BowItem implements XinkeEnergyItem {
 			entity.setPunch(k);
 		if (EnchantmentHelper.getLevel(Enchantments.FLAME, config.bow) > 0)
 			entity.setOnFireFor(100);
-		if (config.omitConsume || config.player.abilities.creativeMode
-				&& (config.ammo.getItem() == Items.SPECTRAL_ARROW || config.ammo.getItem() == Items.TIPPED_ARROW))
-			entity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+		if (config.omitConsume || config.player.abilities.creativeMode)
+			entity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 		return entity;
 	}
 

@@ -16,7 +16,9 @@ import mod.xinke.item.AutoAimBow;
 import mod.xinke.item.XKSteelArmor;
 import mod.xinke.item.XKSteelPickaxe;
 import mod.xinke.item.XKSteelSword;
+import mod.xinke.item.XinkeCarrot;
 import mod.xinke.recipe.RecReg;
+import mod.xinke.statuseffect.XinkeEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -81,9 +83,14 @@ public class XinkeMod implements ModInitializer {
 	public static final Item I_XKSTEEL_BOOTS = new XKSteelArmor(EquipmentSlot.FEET,
 			new FabricItemSettings().group(IG_GENERAL));
 	public static final Item I_AUTOAIM_BOW = new AutoAimBow(new FabricItemSettings().group(IG_GENERAL));
-
+	public static final Item I_XK_CARROT = new XinkeCarrot(new FabricItemSettings().group(IG_GENERAL));
+	
+	
 	public static final Enchantment LAVA_FROST = Registry.register(Registry.ENCHANTMENT,
 			new Identifier(MODID, "lava_frost"), new LavaFrozingEnchantment());
+	
+	public static final XinkeEffect XINKE_BLESS = new XinkeEffect();
+	
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -136,9 +143,13 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_chestplate"), I_XKSTEEL_CHESTPLATE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_leggings"), I_XKSTEEL_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
-
+		Registry.register(Registry.ITEM, new Identifier(MODID, "autoaim_bow"), I_AUTOAIM_BOW);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_carrot"), I_XK_CARROT);
+		
 		new RecReg();
 		CTESReg.register();
+		
+		Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, "xinke_bless"), XINKE_BLESS);
 	}
 
 }
