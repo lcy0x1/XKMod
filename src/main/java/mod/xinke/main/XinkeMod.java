@@ -3,7 +3,8 @@ package mod.xinke.main;
 import java.util.function.Supplier;
 
 import mod.xinke.block.BaseBlock.STE;
-import mod.xinke.block.BladeCrop;
+import mod.xinke.block.main.BladeCrop;
+import mod.xinke.block.main.TeleportBlock;
 import mod.xinke.block.BlockProp;
 import mod.xinke.block.CTESReg;
 import mod.xinke.block.xkec.XKECBlock;
@@ -67,36 +68,40 @@ public class XinkeMod implements ModInitializer {
 	public static final BlockItem BI_XKEC_CORE_1 = toBI(B_XKEC_CORE_1);
 	public static final BlockItem BI_XKEC_CORE_2 = toBI(B_XKEC_CORE_2);
 	public static final BlockItem BI_XKEC_SIDE = toBI(B_XKEC_SIDE);
-
-	public static final Item I_BLADE = new AliasedBlockItem(B_BLADE_CROP, new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_NUGGET = new Item(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_INGOT = new Item(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKCRYSTAL = new Item(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_SWORD = new XKSteelSword(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_PICKAXE = new XKSteelPickaxe(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_HELMET = new XKSteelArmor(EquipmentSlot.HEAD,
-			new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_CHESTPLATE = new XKSteelArmor(EquipmentSlot.CHEST,
-			new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_LEGGINGS = new XKSteelArmor(EquipmentSlot.LEGS,
-			new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XKSTEEL_BOOTS = new XKSteelArmor(EquipmentSlot.FEET,
-			new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_AUTOAIM_BOW = new AutoAimBow(new FabricItemSettings().group(IG_GENERAL));
-	public static final Item I_XK_CARROT = new XinkeCarrot(new FabricItemSettings().group(IG_GENERAL));
-	
-	
-	public static final Enchantment LAVA_FROST = Registry.register(Registry.ENCHANTMENT,
-			new Identifier(MODID, "lava_frost"), new LavaFrozingEnchantment());
 	
 	public static final XinkeEffect XINKE_BLESS = new XinkeEffect();
-	
+
+	public static final Item I_BLADE = new AliasedBlockItem(B_BLADE_CROP, newFIS());
+	public static final Item I_XKSTEEL_NUGGET = new Item(newFIS());
+	public static final Item I_XKSTEEL_INGOT = new Item(newFIS());
+	public static final Item I_XKCRYSTAL = new Item(newFIS());
+	public static final Item I_XKSTEEL_SWORD = new XKSteelSword(newFIS());
+	public static final Item I_XKSTEEL_PICKAXE = new XKSteelPickaxe(newFIS());
+	public static final Item I_XKSTEEL_HELMET = new XKSteelArmor(EquipmentSlot.HEAD, newFIS());
+	public static final Item I_XKSTEEL_CHESTPLATE = new XKSteelArmor(EquipmentSlot.CHEST, newFIS());
+	public static final Item I_XKSTEEL_LEGGINGS = new XKSteelArmor(EquipmentSlot.LEGS, newFIS());
+	public static final Item I_XKSTEEL_BOOTS = new XKSteelArmor(EquipmentSlot.FEET, newFIS());
+	public static final Item I_AUTOAIM_BOW = new AutoAimBow(newFIS());
+	public static final Item I_XK_CARROT = new XinkeCarrot(newFIS());
+
+	public static final Block B_TELE = new TeleportBlock(BlockProp.FBC_XKN, TeleportBlock.TE::new);
+	public static final BlockItem BI_TELE = toBI(B_TELE);
+	public static final Item I_TELE_CHARGE = new Item(newFIS().maxCount(1));
+	public static final Item I_TELE_BIND = new Item(newFIS().maxCount(1));
+
+	public static final Enchantment LAVA_FROST = Registry.register(Registry.ENCHANTMENT,
+			new Identifier(MODID, "lava_frost"), new LavaFrozingEnchantment());
+
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
 			return () -> new ItemStack(I_BLADE);
 		}
 		return () -> new ItemStack(Blocks.STONE);
+	}
+
+	private static FabricItemSettings newFIS() {
+		return new FabricItemSettings().group(IG_GENERAL);
 	}
 
 	private static BlockItem toBI(Block b) {
@@ -145,10 +150,16 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "autoaim_bow"), I_AUTOAIM_BOW);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_carrot"), I_XK_CARROT);
-		
+
+
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "teleport_block"), B_TELE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_block"), BI_TELE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_charge"), I_TELE_CHARGE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_bind"), I_TELE_BIND);
+
 		new RecReg();
 		CTESReg.register();
-		
+
 		Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, "xinke_bless"), XINKE_BLESS);
 	}
 

@@ -11,6 +11,13 @@ import net.minecraft.world.World;
 
 public class XinkeCarrot extends Item {
 
+	public static void setEnergy(ItemStack is) {
+		if (XinkeEnergyItem.isXinkeEnergyItem(is)) {
+			XinkeEnergyItem.raiseMaxEnergy(is, 100);
+			XinkeEnergyItem.raiseEnergy(is, 100);
+		}
+	}
+
 	public XinkeCarrot(Settings settings) {
 		super(settings.food(new FoodComponent.Builder().alwaysEdible()
 				.statusEffect(new StatusEffectInstance(XinkeMod.XINKE_BLESS, 1200), 1).build()));
@@ -22,13 +29,6 @@ public class XinkeCarrot extends Item {
 			return;
 		PlayerEntity player = (PlayerEntity) user;
 		player.inventory.armor.forEach(XinkeCarrot::setEnergy);
-	}
-
-	public static void setEnergy(ItemStack is) {
-		if (XinkeEnergyItem.isXinkeEnergyItem(is)) {
-			XinkeEnergyItem.raiseMaxEnergy(is, 100);
-			XinkeEnergyItem.raiseEnergy(is, 100);
-		}
 	}
 
 }

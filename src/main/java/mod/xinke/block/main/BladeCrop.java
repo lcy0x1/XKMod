@@ -1,4 +1,4 @@
-package mod.xinke.block;
+package mod.xinke.block.main;
 
 import java.util.Random;
 
