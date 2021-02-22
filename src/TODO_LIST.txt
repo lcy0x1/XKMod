@@ -1,0 +1,13 @@
+REQUIRED_ADD:
+    teleport_block texture/model/state
+    teleport_block container slots
+    teleport_block screen
+    teleport_charge texture
+    teleport_bind texture
+
+REQUIRED_TEST:
+    teleport_block same world teleport
+    teleport_block cross world teleport
+
+PLANED_TO_ADD:
+    

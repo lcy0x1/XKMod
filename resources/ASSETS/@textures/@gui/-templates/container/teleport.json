@@ -1,0 +1,31 @@
+{
+    "side": [
+    ],
+    "comp": {
+        "bind": {
+            "sprite": "altas_teleport_bind",
+            "x": 82,
+            "y": 0
+        },
+        "bind_in": {
+            "sprite": "altas_teleport_charge",
+            "x": 52,
+            "y": 18
+        },
+        "activate": {
+            "sprite": "altas_pearl",
+            "x": 100,
+            "y": 0
+        },
+        "arrow_0": {
+            "sprite": "arrow_0",
+            "x": 89,
+            "y": 18
+        },
+        "bind_out": {
+            "sprite": "result_slot",
+            "x": 130,
+            "y": 18
+        }
+    }
+}

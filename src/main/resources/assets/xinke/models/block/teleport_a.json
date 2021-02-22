@@ -1,0 +1,8 @@
+{
+    "parent":"block/cube_bottom_top",
+    "textures":{
+        "top":"xinke:block/teleport_top_a",
+        "bottom":"xinke:block/teleport_bottom",
+        "side":"xinke:block/teleport_side"
+    }
+}

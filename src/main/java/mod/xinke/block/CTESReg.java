@@ -24,6 +24,7 @@ public class CTESReg {
 	public static BlockEntityType<XKITEntity> BET_XKIT;
 
 	public static BlockEntityType<TeleportBlock.TE> BET_TELE;
+	
 	public static ScreenHandlerType<TeleportBlock.Cont> SHT_TELE;
 
 	public static void register() {
@@ -34,7 +35,7 @@ public class CTESReg {
 		BET_XKIT = reg("xkit", XKITEntity::new, XinkeMod.B_XKIT_SOURCE, XinkeMod.B_XKIT_MIDDLE, XinkeMod.B_XKIT_TARGET);
 		BET_TELE = reg("teleport", TeleportBlock.TE::new, XinkeMod.B_TELE);
 
-		ScreenHandlerRegistry.registerSimple(new Identifier(XinkeMod.MODID, "teleport"), TeleportBlock.Cont::new);
+		SHT_TELE = ScreenHandlerRegistry.registerSimple(new Identifier(XinkeMod.MODID, "teleport"), TeleportBlock.Cont::new);
 	}
 
 	private static <T extends BlockEntity> BlockEntityType<T> reg(String id, Supplier<T> sup, Block... blocks) {

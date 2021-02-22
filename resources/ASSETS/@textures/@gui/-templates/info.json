@@ -19,6 +19,9 @@
     },
     "altas": {
         "ids": [
+            "_pearl",
+            "_teleport_bind",
+            "_teleport_charge"
         ],
         "w": 18,
         "h": 18,

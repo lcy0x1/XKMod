@@ -5,15 +5,12 @@ import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.text.Text;
 
 @SerialClass
-public class InvBlockEntity<T extends InvBlockEntity<T>> extends BaseBlockEntity<T>
+public abstract class InvBlockEntity<T extends InvBlockEntity<T>> extends BaseBlockEntity<T>
 		implements Inventory, NamedScreenHandlerFactory {
 
 	@SerialField
@@ -41,19 +38,7 @@ public class InvBlockEntity<T extends InvBlockEntity<T>> extends BaseBlockEntity
 			inv[i] = ItemStack.EMPTY;
 		markDirty();
 	}
-
-	@Override
-	public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Text getDisplayName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public ItemStack getStack(int slot) {
 		return inv[slot];

@@ -40,6 +40,8 @@ import net.minecraft.util.registry.Registry;
 
 public class XinkeMod implements ModInitializer {
 
+	public static boolean isPhysicalClient = false;
+	
 	public static final String MODID = "xinke";
 
 	public static final ItemGroup IG_GENERAL = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
@@ -152,8 +154,8 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_carrot"), I_XK_CARROT);
 
 
-		Registry.register(Registry.BLOCK, new Identifier(MODID, "teleport_block"), B_TELE);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_block"), BI_TELE);
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "teleport"), B_TELE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport"), BI_TELE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_charge"), I_TELE_CHARGE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport_bind"), I_TELE_BIND);
 

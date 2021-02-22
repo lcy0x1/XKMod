@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "lit=false": { "model": "xinke:block/teleport" },
+        "lit=true": { "model": "xinke:block/teleport_a" }
+    }
+}
