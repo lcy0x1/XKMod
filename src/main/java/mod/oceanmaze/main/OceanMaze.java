@@ -29,7 +29,7 @@ public class OceanMaze implements ModInitializer {
 			itemGroupIcon("general"));
 
 	public static final BlockProp BP_OM = new BlockProp(
-			FabricBlockSettings.of(Material.STONE).dropsNothing().ticksRandomly(), 20, 100);
+			FabricBlockSettings.of(Material.STONE).dropsNothing(), 20, 100);
 	public static final FabricBlockSettings BP_METAL = FabricBlockSettings.copyOf(Blocks.IRON_BLOCK);
 
 	
@@ -102,16 +102,16 @@ public class OceanMaze implements ModInitializer {
 
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "water_metal_block"), B_WATER_METAL_BLOCK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "ocean_metal_block"), B_OCEAN_METAL_BLOCK);
-		Registry.register(Registry.BLOCK, new Identifier(MODID, "deep_ocean_wall_block"), B_DEEP_OCEAN_METAL_BLOCK);
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "deep_ocean_metal_block"), B_DEEP_OCEAN_METAL_BLOCK);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_block"), BI_WATER_METAL_BLOCK);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_block"), BI_OCEAN_METAL_BLOCK);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_wall_block"), BI_DEEP_OCEAN_METAL_BLOCK);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_block"), BI_DEEP_OCEAN_METAL_BLOCK);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_ingot"), I_WATER_METAL_INGOT);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_ingot"), I_OCEAN_METAL_INGOT);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_wall_ingot"), I_DEEP_OCEAN_METAL_INGOT);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_ingot"), I_DEEP_OCEAN_METAL_INGOT);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_nugget"), I_WATER_METAL_NUGGET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_nugget"), I_OCEAN_METAL_NUGGET);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_wall_nugget"), I_DEEP_OCEAN_METAL_NUGGET);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_nugget"), I_DEEP_OCEAN_METAL_NUGGET);
 
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_helmet"), I_WATER_METAL_HELMET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_chestplate"), I_WATER_METAL_CHESTPLATE);
