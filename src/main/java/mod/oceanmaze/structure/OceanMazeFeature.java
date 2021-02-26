@@ -43,15 +43,15 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 		}
 
 	}
-	
+
 	public static final List<SpawnSettings.SpawnEntry> MOB = new ArrayList<>();
-	
+
 	static {
-		
+
 		MOB.add(new SpawnEntry(EntityType.ELDER_GUARDIAN, 100, 1, 1));
 		MOB.add(new SpawnEntry(EntityType.GUARDIAN, 200, 1, 4));
 		MOB.add(new SpawnEntry(EntityType.DROWNED, 300, 1, 4));
-		
+
 	}
 
 	public OceanMazeFeature(Codec<DefaultFeatureConfig> codec) {
@@ -63,6 +63,7 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 		return Start::new;
 	}
 
+	@Override
 	public List<SpawnSettings.SpawnEntry> getMonsterSpawns() {
 		return MOB;
 	}

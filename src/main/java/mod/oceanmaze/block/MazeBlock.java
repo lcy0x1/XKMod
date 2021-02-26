@@ -40,7 +40,7 @@ public class MazeBlock extends BaseBlock {
 	public static final Fatigue FATIGUE = new Fatigue();
 	public static final Spawner SPAWNER = new Spawner();
 
-	public static final int DELAY = 2;
+	public static final int DELAY = 4;
 
 	public MazeBlock(BlockProp p, IImpl... impl) {
 		super(p, impl);
@@ -221,25 +221,27 @@ public class MazeBlock extends BaseBlock {
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
 			BlockState rep = OceanMaze.B_OMO_WALL.getDefaultState();
-			for (BooleanProperty bp : PROPS)
-				rep = rep.with(bp, state.get(bp));
+			BlockState self = rep;
 			for (int i = 0; i < 6; i++) {
+				BlockPos uppos = pos.offset(Direction.values()[i]);
+				BlockState torep = world.getBlockState(uppos);
+				self = self.with(PROPS[i], torep.getBlock() != self.getBlock());
 				if (state.get(PROPS[i]))
 					continue;
-				BlockPos uppos = pos.offset(Direction.values()[i]);
 				if (World.isOutOfBuildLimitVertically(uppos))
 					continue;
-				BlockState torep = world.getBlockState(uppos);
-				if (torep.getMaterial().isReplaceable())
-					world.setBlockState(uppos, rep);
-				else if (torep.getBlock() == OceanMaze.B_OMO_WALL) {
-					BlockState target = torep;
-					for (BooleanProperty bp : PROPS)
-						target = target.with(bp, target.get(bp) && rep.get(bp));
-					if (target != torep)
-						world.setBlockState(uppos, target);
+				if (torep.getMaterial().isReplaceable()) {
+					BlockState tar = rep;
+					for (int j = 0; j < 6; j++) {
+						BlockPos look = uppos.offset(Direction.values()[j]);
+						BlockState near = world.getBlockState(look);
+						tar = tar.with(PROPS[j], near.getBlock() != rep.getBlock());
+					}
+					world.setBlockState(uppos, tar);
 				}
 			}
+			if (self != state)
+				world.setBlockState(pos, self);
 		}
 
 		@Override

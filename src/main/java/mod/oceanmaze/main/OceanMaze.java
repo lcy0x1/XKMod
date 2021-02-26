@@ -28,14 +28,14 @@ public class OceanMaze implements ModInitializer {
 	public static final ItemGroup IG_GENERAL = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
 			itemGroupIcon("general"));
 
-	public static final BlockProp BP_OM = new BlockProp(
-			FabricBlockSettings.of(Material.STONE).dropsNothing(), 20, 100);
+	public static final BlockProp BP_OM = new BlockProp(FabricBlockSettings.of(Material.STONE).dropsNothing(), 20, 100);
 	public static final FabricBlockSettings BP_METAL = FabricBlockSettings.copyOf(Blocks.IRON_BLOCK);
 
-	
-	public static final Block B_OMC_CORE = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.HOR_DIRE_STATE, MazeBlock.FLOOR_PROT);
+	public static final Block B_OMC_CORE = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.HOR_DIRE_STATE,
+			MazeBlock.FLOOR_PROT);
 	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.HOR_DIRE_STATE);
-	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.FLOOR_PROT, MazeBlock.FATIGUE);
+	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.FLOOR_PROT,
+			MazeBlock.FATIGUE);
 	public static final Block B_OMC_SPAWNER = new MazeBlock(BP_OM, MazeBlock.SPAWNER, MazeBlock.FATIGUE);
 	public static final Block B_OMO_WALL = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.ALL_DIRE_STATE);
 
@@ -44,7 +44,7 @@ public class OceanMaze implements ModInitializer {
 	public static final BlockItem BI_OMC_FLOOR = toBI(B_OMC_FLOOR);
 	public static final BlockItem BI_OMC_SPAWNER = toBI(B_OMC_SPAWNER);
 	public static final BlockItem BI_OMO_WALL = toBI(B_OMO_WALL);
-	
+
 	public static final Block B_WATER_METAL_BLOCK = new Block(BP_METAL);
 	public static final Block B_OCEAN_METAL_BLOCK = new Block(BP_METAL);
 	public static final Block B_DEEP_OCEAN_METAL_BLOCK = new Block(BP_METAL);
@@ -57,19 +57,31 @@ public class OceanMaze implements ModInitializer {
 	public static final Item I_WATER_METAL_NUGGET = new Item(newFIS());
 	public static final Item I_OCEAN_METAL_NUGGET = new Item(newFIS());
 	public static final Item I_DEEP_OCEAN_METAL_NUGGET = new Item(newFIS());
-	
-	public static final Item I_WATER_METAL_HELMET = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL, EquipmentSlot.HEAD, newFIS());
-	public static final Item I_WATER_METAL_CHESTPLATE = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL, EquipmentSlot.CHEST, newFIS());
-	public static final Item I_WATER_METAL_LEGGINGS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL, EquipmentSlot.LEGS, newFIS());
-	public static final Item I_WATER_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL, EquipmentSlot.FEET, newFIS());
-	public static final Item I_OCEAN_METAL_HELMET = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL, EquipmentSlot.HEAD, newFIS());
-	public static final Item I_OCEAN_METAL_CHESTPLATE = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL, EquipmentSlot.CHEST, newFIS());
-	public static final Item I_OCEAN_METAL_LEGGINGS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL, EquipmentSlot.LEGS, newFIS());
-	public static final Item I_OCEAN_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL, EquipmentSlot.FEET, newFIS());
-	public static final Item I_DEEP_OCEAN_METAL_HELMET = new OceanMetalArmor(OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.HEAD, newFIS());
-	public static final Item I_DEEP_OCEAN_METAL_CHESTPLATE = new OceanMetalArmor(OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.CHEST, newFIS());
-	public static final Item I_DEEP_OCEAN_METAL_LEGGINGS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.LEGS, newFIS());
-	public static final Item I_DEEP_OCEAN_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.FEET, newFIS());
+
+	public static final Item I_WATER_METAL_HELMET = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL,
+			EquipmentSlot.HEAD, newFIS());
+	public static final Item I_WATER_METAL_CHESTPLATE = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL,
+			EquipmentSlot.CHEST, newFIS());
+	public static final Item I_WATER_METAL_LEGGINGS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL,
+			EquipmentSlot.LEGS, newFIS());
+	public static final Item I_WATER_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_WATER_METAL,
+			EquipmentSlot.FEET, newFIS());
+	public static final Item I_OCEAN_METAL_HELMET = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL,
+			EquipmentSlot.HEAD, newFIS());
+	public static final Item I_OCEAN_METAL_CHESTPLATE = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL,
+			EquipmentSlot.CHEST, newFIS());
+	public static final Item I_OCEAN_METAL_LEGGINGS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL,
+			EquipmentSlot.LEGS, newFIS());
+	public static final Item I_OCEAN_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_OCEAN_METAL,
+			EquipmentSlot.FEET, newFIS());
+	public static final Item I_DEEP_OCEAN_METAL_HELMET = new OceanMetalArmor(
+			OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.HEAD, newFIS());
+	public static final Item I_DEEP_OCEAN_METAL_CHESTPLATE = new OceanMetalArmor(
+			OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.CHEST, newFIS());
+	public static final Item I_DEEP_OCEAN_METAL_LEGGINGS = new OceanMetalArmor(
+			OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL, EquipmentSlot.LEGS, newFIS());
+	public static final Item I_DEEP_OCEAN_METAL_BOOTS = new OceanMetalArmor(OceanMetalArmorMaterial.AM_DEEP_OCEAN_METAL,
+			EquipmentSlot.FEET, newFIS());
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -81,7 +93,7 @@ public class OceanMaze implements ModInitializer {
 	private static BlockItem toBI(Block b) {
 		return new BlockItem(b, new FabricItemSettings().group(IG_GENERAL));
 	}
-	
+
 	private static FabricItemSettings newFIS() {
 		return new FabricItemSettings().group(IG_GENERAL);
 	}
@@ -93,7 +105,7 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_cell_floor"), B_OMC_FLOOR);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_cell_spawner"), B_OMC_SPAWNER);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_out_wall"), B_OMO_WALL);
-		
+
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_core"), BI_OMC_CORE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_wall"), BI_OMC_WALL);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_floor"), BI_OMC_FLOOR);
@@ -122,10 +134,12 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_leggings"), I_OCEAN_METAL_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_boots"), I_OCEAN_METAL_BOOTS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_helmet"), I_DEEP_OCEAN_METAL_HELMET);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_chestplate"), I_DEEP_OCEAN_METAL_CHESTPLATE);
-		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_leggings"), I_DEEP_OCEAN_METAL_LEGGINGS);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_chestplate"),
+				I_DEEP_OCEAN_METAL_CHESTPLATE);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_leggings"),
+				I_DEEP_OCEAN_METAL_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_boots"), I_DEEP_OCEAN_METAL_BOOTS);
-		
+
 		OceanMazeStructureReg.onInit();
 	}
 }

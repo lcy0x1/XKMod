@@ -2,9 +2,11 @@ package mod.oceanmaze.main;
 
 import mod.oceanmaze.structure.OceanMazeFeature;
 import mod.oceanmaze.structure.OceanMazeGenerator;
+import mod.oceanmaze.structure.UnderWaterStructureProcessor;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
 import net.minecraft.structure.StructurePieceType;
+import net.minecraft.structure.processor.StructureProcessorType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -22,8 +24,12 @@ public class OceanMazeStructureReg {
 
 	public static final StructureFeature<DefaultFeatureConfig> SF_OCEANMAZE = new OceanMazeFeature(
 			DefaultFeatureConfig.CODEC);
+
 	public static final ConfiguredStructureFeature<?, ?> CSF_OCEANMAZE = SF_OCEANMAZE
 			.configure(DefaultFeatureConfig.DEFAULT);
+
+	public static final StructureProcessorType<UnderWaterStructureProcessor> SPCT_UW = StructureProcessorType
+			.register("oceanmaze:under_water", UnderWaterStructureProcessor.CODEC);
 
 	public static void onInit() {
 		Registry.register(Registry.STRUCTURE_PIECE, new Identifier(OceanMaze.MODID, "oceanmaze"), SPT_OCEANMAZE);

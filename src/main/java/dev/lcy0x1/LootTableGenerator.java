@@ -20,7 +20,7 @@ public class LootTableGenerator {
 		public static class Count {
 
 			public int min, max;
-			public String type;
+			public String type = "minecraft:uniform";
 
 		}
 

@@ -7,18 +7,20 @@ import mod.lcy0x1.util.maze.MazeConfig;
 import mod.lcy0x1.util.maze.MazeGen;
 import mod.lcy0x1.util.maze.MazeGen.Debugger;
 import mod.oceanmaze.main.OceanMazeStructureReg;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.SimpleStructurePiece;
 import net.minecraft.structure.Structure;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.structure.StructurePlacementData;
-import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.gen.ChunkRandom;
 
@@ -49,8 +51,12 @@ public class OceanMazeGenerator {
 		}
 
 		@Override
-		protected void handleMetadata(String metadata, BlockPos pos, ServerWorldAccess serverWorldAccess, Random random,
+		protected void handleMetadata(String str, BlockPos pos, ServerWorldAccess world, Random random,
 				BlockBox boundingBox) {
+			Identifier id = new Identifier(str);
+			BlockEntity be = world.getBlockEntity(pos.offset(Direction.DOWN));
+			if (be instanceof LootableContainerBlockEntity)
+				((LootableContainerBlockEntity) be).setLootTable(id, random.nextLong());
 		}
 
 		@Override
@@ -64,7 +70,7 @@ public class OceanMazeGenerator {
 			Structure structure = structureManager.getStructureOrBlank(this.template);
 			StructurePlacementData placementData = (new StructurePlacementData()).setRotation(this.rotation)
 					.setMirror(BlockMirror.NONE).setPosition(new BlockPos(2, 0, 2))
-					.addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
+					.addProcessor(UnderWaterStructureProcessor.INSTANCE);
 			this.setStructureData(structure, this.pos, placementData);
 		}
 
@@ -143,7 +149,8 @@ public class OceanMazeGenerator {
 	private static void addEdge(StructureManager manager, List<StructurePiece> list, BlockPos pos, int h, int o, int w,
 			int d, int j, Identifier id) {
 		list.add(new Piece(manager, pos.add((o - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.NONE));
-		list.add(new Piece(manager, pos.add((w - d) * 5, -h * 5, (w - j - 1 - d) * 5), id, BlockRotation.CLOCKWISE_180));
+		list.add(
+				new Piece(manager, pos.add((w - d) * 5, -h * 5, (w - j - 1 - d) * 5), id, BlockRotation.CLOCKWISE_180));
 		list.add(new Piece(manager, pos.add((w - j - 1 - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90));
 		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (w - d) * 5), id, BlockRotation.COUNTERCLOCKWISE_90));
 	}
