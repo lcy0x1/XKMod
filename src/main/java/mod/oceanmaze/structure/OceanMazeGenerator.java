@@ -63,30 +63,32 @@ public class OceanMazeGenerator {
 		private void initializeStructureData(StructureManager structureManager) {
 			Structure structure = structureManager.getStructureOrBlank(this.template);
 			StructurePlacementData placementData = (new StructurePlacementData()).setRotation(this.rotation)
-					.setMirror(BlockMirror.NONE).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
+					.setMirror(BlockMirror.NONE).setPosition(new BlockPos(2, 0, 2))
+					.addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS);
 			this.setStructureData(structure, this.pos, placementData);
 		}
 
 	}
-	
-	public static final Identifier CORE = new Identifier("oceanmaze:oceanmaze/core");
+
+	public static final Identifier CORE = new Identifier("oceanmaze:oceanmaze/end_0");
 	public static final Identifier STRAIGHT = new Identifier("oceanmaze:oceanmaze/straight");
 	public static final Identifier CORNER = new Identifier("oceanmaze:oceanmaze/corner");
 	public static final Identifier T_WAY = new Identifier("oceanmaze:oceanmaze/t_way");
 	public static final Identifier CROSS = new Identifier("oceanmaze:oceanmaze/cross");
-	public static final Identifier WALL_FACE = new Identifier("oceanmaze:oceanmaze/wall_face");
-	public static final Identifier WALL_CORNER = new Identifier("oceanmaze:oceanmaze/wall_corner");
+	public static final Identifier END_LV0 = new Identifier("oceanmaze:oceanmaze/end_0");
+	public static final Identifier END_LV1 = new Identifier("oceanmaze:oceanmaze/end_1");
+	public static final Identifier END_LV2 = new Identifier("oceanmaze:oceanmaze/end_2");
+	public static final Identifier END_LV3 = new Identifier("oceanmaze:oceanmaze/end_3");
+
+	public static final Identifier SIDE_EDGE = new Identifier("oceanmaze:oceanmaze/side_edge");
+	public static final Identifier SIDE_CORNER = new Identifier("oceanmaze:oceanmaze/side_corner");
 	public static final Identifier TOP_FACE = new Identifier("oceanmaze:oceanmaze/top_face");
 	public static final Identifier TOP_EDGE = new Identifier("oceanmaze:oceanmaze/top_edge");
 	public static final Identifier TOP_CORNER = new Identifier("oceanmaze:oceanmaze/top_corner");
 	public static final Identifier BOTTOM_FACE = new Identifier("oceanmaze:oceanmaze/bottom_face");
 	public static final Identifier BOTTOM_EDGE = new Identifier("oceanmaze:oceanmaze/bottom_edge");
 	public static final Identifier BOTTOM_CORNER = new Identifier("oceanmaze:oceanmaze/bottom_corner");
-	public static final Identifier END_LV0 = new Identifier("oceanmaze:oceanmaze/end_0");
-	public static final Identifier END_LV1 = new Identifier("oceanmaze:oceanmaze/end_1");
-	public static final Identifier END_LV2 = new Identifier("oceanmaze:oceanmaze/end_2");
-	public static final Identifier END_LV3 = new Identifier("oceanmaze:oceanmaze/end_3");
-	
+
 	public static final int[] LAYERS = { 8, 9, 10, 11, 12 };
 	public static final int[] WEIGHTS = { 5, 10, 15 };
 
@@ -102,9 +104,38 @@ public class OceanMazeGenerator {
 					int dire = map[x][z];
 					CellType ct = parse_ct(dire);
 					Identifier id = parse_id(ct, r, Math.abs(x - mazes[i].r), Math.abs(z - mazes[i].r));
-					children.add(new Piece(manager, pos, id, parse_rot(dire)));
+					children.add(new Piece(manager, pos.add((x - mazes[i].r) * 5, -i * 5, (z - mazes[i].r) * 5), id,
+							parse_rot(dire)));
 				}
+			for (int j = 0; j < mazes[i].w; j++) {
+				addEdge(manager, children, pos, i - 1, -1, mazes[i].w, mazes[i].r, j, TOP_EDGE);
+				addEdge(manager, children, pos, i, -1, mazes[i].w, mazes[i].r, j, SIDE_EDGE);
+
+			}
 		}
+		for (int x = 0; x < mazes[0].w; x++)
+			for (int z = 0; z < mazes[0].w; z++) {
+				children.add(new Piece(manager, pos.add((x - mazes[0].r) * 5, 5, (z - mazes[0].r) * 5), TOP_FACE,
+						BlockRotation.NONE));
+			}
+		int ln = LAYERS.length - 1;
+		for (int x = 0; x < mazes[ln].w; x++)
+			for (int z = 0; z < mazes[ln].w; z++) {
+				children.add(new Piece(manager, pos.add((x - mazes[ln].r) * 5, -(ln + 1) * 5, (z - mazes[ln].r) * 5),
+						BOTTOM_FACE, BlockRotation.NONE));
+			}
+		for (int j = 0; j < mazes[ln].w; j++) {
+			addEdge(manager, children, pos, ln + 1, -1, mazes[ln].w, mazes[ln].r, j, BOTTOM_EDGE);
+
+		}
+	}
+
+	private static void addEdge(StructureManager manager, List<StructurePiece> list, BlockPos pos, int h, int o, int w,
+			int d, int j, Identifier id) {
+		list.add(new Piece(manager, pos.add((o - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.NONE));
+		list.add(new Piece(manager, pos.add((w - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.CLOCKWISE_180));
+		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90));
+		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (w - d) * 5), id, BlockRotation.COUNTERCLOCKWISE_90));
 	}
 
 	private static CellType parse_ct(int cell) {
@@ -118,7 +149,7 @@ public class OceanMazeGenerator {
 			return CellType.T_WAY;
 		if (cell == 15)
 			return CellType.CROSS;
-		// TODO error
+		System.out.println("error: invalid cell " + cell);
 		return null;
 	}
 
@@ -151,9 +182,9 @@ public class OceanMazeGenerator {
 			return BlockRotation.NONE;
 		if (cell == 2)
 			return BlockRotation.CLOCKWISE_180;
-		if (cell == 4)
-			return BlockRotation.COUNTERCLOCKWISE_90;
 		if (cell == 8)
+			return BlockRotation.COUNTERCLOCKWISE_90;
+		if (cell == 4)
 			return BlockRotation.CLOCKWISE_90;
 
 		if (cell == 3)
@@ -165,23 +196,23 @@ public class OceanMazeGenerator {
 			return BlockRotation.NONE;
 		if (cell == 6)
 			return BlockRotation.CLOCKWISE_180;
-		if (cell == 5)
-			return BlockRotation.COUNTERCLOCKWISE_90;
 		if (cell == 10)
+			return BlockRotation.COUNTERCLOCKWISE_90;
+		if (cell == 5)
 			return BlockRotation.CLOCKWISE_90;
 
-		if (cell == 14)
-			return BlockRotation.NONE;
 		if (cell == 13)
+			return BlockRotation.NONE;
+		if (cell == 14)
 			return BlockRotation.CLOCKWISE_180;
-		if (cell == 7)
-			return BlockRotation.COUNTERCLOCKWISE_90;
 		if (cell == 11)
+			return BlockRotation.COUNTERCLOCKWISE_90;
+		if (cell == 7)
 			return BlockRotation.CLOCKWISE_90;
 
 		if (cell == 15)
 			return BlockRotation.NONE;
-		// TODO error
+		System.out.println("error: invalid cell " + cell);
 		return null;
 	}
 

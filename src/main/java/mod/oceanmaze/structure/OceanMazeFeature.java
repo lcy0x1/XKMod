@@ -28,7 +28,8 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 				StructureManager manager, int chunkX, int chunkZ, Biome biome, DefaultFeatureConfig config) {
 			int x = chunkX * 16;
 			int z = chunkZ * 16;
-			int y = chunkGenerator.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+			int y = chunkGenerator.getHeight(x, z, Heightmap.Type.OCEAN_FLOOR);
+			y = Math.max(y, 40);
 			MazeConfig conf = new MazeConfig();
 			BlockPos pos = new BlockPos(x, y, z);
 			OceanMazeGenerator.addPieces(manager, pos, this.children, this.random, conf);

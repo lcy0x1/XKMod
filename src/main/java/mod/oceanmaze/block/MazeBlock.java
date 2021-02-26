@@ -24,6 +24,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -51,7 +53,7 @@ public class MazeBlock extends BaseBlock {
 				boolean notify) {
 			if (world.isClient())
 				return;
-			world.getBlockTickScheduler().schedule(pos, state.getBlock(), DELAY);
+			//world.getBlockTickScheduler().schedule(pos, state.getBlock(), DELAY);
 		}
 
 	}
@@ -72,10 +74,10 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
-	public static class DireState implements IState, IScheduledTick {
+	public static class DireState implements IState, IScheduledTick, IRotMir {
 
-		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.EAST,
-				Properties.WEST };
+		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.WEST,
+				Properties.EAST };
 
 		@Override
 		public void fillStateContainer(Builder<Block, BlockState> builder) {
@@ -101,6 +103,28 @@ public class MazeBlock extends BaseBlock {
 			if (!torep.getMaterial().isReplaceable())
 				return;
 			world.setBlockState(uppos, rep);
+		}
+
+		@Override
+		public BlockState mirror(BlockState state, BlockMirror mirrorIn) {
+			BlockState ans = state;
+			for (int i = 0; i < 4; i++) {
+				Direction d0 = Direction.values()[i + 2];
+				Direction d1 = mirrorIn.apply(d0);
+				ans = ans.with(PROPS[d1.ordinal() - 2], state.get(PROPS[d0.ordinal() - 2]));
+			}
+			return ans;
+		}
+
+		@Override
+		public BlockState rotate(BlockState state, BlockRotation rot) {
+			BlockState ans = state;
+			for (int i = 0; i < 4; i++) {
+				Direction d0 = Direction.values()[i + 2];
+				Direction d1 = rot.rotate(d0);
+				ans = ans.with(PROPS[d1.ordinal() - 2], state.get(PROPS[d0.ordinal() - 2]));
+			}
+			return ans;
 		}
 
 	}
@@ -133,7 +157,7 @@ public class MazeBlock extends BaseBlock {
 			if (count > 0)
 				return;
 			DrownedEntity e = EntityType.DROWNED.create(world);
-			e.refreshPositionAndAngles(pos.getX()+0.5, pos.getY() + 2, pos.getZ()+0.5, 0, 0);
+			e.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0, 0);
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
 			ItemStack trident = new ItemStack(Items.TRIDENT);
 			e.equipStack(EquipmentSlot.MAINHAND, trident);
@@ -177,7 +201,7 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
-	public static class AllDireState implements IState, IScheduledTick {
+	public static class AllDireState implements IState, IScheduledTick, IRotMir {
 
 		public static final BooleanProperty[] PROPS = { Properties.DOWN, Properties.UP, Properties.NORTH,
 				Properties.SOUTH, Properties.WEST, Properties.EAST };
@@ -216,6 +240,28 @@ public class MazeBlock extends BaseBlock {
 						world.setBlockState(uppos, target);
 				}
 			}
+		}
+
+		@Override
+		public BlockState mirror(BlockState state, BlockMirror mirrorIn) {
+			BlockState ans = state;
+			for (int i = 2; i < 6; i++) {
+				Direction d0 = Direction.values()[i];
+				Direction d1 = mirrorIn.apply(d0);
+				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
+			}
+			return ans;
+		}
+
+		@Override
+		public BlockState rotate(BlockState state, BlockRotation rot) {
+			BlockState ans = state;
+			for (int i = 2; i < 6; i++) {
+				Direction d0 = Direction.values()[i];
+				Direction d1 = rot.rotate(d0);
+				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
+			}
+			return ans;
 		}
 
 	}

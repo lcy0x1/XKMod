@@ -246,7 +246,7 @@ public class BaseBlock extends Block {
 
 	}
 
-	private static interface IRotMir extends IImpl {
+	public static interface IRotMir extends IImpl {
 
 		public BlockState mirror(BlockState state, BlockMirror mirrorIn);
 
