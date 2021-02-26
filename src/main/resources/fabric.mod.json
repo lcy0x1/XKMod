@@ -27,7 +27,8 @@
     ]
   },
   "mixins": [
-    "xinke.mixins.json"
+    "xinke.mixins.json",
+    "oceanmaze.mixins.json"
   ],
 
   "depends": {

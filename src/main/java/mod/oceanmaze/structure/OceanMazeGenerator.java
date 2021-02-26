@@ -34,12 +34,15 @@ public class OceanMazeGenerator {
 
 		private final BlockRotation rotation;
 		private final Identifier template;
+		public final boolean inner;
 
-		public Piece(StructureManager structureManager, BlockPos pos, Identifier template, BlockRotation rotation) {
+		public Piece(StructureManager structureManager, BlockPos pos, Identifier template, BlockRotation rotation,
+				boolean inner) {
 			super(OceanMazeStructureReg.SPT_OCEANMAZE, 0);
 			this.pos = pos;
 			this.rotation = rotation;
 			this.template = template;
+			this.inner = inner;
 			this.initializeStructureData(structureManager);
 		}
 
@@ -47,13 +50,14 @@ public class OceanMazeGenerator {
 			super(OceanMazeStructureReg.SPT_OCEANMAZE, compoundTag);
 			this.template = new Identifier(compoundTag.getString("Template"));
 			this.rotation = BlockRotation.valueOf(compoundTag.getString("Rot"));
+			this.inner = compoundTag.getBoolean("inner");
 			this.initializeStructureData(structureManager);
 		}
 
 		@Override
 		protected void handleMetadata(String str, BlockPos pos, ServerWorldAccess world, Random random,
 				BlockBox boundingBox) {
-			Identifier id = new Identifier(str);
+			Identifier id = new Identifier("oceanmaze:chests/" + str.substring(10));
 			BlockEntity be = world.getBlockEntity(pos.offset(Direction.DOWN));
 			if (be instanceof LootableContainerBlockEntity)
 				((LootableContainerBlockEntity) be).setLootTable(id, random.nextLong());
@@ -64,6 +68,7 @@ public class OceanMazeGenerator {
 			super.toNbt(tag);
 			tag.putString("Template", this.template.toString());
 			tag.putString("Rot", this.rotation.name());
+			tag.putBoolean("inner", inner);
 		}
 
 		private void initializeStructureData(StructureManager structureManager) {
@@ -113,7 +118,7 @@ public class OceanMazeGenerator {
 					CellType ct = parse_ct(dire);
 					Identifier id = parse_id(ct, r, Math.abs(x - mazes[i].r), Math.abs(z - mazes[i].r));
 					children.add(new Piece(manager, pos.add((x - mazes[i].r) * 5, -i * 5, (z - mazes[i].r) * 5), id,
-							parse_rot(dire)));
+							parse_rot(dire), id != CORE));
 				}
 		}
 		for (int i = 0; i < LAYERS.length - 1; i++) {
@@ -127,13 +132,13 @@ public class OceanMazeGenerator {
 		for (int x = 0; x < mazes[0].w; x++)
 			for (int z = 0; z < mazes[0].w; z++) {
 				children.add(new Piece(manager, pos.add((x - mazes[0].r) * 5, 5, (z - mazes[0].r) * 5), TOP_FACE,
-						BlockRotation.NONE));
+						BlockRotation.NONE, false));
 			}
 		int ln = LAYERS.length - 1;
 		for (int x = 0; x < mazes[ln].w; x++)
 			for (int z = 0; z < mazes[ln].w; z++) {
 				children.add(new Piece(manager, pos.add((x - mazes[ln].r) * 5, -(ln + 1) * 5, (z - mazes[ln].r) * 5),
-						BOTTOM_FACE, BlockRotation.NONE));
+						BOTTOM_FACE, BlockRotation.NONE, false));
 			}
 		for (int j = 0; j < mazes[ln].w; j++) {
 		}
@@ -148,11 +153,13 @@ public class OceanMazeGenerator {
 
 	private static void addEdge(StructureManager manager, List<StructurePiece> list, BlockPos pos, int h, int o, int w,
 			int d, int j, Identifier id) {
-		list.add(new Piece(manager, pos.add((o - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.NONE));
-		list.add(
-				new Piece(manager, pos.add((w - d) * 5, -h * 5, (w - j - 1 - d) * 5), id, BlockRotation.CLOCKWISE_180));
-		list.add(new Piece(manager, pos.add((w - j - 1 - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90));
-		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (w - d) * 5), id, BlockRotation.COUNTERCLOCKWISE_90));
+		list.add(new Piece(manager, pos.add((o - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.NONE, false));
+		list.add(new Piece(manager, pos.add((w - d) * 5, -h * 5, (w - j - 1 - d) * 5), id, BlockRotation.CLOCKWISE_180,
+				false));
+		list.add(new Piece(manager, pos.add((w - j - 1 - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90,
+				false));
+		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (w - d) * 5), id, BlockRotation.COUNTERCLOCKWISE_90,
+				false));
 	}
 
 	private static CellType parse_ct(int cell) {

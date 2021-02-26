@@ -61,15 +61,15 @@ public class LootTableGenerator {
 			@JsonClass(noTag = JsonClass.NoTag.LOAD)
 			public static class EnchantLevel extends Function {
 
-				public Count level;
+				public Count levels;
 				public boolean treasure;
 
 				public EnchantLevel(int min, int max) {
 					super("minecraft:enchant_with_levels");
-					level = new Count();
-					level.min = min;
-					level.max = max;
-					level.type = "minecraft:uniform";
+					levels = new Count();
+					levels.min = min;
+					levels.max = max;
+					levels.type = "minecraft:uniform";
 				}
 
 			}

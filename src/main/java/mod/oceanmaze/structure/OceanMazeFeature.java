@@ -1,8 +1,8 @@
 package mod.oceanmaze.structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 
 import mod.lcy0x1.util.maze.MazeConfig;
@@ -44,14 +44,11 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 
 	}
 
-	public static final List<SpawnSettings.SpawnEntry> MOB = new ArrayList<>();
+	public static final List<SpawnSettings.SpawnEntry> MOB;
 
 	static {
-
-		MOB.add(new SpawnEntry(EntityType.ELDER_GUARDIAN, 100, 1, 1));
-		MOB.add(new SpawnEntry(EntityType.GUARDIAN, 200, 1, 4));
-		MOB.add(new SpawnEntry(EntityType.DROWNED, 300, 1, 4));
-
+		MOB = ImmutableList.of(new SpawnEntry(EntityType.ELDER_GUARDIAN, 1, 1, 1),
+				new SpawnEntry(EntityType.GUARDIAN, 4, 2, 4));
 	}
 
 	public OceanMazeFeature(Codec<DefaultFeatureConfig> codec) {
