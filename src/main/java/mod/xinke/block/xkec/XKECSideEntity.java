@@ -1,8 +1,8 @@
 package mod.xinke.block.xkec;
 
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import mod.xinke.block.CTESReg;
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;

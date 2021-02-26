@@ -6,14 +6,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import mod.xinke.block.CTESReg;
 import mod.xinke.main.XinkeMod;
 import mod.xinke.recipe.RecReg;
 import mod.xinke.recipe.XKECRecipe;
 import mod.xinke.recipe.XKECRecipe.InvLayer;
 import mod.xinke.recipe.XKFillRecipe;
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

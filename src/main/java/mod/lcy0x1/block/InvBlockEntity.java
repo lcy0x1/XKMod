@@ -1,7 +1,7 @@
-package mod.xinke.block;
+package mod.lcy0x1.block;
 
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -38,7 +38,7 @@ public abstract class InvBlockEntity<T extends InvBlockEntity<T>> extends BaseBl
 			inv[i] = ItemStack.EMPTY;
 		markDirty();
 	}
-	
+
 	@Override
 	public ItemStack getStack(int slot) {
 		return inv[slot];

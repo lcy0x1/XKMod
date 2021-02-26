@@ -1,4 +1,4 @@
-package mod.xinke.util;
+package mod.lcy0x1.util;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;

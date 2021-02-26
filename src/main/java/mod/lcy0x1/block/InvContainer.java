@@ -1,4 +1,4 @@
-package mod.xinke.block;
+package mod.lcy0x1.block;
 
 import java.util.function.Predicate;
 
@@ -21,18 +21,20 @@ public class InvContainer<T extends InvContainer<T>> extends ScreenHandler {
 			this.pred = pred;
 		}
 
+		@Override
 		public boolean canInsert(ItemStack is) {
 			return pred.test(is);
 		}
 
 	}
-	
+
 	public static class ResultSlot extends Slot {
 
 		public ResultSlot(Inventory inventory, int index, int x, int y) {
 			super(inventory, index, x, y);
 		}
 
+		@Override
 		public boolean canInsert(ItemStack is) {
 			return false;
 		}

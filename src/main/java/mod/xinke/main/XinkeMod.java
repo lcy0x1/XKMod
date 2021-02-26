@@ -2,11 +2,10 @@ package mod.xinke.main;
 
 import java.util.function.Supplier;
 
-import mod.xinke.block.BaseBlock.STE;
+import mod.lcy0x1.block.BaseBlock.STE;
+import mod.xinke.block.CTESReg;
 import mod.xinke.block.main.BladeCrop;
 import mod.xinke.block.main.TeleportBlock;
-import mod.xinke.block.BlockProp;
-import mod.xinke.block.CTESReg;
 import mod.xinke.block.xkec.XKECBlock;
 import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;
@@ -41,7 +40,7 @@ import net.minecraft.util.registry.Registry;
 public class XinkeMod implements ModInitializer {
 
 	public static boolean isPhysicalClient = false;
-	
+
 	public static final String MODID = "xinke";
 
 	public static final ItemGroup IG_GENERAL = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
@@ -52,14 +51,14 @@ public class XinkeMod implements ModInitializer {
 	public static final Block B_XKSTEEL_BLOCK = new Block(
 			FabricBlockSettings.of(Material.METAL).hardness(3f).resistance(8f));
 
-	public static final Block B_XK_NODE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKNodeEntity::new);
-	public static final Block B_XKIT_SOURCE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
-	public static final Block B_XKIT_MIDDLE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
-	public static final Block B_XKIT_TARGET = new XKECBlock(BlockProp.FBC_XKN, (STE) XKITEntity::new);
-	public static final Block B_XKEC_CORE_0 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
-	public static final Block B_XKEC_CORE_1 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
-	public static final Block B_XKEC_CORE_2 = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECCoreEntity::new);
-	public static final Block B_XKEC_SIDE = new XKECBlock(BlockProp.FBC_XKN, (STE) XKECSideEntity::new);
+	public static final Block B_XK_NODE = new XKECBlock(CTESReg.FBC_XKN, (STE) XKNodeEntity::new);
+	public static final Block B_XKIT_SOURCE = new XKECBlock(CTESReg.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKIT_MIDDLE = new XKECBlock(CTESReg.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKIT_TARGET = new XKECBlock(CTESReg.FBC_XKN, (STE) XKITEntity::new);
+	public static final Block B_XKEC_CORE_0 = new XKECBlock(CTESReg.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_CORE_1 = new XKECBlock(CTESReg.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_CORE_2 = new XKECBlock(CTESReg.FBC_XKN, (STE) XKECCoreEntity::new);
+	public static final Block B_XKEC_SIDE = new XKECBlock(CTESReg.FBC_XKN, (STE) XKECSideEntity::new);
 
 	public static final BlockItem BI_XKSTEEL_BLOCK = toBI(B_XKSTEEL_BLOCK);
 	public static final BlockItem BI_XK_NODE = toBI(B_XK_NODE);
@@ -70,7 +69,7 @@ public class XinkeMod implements ModInitializer {
 	public static final BlockItem BI_XKEC_CORE_1 = toBI(B_XKEC_CORE_1);
 	public static final BlockItem BI_XKEC_CORE_2 = toBI(B_XKEC_CORE_2);
 	public static final BlockItem BI_XKEC_SIDE = toBI(B_XKEC_SIDE);
-	
+
 	public static final XinkeEffect XINKE_BLESS = new XinkeEffect();
 
 	public static final Item I_BLADE = new AliasedBlockItem(B_BLADE_CROP, newFIS());
@@ -86,14 +85,13 @@ public class XinkeMod implements ModInitializer {
 	public static final Item I_AUTOAIM_BOW = new AutoAimBow(newFIS());
 	public static final Item I_XK_CARROT = new XinkeCarrot(newFIS());
 
-	public static final Block B_TELE = new TeleportBlock(BlockProp.FBC_XKN, TeleportBlock.TE::new);
+	public static final Block B_TELE = new TeleportBlock(CTESReg.FBC_XKN, TeleportBlock.TE::new);
 	public static final BlockItem BI_TELE = toBI(B_TELE);
 	public static final Item I_TELE_CHARGE = new Item(newFIS().maxCount(1));
 	public static final Item I_TELE_BIND = new Item(newFIS().maxCount(1));
 
 	public static final Enchantment LAVA_FROST = Registry.register(Registry.ENCHANTMENT,
 			new Identifier(MODID, "lava_frost"), new LavaFrozingEnchantment());
-
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -152,7 +150,6 @@ public class XinkeMod implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_steel_boots"), I_XKSTEEL_BOOTS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "autoaim_bow"), I_AUTOAIM_BOW);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "xinke_carrot"), I_XK_CARROT);
-
 
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "teleport"), B_TELE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "teleport"), BI_TELE);

@@ -4,8 +4,13 @@ import java.util.List;
 
 import dev.xinke.SpriteManager;
 import dev.xinke.SpriteManager.ScreenRenderer;
-import mod.xinke.block.AutoScreen;
-import mod.xinke.block.BaseBlock.BaseBlockWithEntity;
+import mod.lcy0x1.block.AutoScreen;
+import mod.lcy0x1.block.BlockProp;
+import mod.lcy0x1.block.InvBlockEntity;
+import mod.lcy0x1.block.InvContainer;
+import mod.lcy0x1.block.BaseBlock.BaseBlockWithEntity;
+import mod.lcy0x1.util.NBTManager;
+import mod.lcy0x1.util.SerialClass;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -29,30 +34,10 @@ import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import mod.xinke.block.BlockProp;
 import mod.xinke.block.CTESReg;
-import mod.xinke.block.InvBlockEntity;
-import mod.xinke.block.InvContainer;
 import mod.xinke.main.XinkeMod;
-import mod.xinke.util.NBTManager;
-import mod.xinke.util.SerialClass;
 
 public class TeleportBlock extends BaseBlockWithEntity {
-
-	@Environment(EnvType.CLIENT)
-	public static class Scr extends AutoScreen<Cont> {
-
-		public Scr(Cont handler, PlayerInventory inventory, Text title) {
-			super(handler, inventory, title, SPRM.getHeight());
-		}
-
-		@Override
-		protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-			ScreenRenderer sr = SPRM.getRenderer(this);
-			sr.start(matrices);
-		}
-
-	}
 
 	public static class Cont extends InvContainer<Cont> {
 
@@ -66,6 +51,21 @@ public class TeleportBlock extends BaseBlockWithEntity {
 			addSlot(SPRM.getSlot("bind_out", (x, y) -> new ResultSlot(inv, 1, x, y)));
 			addSlot(SPRM.getSlot("bind", (x, y) -> new CondSlot(inv, 2, x, y, (is) -> isItemValid(2, is))));
 			addSlot(SPRM.getSlot("activate", (x, y) -> new CondSlot(inv, 3, x, y, (is) -> isItemValid(3, is))));
+		}
+
+	}
+
+	@Environment(EnvType.CLIENT)
+	public static class Scr extends AutoScreen<Cont> {
+
+		public Scr(Cont handler, PlayerInventory inventory, Text title) {
+			super(handler, inventory, title, SPRM.getHeight());
+		}
+
+		@Override
+		protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
+			ScreenRenderer sr = SPRM.getRenderer(this);
+			sr.start(matrices);
 		}
 
 	}
@@ -88,6 +88,11 @@ public class TeleportBlock extends BaseBlockWithEntity {
 		}
 
 		@Override
+		public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+			return new Cont(syncId, inv, this);
+		}
+
+		@Override
 		public int[] getAvailableSlots(Direction side) {
 			return new int[] { 2, 3 };
 		}
@@ -98,6 +103,11 @@ public class TeleportBlock extends BaseBlockWithEntity {
 			nbt.putBlockPos("pos", getPos());
 			nbt.tag.putString("dim", getWorld().getRegistryKey().getValue().toString());
 			return ans;
+		}
+
+		@Override
+		public Text getDisplayName() {
+			return new TranslatableText("xinke:container.teleport");
 		}
 
 		@Override
@@ -135,16 +145,6 @@ public class TeleportBlock extends BaseBlockWithEntity {
 			}
 		}
 
-		@Override
-		public Text getDisplayName() {
-			return new TranslatableText("xinke:container.teleport");
-		}
-
-		@Override
-		public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-			return new Cont(syncId, inv, this);
-		}
-
 	}
 
 	public static class TeleState implements IState, ILight {
@@ -159,6 +159,11 @@ public class TeleportBlock extends BaseBlockWithEntity {
 		@Override
 		public int getLightValue(BlockState bs) {
 			return bs.get(Properties.LIT) ? 15 : 0;
+		}
+
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			return bs.with(Properties.LIT, false);
 		}
 
 	}
@@ -181,7 +186,6 @@ public class TeleportBlock extends BaseBlockWithEntity {
 
 	public TeleportBlock(BlockProp p, STE ste) {
 		super(p, ste, TeleState.INSTANCE);
-		setDefaultState(getDefaultState().with(Properties.LIT, false));
 	}
 
 }

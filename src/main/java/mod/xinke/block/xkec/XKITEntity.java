@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import mod.xinke.block.CTESReg;
 import mod.xinke.main.XinkeMod;
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

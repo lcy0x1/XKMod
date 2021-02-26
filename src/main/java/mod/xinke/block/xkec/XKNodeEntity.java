@@ -1,7 +1,7 @@
 package mod.xinke.block.xkec;
 
+import mod.lcy0x1.util.SerialClass;
 import mod.xinke.block.CTESReg;
-import mod.xinke.util.SerialClass;
 import net.minecraft.entity.player.PlayerEntity;
 
 @SerialClass

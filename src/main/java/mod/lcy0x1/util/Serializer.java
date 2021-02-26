@@ -1,4 +1,4 @@
-package mod.xinke.util;
+package mod.lcy0x1.util;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -12,7 +12,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import mod.xinke.util.SerialClass.SerialField;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;

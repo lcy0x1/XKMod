@@ -2,14 +2,18 @@ package mod.xinke.block;
 
 import java.util.function.Supplier;
 
+import mod.lcy0x1.block.BlockProp;
 import mod.xinke.block.main.TeleportBlock;
 import mod.xinke.block.xkec.XKECCoreEntity;
 import mod.xinke.block.xkec.XKECSideEntity;
 import mod.xinke.block.xkec.XKITEntity;
 import mod.xinke.block.xkec.XKNodeEntity;
 import mod.xinke.main.XinkeMod;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.Material;
+import net.minecraft.block.MaterialColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.screen.ScreenHandlerType;
@@ -24,8 +28,11 @@ public class CTESReg {
 	public static BlockEntityType<XKITEntity> BET_XKIT;
 
 	public static BlockEntityType<TeleportBlock.TE> BET_TELE;
-	
+
 	public static ScreenHandlerType<TeleportBlock.Cont> SHT_TELE;
+
+	public static final BlockProp FBC_XKN = new BlockProp(
+			FabricBlockSettings.of(Material.GLASS, MaterialColor.DIAMOND).luminance(bs -> 15).nonOpaque(), 3, 3);
 
 	public static void register() {
 		BET_XK_NODE = reg("xkec_node", XKNodeEntity::new, XinkeMod.B_XK_NODE);
@@ -35,7 +42,8 @@ public class CTESReg {
 		BET_XKIT = reg("xkit", XKITEntity::new, XinkeMod.B_XKIT_SOURCE, XinkeMod.B_XKIT_MIDDLE, XinkeMod.B_XKIT_TARGET);
 		BET_TELE = reg("teleport", TeleportBlock.TE::new, XinkeMod.B_TELE);
 
-		SHT_TELE = ScreenHandlerRegistry.registerSimple(new Identifier(XinkeMod.MODID, "teleport"), TeleportBlock.Cont::new);
+		SHT_TELE = ScreenHandlerRegistry.registerSimple(new Identifier(XinkeMod.MODID, "teleport"),
+				TeleportBlock.Cont::new);
 	}
 
 	private static <T extends BlockEntity> BlockEntityType<T> reg(String id, Supplier<T> sup, Block... blocks) {

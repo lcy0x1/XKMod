@@ -8,7 +8,7 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import mod.xinke.block.AutoScreen;
+import mod.lcy0x1.block.AutoScreen;
 import mod.xinke.main.XinkeMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

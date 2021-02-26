@@ -2,8 +2,8 @@ package mod.xinke.recipe;
 
 import java.util.List;
 
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;

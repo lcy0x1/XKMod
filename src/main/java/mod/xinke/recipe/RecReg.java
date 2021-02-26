@@ -1,6 +1,6 @@
 package mod.xinke.recipe;
 
-import mod.xinke.util.SerialClass;
+import mod.lcy0x1.util.SerialClass;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 

@@ -1,4 +1,4 @@
-package mod.xinke.util;
+package mod.lcy0x1.util;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.TYPE;

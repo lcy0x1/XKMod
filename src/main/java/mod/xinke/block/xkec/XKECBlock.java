@@ -1,7 +1,7 @@
 package mod.xinke.block.xkec;
 
-import mod.xinke.block.BaseBlock.BaseBlockWithEntity;
-import mod.xinke.block.BlockProp;
+import mod.lcy0x1.block.BlockProp;
+import mod.lcy0x1.block.BaseBlock.BaseBlockWithEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -77,13 +77,17 @@ public class XKECBlock extends BaseBlockWithEntity {
 			return bs.get(Properties.LIT) ? 15 : 7;
 		}
 
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			return bs.with(Properties.LIT, false);
+		}
+
 	}
 
 	protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0D, 5.0D, 5.0D, 11.0D, 11.0D, 11.0D);
 
 	public XKECBlock(BlockProp prop, STE sup) {
 		super(prop, sup, XKState.INSTANCE, XKECUse.INSTANCE);
-		this.setDefaultState(this.getDefaultState().with(Properties.LIT, false));
 	}
 
 	@Override

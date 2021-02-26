@@ -1,4 +1,4 @@
-package mod.xinke.util;
+package mod.lcy0x1.util;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import mod.xinke.util.SerialClass.SerialField;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.ByteTag;

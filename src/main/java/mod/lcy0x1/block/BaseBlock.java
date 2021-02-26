@@ -1,7 +1,8 @@
-package mod.xinke.block;
+package mod.lcy0x1.block;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
@@ -11,11 +12,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.IntProperty;
@@ -71,12 +74,15 @@ public class BaseBlock extends Block {
 		private final FabricBlockSettings props;
 		private final List<IState> stateList = new ArrayList<>();
 		private final List<IRep> repList = new ArrayList<>();
+		private final List<IScheduledTick> schetickList = new ArrayList<>();
 
 		private IRotMir rotmir;
 		private IFace face;
 		private ITE ite;
 		private IPower power;
 		private IClick click;
+		private INeighbor neigh;
+		private IEntityCollision entcoll;
 
 		public BlockImplementor(FabricBlockSettings p) {
 			props = p;
@@ -87,6 +93,8 @@ public class BaseBlock extends Block {
 				stateList.add((IState) impl);
 			if (impl instanceof IRep)
 				repList.add((IRep) impl);
+			if (impl instanceof IScheduledTick)
+				schetickList.add((IScheduledTick) impl);
 			if (impl instanceof STE)
 				impl = new TEPvd((STE) impl);
 			if (impl instanceof ILight)
@@ -99,6 +107,10 @@ public class BaseBlock extends Block {
 				ite = (ITE) impl;
 			if (impl instanceof IPower)
 				power = (IPower) impl;
+			if (impl instanceof INeighbor)
+				neigh = (INeighbor) impl;
+			if (impl instanceof IEntityCollision)
+				entcoll = (IEntityCollision) impl;
 			if (impl instanceof IClick && (!(impl instanceof TEPvd) || click == null))
 				click = (IClick) impl;
 			return this;
@@ -122,6 +134,25 @@ public class BaseBlock extends Block {
 	public static interface IImpl {
 	}
 
+	public static interface IEntityCollision extends IImpl {
+
+		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity);
+
+	}
+
+	public static interface IScheduledTick extends IImpl {
+
+		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r);
+
+	}
+
+	public static interface INeighbor extends IImpl {
+
+		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
+				boolean notify);
+
+	}
+
 	public static interface ILight extends IImpl {
 
 		public int getLightValue(BlockState bs);
@@ -137,6 +168,8 @@ public class BaseBlock extends Block {
 	public static interface IState extends IImpl {
 
 		public void fillStateContainer(StateManager.Builder<Block, BlockState> builder);
+
+		public BlockState setDefaultState(BlockState bs);
 
 	}
 
@@ -161,6 +194,11 @@ public class BaseBlock extends Block {
 		@Override
 		public BlockState getStateForPlacement(BlockState def, ItemPlacementContext context) {
 			return def.with(FACING, context.getPlayerLookDirection().getOpposite());
+		}
+
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			return bs.with(FACING, Direction.NORTH);
 		}
 
 	}
@@ -188,6 +226,11 @@ public class BaseBlock extends Block {
 		@Override
 		public BlockState rotate(BlockState state, BlockRotation rot) {
 			return state.with(HORIZONTAL_FACING, rot.rotate(state.get(HORIZONTAL_FACING)));
+		}
+
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			return bs.with(HORIZONTAL_FACING, Direction.NORTH);
 		}
 	}
 
@@ -229,6 +272,11 @@ public class BaseBlock extends Block {
 		@Override
 		public int getWeakPower(BlockState bs, BlockView r, BlockPos pos, Direction d) {
 			return bs.get(POWER_0_15);
+		}
+
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			return bs.with(POWER_0_15, 0);
 		}
 
 	}
@@ -283,6 +331,10 @@ public class BaseBlock extends Block {
 
 	public BaseBlock(BlockImplementor bimpl) {
 		super(handler(bimpl));
+		BlockState bs = this.getDefaultState();
+		for (IState ist : impl.stateList)
+			bs = ist.setDefaultState(bs);
+		this.setDefaultState(bs);
 	}
 
 	public BaseBlock(BlockProp p, IImpl... impl) {
@@ -355,16 +407,30 @@ public class BaseBlock extends Block {
 		return state;
 	}
 
-	protected void addImpls(BlockImplementor impl) {
-	}
-
 	@Override
 	protected final void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 		impl = TEMP;
 		TEMP = null;
-		addImpls(impl);
 		for (IState is : impl.stateList)
 			is.fillStateContainer(builder);
+	}
+
+	public final void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
+			boolean notify) {
+		super.neighborUpdate(state, world, pos, block, fromPos, notify);
+		if (impl.neigh != null)
+			impl.neigh.neighborUpdate(state, world, pos, block, fromPos, notify);
+	}
+
+	public final void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+		super.scheduledTick(state, world, pos, r);
+		for (IScheduledTick ticker : impl.schetickList)
+			ticker.scheduledTick(state, world, pos, r);
+	}
+
+	public final void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+		if (impl.entcoll != null)
+			impl.entcoll.onEntityCollision(state, world, pos, entity);
 	}
 
 }

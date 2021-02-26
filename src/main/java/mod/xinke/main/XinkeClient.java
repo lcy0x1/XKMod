@@ -16,7 +16,7 @@ public class XinkeClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		XinkeMod.isPhysicalClient = true;
-		
+
 		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKEC_SIDE, XKECBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XK_NODE, XKECBlockEntityRenderer::new);
 		BlockEntityRendererRegistry.INSTANCE.register(CTESReg.BET_XKEC_CORE, XKECCoreEntityRenderer::new);
@@ -31,9 +31,8 @@ public class XinkeClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(XinkeMod.B_XKIT_SOURCE, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(XinkeMod.B_XKIT_MIDDLE, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(XinkeMod.B_XKIT_TARGET, RenderLayer.getCutout());
-		
 
-        ScreenRegistry.register(CTESReg.SHT_TELE, TeleportBlock.Scr::new);
+		ScreenRegistry.register(CTESReg.SHT_TELE, TeleportBlock.Scr::new);
 	}
 
 }

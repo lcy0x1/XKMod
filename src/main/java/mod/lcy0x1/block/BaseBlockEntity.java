@@ -1,7 +1,7 @@
-package mod.xinke.block;
+package mod.lcy0x1.block;
 
-import mod.xinke.util.Automator;
-import mod.xinke.util.ExceptionHandler;
+import mod.lcy0x1.util.Automator;
+import mod.lcy0x1.util.ExceptionHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

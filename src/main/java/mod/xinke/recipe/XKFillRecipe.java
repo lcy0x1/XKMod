@@ -1,8 +1,8 @@
 package mod.xinke.recipe;
 
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import mod.xinke.item.XinkeEnergyItem;
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;

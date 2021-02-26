@@ -1,4 +1,4 @@
-package mod.xinke.util;
+package mod.lcy0x1.util.math;
 
 import java.util.function.Function;
 

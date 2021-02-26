@@ -1,8 +1,8 @@
 package mod.xinke.block.xkec;
 
-import mod.xinke.block.BaseBlockEntity;
-import mod.xinke.util.SerialClass;
-import mod.xinke.util.SerialClass.SerialField;
+import mod.lcy0x1.block.BaseBlockEntity;
+import mod.lcy0x1.util.SerialClass;
+import mod.lcy0x1.util.SerialClass.SerialField;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;

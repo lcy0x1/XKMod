@@ -25,12 +25,14 @@ import com.google.gson.stream.JsonWriter;
 
 public class ResourceManager {
 
-	private static class AssetGen {
+	private final AssetGen assetgen;
 
-		private static final String BS_, IM_, BM_, IM_B, LT_;
+	private class AssetGen {
 
-		static {
-			String path = "./resources/";
+		private final String path, BS_, IM_, BM_, IM_B, LT_;
+
+		private AssetGen() {
+			path = "./resources/" + MODID + "/";
 			BS_ = readFile(path + "BS/-templates/-.json");
 			BM_ = readFile(path + "BM/-templates/-.json");
 			IM_ = readFile(path + "IM/-templates/-.json");
@@ -39,29 +41,29 @@ public class ResourceManager {
 
 		}
 
-		private static void addBlockAssets(String block) throws IOException {
+		private void addBlockAssets(String block) throws IOException {
 			write(BS + block + ".json", BS_.replaceAll("\\^", block));
 			write(BM + block + ".json", BM_.replaceAll("\\^", block));
 			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
 		}
 
-		private static void addBlockItemAssets(String block) throws IOException {
+		private void addBlockItemAssets(String block) throws IOException {
 			write(IM + block + ".json", IM_B.replaceAll("\\^", block));
 		}
 
-		private static void addItemAssets(String item) throws IOException {
+		private void addItemAssets(String item) throws IOException {
 			write(IM + item + ".json", IM_.replaceAll("\\^", item));
 		}
 
-		private static void addItemAssets(String item, String res) throws IOException {
+		private void addItemAssets(String item, String res) throws IOException {
 			write(IM + item + ".json", IM_.replaceAll("\\^", res));
 		}
 
-		private static void addLootTable(String block) throws IOException {
+		private void addLootTable(String block) throws IOException {
 			write(BL + block + ".json", LT_.replaceAll("\\^", block));
 		}
 
-		private static String readFile(String path) {
+		private String readFile(String path) {
 			List<String> list = null;
 			try {
 				list = Files.readLines(new File(path), Charset.defaultCharset());
@@ -75,7 +77,7 @@ public class ResourceManager {
 			return str;
 		}
 
-		private static void write(String name, String cont) throws IOException {
+		private void write(String name, String cont) throws IOException {
 			File f = new File(name);
 			check(f);
 			PrintStream ps = new PrintStream(f);
@@ -85,9 +87,9 @@ public class ResourceManager {
 
 	}
 
-	private static class AssetMove {
+	private class AssetMove {
 
-		private static class BSConfig {
+		private class BSConfig {
 
 			public final String name;
 			public final String bs, im;
@@ -96,34 +98,34 @@ public class ResourceManager {
 			public BSConfig(String str, Map<String, BSConfig> map) {
 				JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
 				name = obj.get("-name").getAsString();
-				bs = AssetGen.readFile("./resources/BS/-templates/-" + obj.get("-bs").getAsString() + ".json");
+				bs = assetgen.readFile(assetgen.path + "BS/-templates/-" + obj.get("-bs").getAsString() + ".json");
 				JsonArray arr = obj.get("-bm").getAsJsonArray();
 				bm = new String[arr.size()];
 				for (int i = 0; i < bm.length; i++) {
-					bm[i] = AssetGen.readFile("./resources/BM/-templates/-" + arr.get(i).getAsString() + ".json");
+					bm[i] = assetgen.readFile(assetgen.path + "BM/-templates/-" + arr.get(i).getAsString() + ".json");
 				}
 				im = obj.has("-im")
-						? AssetGen.readFile("./resources/IM/-templates/-" + obj.get("-im").getAsString() + ".json")
+						? assetgen.readFile(assetgen.path + "IM/-templates/-" + obj.get("-im").getAsString() + ".json")
 						: null;
 				map.put(name, this);
 			}
 
 			public void run(String block) throws IOException {
-				AssetGen.write(BS + block + ".json", bs.replaceAll("\\^", block));
+				assetgen.write(BS + block + ".json", bs.replaceAll("\\^", block));
 				if (bm.length == 1)
-					AssetGen.write(BM + block + ".json", bm[0].replaceAll("\\^", block));
+					assetgen.write(BM + block + ".json", bm[0].replaceAll("\\^", block));
 				else
 					for (int i = 0; i < bm.length; i++)
-						AssetGen.write(BM + block + "_" + i + ".json", bm[i].replaceAll("\\^", block + "_" + i));
+						assetgen.write(BM + block + "_" + i + ".json", bm[i].replaceAll("\\^", block + "_" + i));
 				if (im != null)
-					AssetGen.write(IM + block + ".json", im.replaceAll("\\^", block));
+					assetgen.write(IM + block + ".json", im.replaceAll("\\^", block));
 			}
 
 		}
 
-		private static final Map<String, String> PATHMAP = new HashMap<>();
+		private final Map<String, String> PATHMAP = new HashMap<>();
 
-		static {
+		private AssetMove() {
 			PATHMAP.put("ASSETS", PATH_ASSET);
 			PATHMAP.put("BS", BS);
 			PATHMAP.put("BM", BM);
@@ -135,32 +137,32 @@ public class ResourceManager {
 
 		}
 
-		public static void organize() throws IOException {
+		public void organize() throws IOException {
 			delete(new File(PATH_ASSET));
 			delete(new File(PATH_DATA));
-			GUIGen.gen();
+			new GUIGen().gen();
 			orgImpl("ASSETS");
 			orgBlocks();
 			orgItems();
-			RecipeGen.gen();
+			new RecipeGen().gen();
 			orgImpl("R");
 		}
 
-		private static void copyTo(File file, String path) throws IOException {
+		private void copyTo(File file, String path) throws IOException {
 			File f = new File(path);
 			check(f);
 			Files.copy(file, f);
 		}
 
-		private static void orgBlocks() throws IOException {
+		private void orgBlocks() throws IOException {
 			orgImpl("BT");
 			Map<String, List<String>> map;
-			map = readJson("./resources/BL/-info.json");
+			map = readJson(assetgen.path + "BL/-info.json");
 			List<String> ignore = map.get("-ignore");
 			for (String key : map.keySet()) {
 				if (key.startsWith("-"))
 					continue;
-				String template = AssetGen.readFile("./resources/BL/-templates/-" + key + ".json");
+				String template = assetgen.readFile(assetgen.path + "BL/-templates/-" + key + ".json");
 				for (String str : map.get(key)) {
 					JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
 					String ans = template;
@@ -169,16 +171,16 @@ public class ResourceManager {
 							continue;
 						ans = ans.replaceAll("\\^" + ent.getKey(), ent.getValue().getAsString());
 					}
-					AssetGen.write(BL + obj.get("-name").getAsString() + ".json", ans);
+					assetgen.write(BL + obj.get("-name").getAsString() + ".json", ans);
 					ignore.add(obj.get("-name").getAsString());
 				}
 			}
-			map = readJson("./resources/BS/-info.json");
+			map = readJson(assetgen.path + "BS/-info.json");
 			List<String> blocks = orgImpl("BS");
 			for (String block : blocks)
-				AssetGen.addBlockItemAssets(block);
+				assetgen.addBlockItemAssets(block);
 			for (String block : map.get(""))
-				AssetGen.addBlockAssets(block);
+				assetgen.addBlockAssets(block);
 			Map<String, BSConfig> config = new HashMap<>();
 			map.get("-setup").forEach(str -> new BSConfig(str, config));
 			for (String key : map.keySet()) {
@@ -193,12 +195,12 @@ public class ResourceManager {
 			});
 			for (String block : blocks)
 				if (!ignore.contains(block))
-					AssetGen.addLootTable(block);
+					assetgen.addLootTable(block);
 			orgImpl("BM");
 			orgImpl("BL");
 		}
 
-		private static void orgImpl(File file, List<String> list, String path, String str) throws IOException {
+		private void orgImpl(File file, List<String> list, String path, String str) throws IOException {
 			String name = file.getName();
 			char ch = name.charAt(0);
 			if (ch == '.' || ch == '-')
@@ -230,71 +232,36 @@ public class ResourceManager {
 			}
 		}
 
-		private static List<String> orgImpl(String path) throws IOException {
+		private List<String> orgImpl(String path) throws IOException {
 			List<String> list = new ArrayList<>();
-			orgImpl(new File("./resources/" + path + "/"), list, PATHMAP.get(path), "");
+			orgImpl(new File(assetgen.path + path + "/"), list, PATHMAP.get(path), "");
 			return list;
 		}
 
-		private static void orgItems() throws IOException {
-			Map<String, List<String>> map = readJson("./resources/IT/-info.json");
+		private void orgItems() throws IOException {
+			Map<String, List<String>> map = readJson(assetgen.path + "IT/-info.json");
 			List<String> list = orgImpl("IT");
 			for (String item : list) {
 				if (!map.get("ignore").contains(item))
-					AssetGen.addItemAssets(item);
+					assetgen.addItemAssets(item);
 			}
-			map = readJson("./resources/IM/-info.json");
+			map = readJson(assetgen.path + "IM/-info.json");
 			for (Entry<String, List<String>> ent : map.entrySet()) {
 				String key = ent.getKey();
 				int lo = key.charAt(0) - '0';
 				int hi = key.charAt(2) - '0';
 				for (String str : ent.getValue())
 					for (int i = lo; i <= hi; i++)
-						AssetGen.addItemAssets(str.replaceAll("\\^", "_" + i), str.replaceAll("\\^", ""));
+						assetgen.addItemAssets(str.replaceAll("\\^", "_" + i), str.replaceAll("\\^", ""));
 			}
 			orgImpl("IM");
 		}
 
-		private static Map<String, List<String>> readJson(String path) throws IOException {
-			JsonElement e = readJsonFile(path);
-			Map<String, List<String>> ans = new HashMap<>();
-			e.getAsJsonObject().entrySet()
-					.forEach(ent0 -> ent0.getValue().getAsJsonObject().entrySet().forEach(ent1 -> {
-						String key = ent1.getKey();
-						List<String> list;
-						if (ans.containsKey(key))
-							list = ans.get(key);
-						else
-							ans.put(key, list = new ArrayList<>());
-						ent1.getValue().getAsJsonObject().entrySet().forEach(ent2 -> {
-							String group = ent2.getKey();
-							ent2.getValue().getAsJsonArray().forEach(ent3 -> {
-								String name = ent3.isJsonObject() ? ent3.toString() : ent3.getAsString();
-								if (name.startsWith("_") || name.startsWith("^"))
-									list.add(group + name);
-								else if (name.endsWith("_"))
-									list.add(name + group);
-								else
-									list.add(name);
-							});
-						});
-					}));
-			return ans;
-		}
-
-		private static JsonElement readJsonFile(String path) throws IOException {
-			File f = new File(path);
-			JsonReader r = new JsonReader(Files.newReader(f, Charset.defaultCharset()));
-			JsonElement e = new JsonParser().parse(r);
-			r.close();
-			return e;
-		}
-
 	}
 
-	private static class GUIGen {
+	private class GUIGen {
 
-		private static class Comp {
+		private class Comp {
 
 			private final String name;
 			private final Item it;
@@ -330,7 +297,7 @@ public class ResourceManager {
 
 		}
 
-		private static class Item {
+		private class Item {
 
 			private final String name, app;
 			private final int w, h, dx, dy;
@@ -364,18 +331,18 @@ public class ResourceManager {
 
 		}
 
-		private static final String GUI = "./resources/ASSETS/@textures/@gui/";
+		private final String GUI = assetgen.path + "ASSETS/@textures/@gui/";
 
-		private static final Map<String, Item> ITEM_MAP = new HashMap<>();
+		private final Map<String, Item> ITEM_MAP = new HashMap<>();
 
-		private static void gen() throws IOException {
+		private void gen() throws IOException {
 			readSprites();
 			File f = new File(GUI + "-templates/container/");
 			Item top = ITEM_MAP.get("top");
 			Item middle = ITEM_MAP.get("middle");
 			Item bottom = ITEM_MAP.get("bottom");
 			for (File fi : f.listFiles()) {
-				JsonObject e = AssetMove.readJsonFile(fi.getPath()).getAsJsonObject();
+				JsonObject e = readJsonFile(fi.getPath()).getAsJsonObject();
 				JsonObject out = new JsonObject();
 				List<Item> side = new ArrayList<>();
 				List<Comp> comp = new ArrayList<>();
@@ -430,12 +397,12 @@ public class ResourceManager {
 
 		}
 
-		private static int getInt(JsonObject e, String key, int def) {
+		private int getInt(JsonObject e, String key, int def) {
 			return e.has(key) ? e.get(key).getAsInt() : def;
 		}
 
-		private static void readSprites() throws IOException {
-			JsonElement e = AssetMove.readJsonFile(GUI + "-templates/info.json");
+		private void readSprites() throws IOException {
+			JsonElement e = readJsonFile(GUI + "-templates/info.json");
 			e.getAsJsonObject().entrySet().forEach(ent -> {
 				String name = ent.getKey();
 				JsonObject o = ent.getValue().getAsJsonObject();
@@ -446,7 +413,7 @@ public class ResourceManager {
 			});
 		}
 
-		private static void write(String path, JsonObject obj) throws IOException {
+		private void write(String path, JsonObject obj) throws IOException {
 			File fy = new File(path);
 			check(fy);
 			JsonWriter jw = new JsonWriter(Files.newWriter(fy, Charset.defaultCharset()));
@@ -458,12 +425,12 @@ public class ResourceManager {
 
 	}
 
-	private static class RecipeGen {
+	private class RecipeGen {
 
-		private static void gen() throws IOException {
-			Map<String, List<String>> map = AssetMove.readJson("./resources/R/-info.json");
+		private void gen() throws IOException {
+			Map<String, List<String>> map = readJson(assetgen.path + "resources/R/-info.json");
 			for (String template : map.keySet()) {
-				String tmpl = AssetGen.readFile("./resources/R/-templates/-" + template + ".json");
+				String tmpl = assetgen.readFile(assetgen.path + "R/-templates/-" + template + ".json");
 				for (String str : map.get(template)) {
 					JsonObject obj = new JsonParser().parse(str).getAsJsonObject();
 					String rec = tmpl;
@@ -474,27 +441,37 @@ public class ResourceManager {
 						String val = ent.getValue().getAsString();
 						rec = rec.replaceAll("\\^" + key, val);
 					}
-					AssetGen.write(R + obj.get("-name").getAsString() + ".json", rec);
+					assetgen.write(R + obj.get("-name").getAsString() + ".json", rec);
 				}
 			}
 		}
 
 	}
 
-	private static final String PATH_PRE = "./src/main/resources/";
-	private static final String PATH_ASSET = PATH_PRE + "assets/xinke/";
-	private static final String PATH_DATA = PATH_PRE + "data/xinke/";
-
-	private static final String BS = PATH_ASSET + "blockstates/";
-	private static final String BM = PATH_ASSET + "models/block/";
-	private static final String BT = PATH_ASSET + "textures/block/";
-	private static final String BL = PATH_DATA + "loot_tables/blocks/";
-	private static final String IM = PATH_ASSET + "models/item/";
-	private static final String IT = PATH_ASSET + "textures/item/";
-	private static final String R = PATH_DATA + "recipes/";
+	private String MODID = "";
+	private final String PATH_PRE, PATH_ASSET, PATH_DATA;
+	private final String BS, BM, BT, BL, IM, IT, R;
 
 	public static void main(String[] strs) throws IOException {
-		AssetMove.organize();
+		new ResourceManager("xinke");
+	}
+
+	private ResourceManager(String modid) throws IOException {
+		MODID = modid;
+
+		PATH_PRE = "./src/main/resources/";
+		PATH_ASSET = PATH_PRE + "assets/" + MODID + "/";
+		PATH_DATA = PATH_PRE + "data/" + MODID + "/";
+		BS = PATH_ASSET + "blockstates/";
+		BM = PATH_ASSET + "models/block/";
+		BT = PATH_ASSET + "textures/block/";
+		BL = PATH_DATA + "loot_tables/blocks/";
+		IM = PATH_ASSET + "models/item/";
+		IT = PATH_ASSET + "textures/item/";
+		R = PATH_DATA + "recipes/";
+
+		assetgen = new AssetGen();
+		new AssetMove().organize();
 	}
 
 	private static void check(File f) throws IOException {
@@ -511,6 +488,40 @@ public class ResourceManager {
 			for (File fi : f.listFiles())
 				delete(fi);
 		f.delete();
+	}
+
+	private static Map<String, List<String>> readJson(String path) throws IOException {
+		JsonElement e = readJsonFile(path);
+		Map<String, List<String>> ans = new HashMap<>();
+		e.getAsJsonObject().entrySet().forEach(ent0 -> ent0.getValue().getAsJsonObject().entrySet().forEach(ent1 -> {
+			String key = ent1.getKey();
+			List<String> list;
+			if (ans.containsKey(key))
+				list = ans.get(key);
+			else
+				ans.put(key, list = new ArrayList<>());
+			ent1.getValue().getAsJsonObject().entrySet().forEach(ent2 -> {
+				String group = ent2.getKey();
+				ent2.getValue().getAsJsonArray().forEach(ent3 -> {
+					String name = ent3.isJsonObject() ? ent3.toString() : ent3.getAsString();
+					if (name.startsWith("_") || name.startsWith("^"))
+						list.add(group + name);
+					else if (name.endsWith("_"))
+						list.add(name + group);
+					else
+						list.add(name);
+				});
+			});
+		}));
+		return ans;
+	}
+
+	private static JsonElement readJsonFile(String path) throws IOException {
+		File f = new File(path);
+		JsonReader r = new JsonReader(Files.newReader(f, Charset.defaultCharset()));
+		JsonElement e = new JsonParser().parse(r);
+		r.close();
+		return e;
 	}
 
 }
