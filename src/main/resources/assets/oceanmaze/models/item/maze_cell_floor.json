@@ -1,4 +1,4 @@
 {
-    "parent": "maze_cell_floormodid:block/maze_cell_floor"
+    "parent": "oceanmaze:block/maze_cell_floor"
 }
 

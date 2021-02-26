@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "deep_ocean_metal_leggingsmodid:item/deep_ocean_metal_leggings"
+        "layer0": "oceanmaze:item/deep_ocean_metal_leggings"
     }
 }
 

@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "ocean_metal_helmetmodid:item/ocean_metal_helmet"
+        "layer0": "oceanmaze:item/ocean_metal_helmet"
     }
 }
 

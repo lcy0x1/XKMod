@@ -74,7 +74,7 @@ public class ResourceManager {
 			String str = "";
 			for (String s : list)
 				str += s + "\n";
-			return str.replaceAll("^modid", MODID);
+			return str.replaceAll("\\^modid", MODID);
 		}
 
 		private void write(String name, String cont) throws IOException {
