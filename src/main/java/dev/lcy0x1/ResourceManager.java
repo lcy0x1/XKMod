@@ -477,7 +477,7 @@ public class ResourceManager {
 		new AssetMove().organize();
 	}
 
-	private static void check(File f) throws IOException {
+	public static void check(File f) throws IOException {
 		if (!f.getParentFile().exists())
 			f.getParentFile().mkdirs();
 		if (!f.exists())
