@@ -19,7 +19,8 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "mod.xinke.main.XinkeMod"
+      "mod.xinke.main.XinkeMod",
+      "mod.oceanmaze.main.OceanMaze"
     ],
     "client": [
       "mod.xinke.main.XinkeClient"

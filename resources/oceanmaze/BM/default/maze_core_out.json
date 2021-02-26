@@ -1,0 +1,14 @@
+{
+    "textures": {
+        "texture": "oceanmaze:block/maze_core_out",
+        "particle": "oceanmaze:block/maze_core_out"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 0 ],
+            "faces": {
+                "north": { "texture": "#texture", "cullface":"north" }
+            }
+        }
+    ]
+}

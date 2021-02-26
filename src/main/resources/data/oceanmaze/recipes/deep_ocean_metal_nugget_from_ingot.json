@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "oceanmaze:deep_ocean_metal_ingot"
+        }
+    ],
+    "result": {
+        "item": "oceanmaze:deep_ocean_metal_nugget",
+        "count": 9
+    }
+}
+

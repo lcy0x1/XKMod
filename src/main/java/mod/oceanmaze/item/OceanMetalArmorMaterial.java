@@ -32,12 +32,12 @@ public class OceanMetalArmorMaterial implements ArmorMaterial {
 
 	@Override
 	public int getDurability(EquipmentSlot slot) {
-		return DUR[slot.ordinal()] * (15 + lv * 3);
+		return DUR[slot.getEntitySlotId()] * (15 + lv * 3);
 	}
 
 	@Override
 	public int getProtectionAmount(EquipmentSlot slot) {
-		return PROT[slot.ordinal()] + lv;
+		return PROT[slot.getEntitySlotId()] + lv;
 	}
 
 	@Override

@@ -1,0 +1,13 @@
+{
+    "": {
+        "-ignore": {
+            "": [
+                "maze_cell_core",
+                "maze_cell_wall",
+                "maze_cell_spawner",
+                "maze_cell_floor",
+                "maze_out_wall"
+            ]
+        }
+    }
+}

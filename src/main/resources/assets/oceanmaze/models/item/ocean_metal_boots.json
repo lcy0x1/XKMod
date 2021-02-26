@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "ocean_metal_bootsmodid:item/ocean_metal_boots"
+    }
+}
+

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "oceanmaze:block/maze_cell_floor"
+        }
+    }
+}

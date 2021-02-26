@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "oceanmaze:water_metal_ingot"
+        }
+    ],
+    "result": {
+        "item": "oceanmaze:water_metal_nugget",
+        "count": 9
+    }
+}
+

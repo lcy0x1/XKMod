@@ -1,4 +1,4 @@
-package dev.xinke;
+package dev.lcy0x1;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -74,7 +74,7 @@ public class ResourceManager {
 			String str = "";
 			for (String s : list)
 				str += s + "\n";
-			return str;
+			return str.replaceAll("^modid", MODID);
 		}
 
 		private void write(String name, String cont) throws IOException {
@@ -428,7 +428,7 @@ public class ResourceManager {
 	private class RecipeGen {
 
 		private void gen() throws IOException {
-			Map<String, List<String>> map = readJson(assetgen.path + "resources/R/-info.json");
+			Map<String, List<String>> map = readJson(assetgen.path + "R/-info.json");
 			for (String template : map.keySet()) {
 				String tmpl = assetgen.readFile(assetgen.path + "R/-templates/-" + template + ".json");
 				for (String str : map.get(template)) {
@@ -454,6 +454,7 @@ public class ResourceManager {
 
 	public static void main(String[] strs) throws IOException {
 		new ResourceManager("xinke");
+		new ResourceManager("oceanmaze");
 	}
 
 	private ResourceManager(String modid) throws IOException {

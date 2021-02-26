@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "deep_ocean_metal_bootsmodid:item/deep_ocean_metal_boots"
+    }
+}
+
