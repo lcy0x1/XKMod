@@ -28,8 +28,7 @@ public class OceanMazeStructureReg {
 	public static void onInit() {
 		Registry.register(Registry.STRUCTURE_PIECE, new Identifier(OceanMaze.MODID, "oceanmaze"), SPT_OCEANMAZE);
 		FabricStructureBuilder.create(new Identifier(OceanMaze.MODID, "oceanmaze"), SF_OCEANMAZE)
-				.step(GenerationStep.Feature.UNDERGROUND_STRUCTURES).defaultConfig(32, 8, 12345).adjustsSurface()
-				.register();
+				.step(GenerationStep.Feature.SURFACE_STRUCTURES).defaultConfig(64, 8, 26243534).register();
 
 		RegistryKey<ConfiguredStructureFeature<?, ?>> myConfigured = RegistryKey
 				.of(Registry.CONFIGURED_STRUCTURE_FEATURE_WORLDGEN, new Identifier(OceanMaze.MODID, "oceanmaze"));
@@ -38,5 +37,5 @@ public class OceanMazeStructureReg {
 		BiomeModifications.addStructure((biome) -> biome.getBiome().getCategory() == Biome.Category.OCEAN
 				&& biome.getBiome().getDepth() < -1.5f, myConfigured);
 	}
-	
+
 }

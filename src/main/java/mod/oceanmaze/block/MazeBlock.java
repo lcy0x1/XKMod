@@ -220,6 +220,8 @@ public class MazeBlock extends BaseBlock {
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			if(true)
+				return;
 			BlockState rep = OceanMaze.B_OMO_WALL.getDefaultState();
 			for (BooleanProperty bp : PROPS)
 				rep = rep.with(bp, state.get(bp));

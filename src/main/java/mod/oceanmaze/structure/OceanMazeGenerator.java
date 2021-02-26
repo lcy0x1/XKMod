@@ -82,6 +82,8 @@ public class OceanMazeGenerator {
 
 	public static final Identifier SIDE_EDGE = new Identifier("oceanmaze:oceanmaze/side_edge");
 	public static final Identifier SIDE_CORNER = new Identifier("oceanmaze:oceanmaze/side_corner");
+	public static final Identifier LAST_SIDE_EDGE = new Identifier("oceanmaze:oceanmaze/last_side_edge");
+	public static final Identifier LAST_SIDE_CORNER = new Identifier("oceanmaze:oceanmaze/last_side_corner");
 	public static final Identifier TOP_FACE = new Identifier("oceanmaze:oceanmaze/top_face");
 	public static final Identifier TOP_EDGE = new Identifier("oceanmaze:oceanmaze/top_edge");
 	public static final Identifier TOP_CORNER = new Identifier("oceanmaze:oceanmaze/top_corner");
@@ -107,11 +109,14 @@ public class OceanMazeGenerator {
 					children.add(new Piece(manager, pos.add((x - mazes[i].r) * 5, -i * 5, (z - mazes[i].r) * 5), id,
 							parse_rot(dire)));
 				}
+		}
+		for (int i = 0; i < LAYERS.length - 1; i++) {
 			for (int j = 0; j < mazes[i].w; j++) {
 				addEdge(manager, children, pos, i - 1, -1, mazes[i].w, mazes[i].r, j, TOP_EDGE);
 				addEdge(manager, children, pos, i, -1, mazes[i].w, mazes[i].r, j, SIDE_EDGE);
-
 			}
+			addEdge(manager, children, pos, i - 1, -1, mazes[i].w, mazes[i].r, mazes[i].w, TOP_CORNER);
+			addEdge(manager, children, pos, i, -1, mazes[i].w, mazes[i].r, mazes[i].w, SIDE_CORNER);
 		}
 		for (int x = 0; x < mazes[0].w; x++)
 			for (int z = 0; z < mazes[0].w; z++) {
@@ -125,16 +130,21 @@ public class OceanMazeGenerator {
 						BOTTOM_FACE, BlockRotation.NONE));
 			}
 		for (int j = 0; j < mazes[ln].w; j++) {
+		}
+		addEdge(manager, children, pos, ln - 1, -1, mazes[ln].w, mazes[ln].r, mazes[ln].w, TOP_CORNER);
+		addEdge(manager, children, pos, ln, -1, mazes[ln].w, mazes[ln].r, mazes[ln].w, LAST_SIDE_CORNER);
+		for (int j = 0; j < mazes[ln].w; j++) {
+			addEdge(manager, children, pos, ln - 1, -1, mazes[ln].w, mazes[ln].r, j, TOP_EDGE);
+			addEdge(manager, children, pos, ln, -1, mazes[ln].w, mazes[ln].r, j, LAST_SIDE_EDGE);
 			addEdge(manager, children, pos, ln + 1, -1, mazes[ln].w, mazes[ln].r, j, BOTTOM_EDGE);
-
 		}
 	}
 
 	private static void addEdge(StructureManager manager, List<StructurePiece> list, BlockPos pos, int h, int o, int w,
 			int d, int j, Identifier id) {
 		list.add(new Piece(manager, pos.add((o - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.NONE));
-		list.add(new Piece(manager, pos.add((w - d) * 5, -h * 5, (j - d) * 5), id, BlockRotation.CLOCKWISE_180));
-		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90));
+		list.add(new Piece(manager, pos.add((w - d) * 5, -h * 5, (w - j - 1 - d) * 5), id, BlockRotation.CLOCKWISE_180));
+		list.add(new Piece(manager, pos.add((w - j - 1 - d) * 5, -h * 5, (o - d) * 5), id, BlockRotation.CLOCKWISE_90));
 		list.add(new Piece(manager, pos.add((j - d) * 5, -h * 5, (w - d) * 5), id, BlockRotation.COUNTERCLOCKWISE_90));
 	}
 
