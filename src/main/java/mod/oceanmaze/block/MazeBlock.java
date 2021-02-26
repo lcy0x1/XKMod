@@ -85,7 +85,7 @@ public class MazeBlock extends BaseBlock {
 		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			for (BooleanProperty bp : PROPS)
-				bs = bs.with(bp, true);
+				bs = bs.with(bp, false);
 			return bs;
 		}
 
@@ -132,8 +132,8 @@ public class MazeBlock extends BaseBlock {
 					Predicates.alwaysTrue()).size();
 			if (count > 0)
 				return;
-			DrownedEntity e = new DrownedEntity(EntityType.DROWNED, world);
-			e.setPos(pos.getX(), pos.getY() + 2, pos.getZ());
+			DrownedEntity e = EntityType.DROWNED.create(world);
+			e.refreshPositionAndAngles(pos.getX()+0.5, pos.getY() + 2, pos.getZ()+0.5, 0, 0);
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
 			ItemStack trident = new ItemStack(Items.TRIDENT);
 			e.equipStack(EquipmentSlot.MAINHAND, trident);
@@ -200,7 +200,7 @@ public class MazeBlock extends BaseBlock {
 			for (BooleanProperty bp : PROPS)
 				rep = rep.with(bp, state.get(bp));
 			for (int i = 0; i < 6; i++) {
-				if (!state.get(PROPS[i]))
+				if (state.get(PROPS[i]))
 					continue;
 				BlockPos uppos = pos.offset(Direction.values()[i]);
 				if (World.isOutOfBuildLimitVertically(uppos))

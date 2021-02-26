@@ -1,6 +1,8 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/cube_bottom_top",
     "textures": {
-        "all": "oceanmaze:block/maze_core_out"
+        "side": "oceanmaze:block/maze_cell_in",
+        "top":"oceanmaze:block/maze_core_out",
+        "bottom":"oceanmaze:block/maze_core_out"
     }
 }

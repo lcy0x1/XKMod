@@ -127,6 +127,7 @@ public class ResourceManager {
 
 		private AssetMove() {
 			PATHMAP.put("ASSETS", PATH_ASSET);
+			PATHMAP.put("DATA", PATH_DATA);
 			PATHMAP.put("BS", BS);
 			PATHMAP.put("BM", BM);
 			PATHMAP.put("BT", BT);
@@ -142,6 +143,7 @@ public class ResourceManager {
 			delete(new File(PATH_DATA));
 			new GUIGen().gen();
 			orgImpl("ASSETS");
+			orgImpl("DATA");
 			orgBlocks();
 			orgItems();
 			new RecipeGen().gen();
