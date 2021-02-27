@@ -260,7 +260,7 @@ public class JsonDecoder {
 			Object ent = decode(obj.get("val"), par.curjfld.generic()[1], par);
 			par.index = 0;
 
-			if(key != null)
+			if (key != null)
 				val.put(key, ent);
 		}
 		return val;
@@ -384,7 +384,7 @@ public class JsonDecoder {
 			try {
 				f.set(obj, decode(elem, f.getType(), getInvoker()));
 			} catch (Exception e) {
-				throw new Exception("error at " + curcls + " in field " + f +" | Elem : "+elem, e);
+				throw new Exception("error at " + curcls + " in field " + f + " | Elem : " + elem, e);
 			}
 			curfld = null;
 		}

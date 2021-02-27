@@ -13,6 +13,14 @@
         }
     },
     "result": {
-        "item": "oceanmaze:ocean_metal_boots"
+        "item": "oceanmaze:ocean_metal_boots",
+        "data": {
+            "Enchantments": [
+                {
+                    "id": "minecraft:depth_strider",
+                    "lvl": 2
+                }
+            ]
+        }
     }
 }

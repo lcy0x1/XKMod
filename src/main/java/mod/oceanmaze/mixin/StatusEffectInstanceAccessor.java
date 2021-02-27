@@ -7,8 +7,8 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 @Mixin(StatusEffectInstance.class)
 public interface StatusEffectInstanceAccessor {
-	
+
 	@Accessor("duration")
-    public void setDuration (int duration);
+	public void setDuration(int duration);
 
 }

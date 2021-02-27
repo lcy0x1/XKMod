@@ -18,13 +18,14 @@ public class OceanMazeMap extends FilledMapItem {
 		super(settings);
 	}
 
+	@Override
 	public void updateColors(World world, Entity entity, MapState state) {
 		if (world.getRegistryKey() == state.dimension && entity instanceof PlayerEntity) {
 			int scale = 1 << state.scale;
 			int cx = state.xCenter;
 			int cz = state.zCenter;
-			int rx = MathHelper.floor(entity.getX() - (double) cx) / scale + 64;
-			int rz = MathHelper.floor(entity.getZ() - (double) cz) / scale + 64;
+			int rx = MathHelper.floor(entity.getX() - cx) / scale + 64;
+			int rz = MathHelper.floor(entity.getZ() - cz) / scale + 64;
 			int radius = 128 / scale;
 			MapState.PlayerUpdateTracker playerUpdateTracker = state.getPlayerSyncData((PlayerEntity) entity);
 			++playerUpdateTracker.field_131;

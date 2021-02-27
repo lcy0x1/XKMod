@@ -12,7 +12,7 @@ public class BlockProp {
 	public BlockProp(FabricBlockSettings mat) {
 		props = mat;
 	}
-	
+
 	public BlockProp(FabricBlockSettings mat, float hard, float rest) {
 		props = mat;
 		props.hardness(hard).resistance(rest);

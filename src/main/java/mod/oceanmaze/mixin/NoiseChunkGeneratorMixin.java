@@ -31,7 +31,7 @@ public class NoiseChunkGeneratorMixin {
 				for (int i = 0; i < OceanMazeGenerator.LAYERS.length; i++) {
 					BlockBox sub = new BlockBox(box.minX + i * 5 + 5, box.minY + i * 5 + 5, box.minZ + i * 5 + 5,
 							box.maxX - i * 5 - 5, box.minY + i * 5 + 10, box.maxZ - i * 5 - 5);
-					if(sub.contains(pos))
+					if (sub.contains(pos))
 						info.setReturnValue(OceanMazeStructureReg.SF_OCEANMAZE.getMonsterSpawns());
 				}
 			}

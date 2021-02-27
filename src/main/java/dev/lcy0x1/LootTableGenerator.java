@@ -25,38 +25,7 @@ public class LootTableGenerator {
 		}
 
 		@JsonClass(noTag = JsonClass.NoTag.LOAD)
-		public static class PoolEntry {
-
-			public String type = "minecraft:item";
-			public int weight = 0;
-			public String name;
-
-			public PoolEntry(int w, String item) {
-				this.weight = w;
-				this.name = item;
-			}
-
-		}
-
-		@JsonClass(noTag = JsonClass.NoTag.LOAD)
 		public static abstract class Function {
-
-			public String function;
-
-			@JsonClass(noTag = JsonClass.NoTag.LOAD)
-			public static class SetCount extends Function {
-
-				public Count count;
-
-				public SetCount(int min, int max) {
-					super("minecraft:set_count");
-					count = new Count();
-					count.min = min;
-					count.max = max;
-					count.type = "minecraft:uniform";
-				}
-
-			}
 
 			@JsonClass(noTag = JsonClass.NoTag.LOAD)
 			public static class EnchantLevel extends Function {
@@ -74,6 +43,23 @@ public class LootTableGenerator {
 
 			}
 
+			@JsonClass(noTag = JsonClass.NoTag.LOAD)
+			public static class SetCount extends Function {
+
+				public Count count;
+
+				public SetCount(int min, int max) {
+					super("minecraft:set_count");
+					count = new Count();
+					count.min = min;
+					count.max = max;
+					count.type = "minecraft:uniform";
+				}
+
+			}
+
+			public String function;
+
 			public Function(String func) {
 				this.function = func;
 			}
@@ -83,32 +69,14 @@ public class LootTableGenerator {
 		@JsonClass(noTag = JsonClass.NoTag.LOAD)
 		public static class FunctionPoolEntry extends PoolEntry {
 
+			@JsonField(generic = Function.class)
+			public List<Function> functions = new ArrayList<>();
+
 			public FunctionPoolEntry(int w, String item) {
 				super(w, item);
 			}
 
-			@JsonField(generic = Function.class)
-			public List<Function> functions = new ArrayList<>();
-
 			public FunctionPoolEntry add(Function f) {
-				functions.add(f);
-				return this;
-			}
-
-		}
-
-		@JsonClass(noTag = JsonClass.NoTag.LOAD)
-		public static class StringFuncPoolEntry extends PoolEntry {
-
-			public StringFuncPoolEntry(int w, String item, String func) {
-				super(w, item);
-				this.add(func);
-			}
-
-			@JsonField(generic = String.class)
-			public List<String> functions = new ArrayList<>();
-
-			public StringFuncPoolEntry add(String f) {
 				functions.add(f);
 				return this;
 			}
@@ -129,12 +97,15 @@ public class LootTableGenerator {
 		}
 
 		@JsonClass(noTag = JsonClass.NoTag.LOAD)
-		public static class StaticPool extends Pool {
+		public static class PoolEntry {
 
-			public int rolls;
+			public String type = "minecraft:item";
+			public int weight = 0;
+			public String name;
 
-			public StaticPool(int c) {
-				rolls = c;
+			public PoolEntry(int w, String item) {
+				this.weight = w;
+				this.name = item;
 			}
 
 		}
@@ -148,6 +119,35 @@ public class LootTableGenerator {
 				rolls = new Count();
 				rolls.min = min;
 				rolls.max = max;
+			}
+
+		}
+
+		@JsonClass(noTag = JsonClass.NoTag.LOAD)
+		public static class StaticPool extends Pool {
+
+			public int rolls;
+
+			public StaticPool(int c) {
+				rolls = c;
+			}
+
+		}
+
+		@JsonClass(noTag = JsonClass.NoTag.LOAD)
+		public static class StringFuncPoolEntry extends PoolEntry {
+
+			@JsonField(generic = String.class)
+			public List<String> functions = new ArrayList<>();
+
+			public StringFuncPoolEntry(int w, String item, String func) {
+				super(w, item);
+				this.add(func);
+			}
+
+			public StringFuncPoolEntry add(String f) {
+				functions.add(f);
+				return this;
 			}
 
 		}
@@ -225,15 +225,15 @@ public class LootTableGenerator {
 		}
 	}
 
-	private static FunctionPoolEntry item(String item, int w, int min, int max) {
-		return new FunctionPoolEntry(w, item).add(new Function.SetCount(min, max));
-	}
-
 	private static Pool injectEquips(Pool pool, Function.EnchantLevel enc, int lv, int w) {
 		for (int i = 0; i < 4; i++) {
 			pool.add(new FunctionPoolEntry(w, "oceanmaze:" + metals[lv] + equips[i]).add(enc));
 		}
 		return pool;
+	}
+
+	private static FunctionPoolEntry item(String item, int w, int min, int max) {
+		return new FunctionPoolEntry(w, item).add(new Function.SetCount(min, max));
 	}
 
 	private static void write(LootTable table, String path) throws IOException {

@@ -56,13 +56,13 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 	}
 
 	@Override
-	public StructureStartFactory<DefaultFeatureConfig> getStructureStartFactory() {
-		return Start::new;
+	public List<SpawnSettings.SpawnEntry> getMonsterSpawns() {
+		return MOB;
 	}
 
 	@Override
-	public List<SpawnSettings.SpawnEntry> getMonsterSpawns() {
-		return MOB;
+	public StructureStartFactory<DefaultFeatureConfig> getStructureStartFactory() {
+		return Start::new;
 	}
 
 }

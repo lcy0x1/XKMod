@@ -10,12 +10,9 @@ import net.minecraft.sound.SoundEvents;
 
 public class OMArmorMat implements ArmorMaterial {
 
-	public static final OMArmorMat WATER = new OMArmorMat("water_metal",
-			OceanMaze.I_WATER_METAL_INGOT, 0);
-	public static final OMArmorMat OCEAN = new OMArmorMat("ocean_metal",
-			OceanMaze.I_OCEAN_METAL_INGOT, 1);
-	public static final OMArmorMat DEEP = new OMArmorMat("deep_ocean_metal",
-			OceanMaze.I_DEEP_OCEAN_METAL_INGOT, 2);
+	public static final OMArmorMat WATER = new OMArmorMat("water_metal", OceanMaze.I_WATER_METAL_INGOT, 0);
+	public static final OMArmorMat OCEAN = new OMArmorMat("ocean_metal", OceanMaze.I_OCEAN_METAL_INGOT, 1);
+	public static final OMArmorMat DEEP = new OMArmorMat("deep_ocean_metal", OceanMaze.I_DEEP_OCEAN_METAL_INGOT, 2);
 
 	private static final int[] PROT = { 2, 4, 4, 2 };
 	private static final int[] DUR = new int[] { 13, 15, 16, 11 };
@@ -36,11 +33,6 @@ public class OMArmorMat implements ArmorMaterial {
 	}
 
 	@Override
-	public int getProtectionAmount(EquipmentSlot slot) {
-		return PROT[slot.getEntitySlotId()] + lv;
-	}
-
-	@Override
 	public int getEnchantability() {
 		return 15;
 	}
@@ -51,8 +43,8 @@ public class OMArmorMat implements ArmorMaterial {
 	}
 
 	@Override
-	public Ingredient getRepairIngredient() {
-		return Ingredient.ofItems(repair);
+	public float getKnockbackResistance() {
+		return 0;
 	}
 
 	@Override
@@ -61,13 +53,18 @@ public class OMArmorMat implements ArmorMaterial {
 	}
 
 	@Override
-	public float getToughness() {
-		return lv * 2;
+	public int getProtectionAmount(EquipmentSlot slot) {
+		return PROT[slot.getEntitySlotId()] + lv;
 	}
 
 	@Override
-	public float getKnockbackResistance() {
-		return 0;
+	public Ingredient getRepairIngredient() {
+		return Ingredient.ofItems(repair);
+	}
+
+	@Override
+	public float getToughness() {
+		return lv * 2;
 	}
 
 }

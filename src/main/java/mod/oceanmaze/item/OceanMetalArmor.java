@@ -1,6 +1,7 @@
 package mod.oceanmaze.item;
 
 import mod.oceanmaze.main.OceanMaze;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -41,21 +42,25 @@ public class OceanMetalArmor extends ArmorItem {
 		int hs = 0;
 		int res = 0;
 		int deep = 0;
+		int enc = 0;
 
 		ItemStack is = le.getEquippedStack(EquipmentSlot.HEAD);
 		if (is.getItem() instanceof OceanMetalArmor) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			if (!inWater)
 				breath = am == OMArmorMat.WATER ? 200 : am == OMArmorMat.OCEAN ? 600 : 1800;
-			vi = am != OMArmorMat.WATER;
-			if (am == OMArmorMat.DEEP) {
-				hs++;
-				wet += 600;
-				deep += 5;
+			else {
+				vi = am != OMArmorMat.WATER;
+				if (am == OMArmorMat.DEEP) {
+					hs++;
+					wet += 600;
+					deep += 5;
+				}
 			}
 		}
 		is = le.getEquippedStack(EquipmentSlot.CHEST);
-		if (is.getItem() instanceof OceanMetalArmor && inWater) {
+		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
+		if ((is.getItem() instanceof OceanMetalArmor) && inWater) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			res += am == OMArmorMat.WATER ? 1 : am == OMArmorMat.OCEAN ? 2 : 3;
 			wet += am == OMArmorMat.WATER ? 0 : 600;
@@ -63,7 +68,9 @@ public class OceanMetalArmor extends ArmorItem {
 				deep += 7;
 		}
 		is = le.getEquippedStack(EquipmentSlot.LEGS);
-		if (is.getItem() instanceof OceanMetalArmor && inWater) {
+		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
+		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
+		if ((is.getItem() instanceof OceanMetalArmor) && inWater) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			res += am == OMArmorMat.WATER ? 1 : am == OMArmorMat.OCEAN ? 2 : 3;
 			if (am == OMArmorMat.DEEP) {
@@ -72,7 +79,8 @@ public class OceanMetalArmor extends ArmorItem {
 			}
 		}
 		is = le.getEquippedStack(EquipmentSlot.FEET);
-		if (is.getItem() instanceof OceanMetalArmor && inWater) {
+		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
+		if ((is.getItem() instanceof OceanMetalArmor) && inWater) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			if (am == OMArmorMat.DEEP) {
 				wet += 1200;
@@ -81,18 +89,20 @@ public class OceanMetalArmor extends ArmorItem {
 			}
 		}
 
+		wet = (int) (wet * (1 + enc / 4.0));
+
 		if (vi)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 200));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 215));
 		if (breath > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, breath));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, breath + 14));
 		if (res > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 200, (res - 1) / 2));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 213, (res - 1) / 2));
 		if (deep >= 10)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, 200));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, 212));
 		if (hs > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 200, hs - 1));
-		if(wet>0)
-			le.addStatusEffect(new StatusEffectInstance(OceanMaze.SPONGE_WET, wet));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 211, hs - 1));
+		if (wet > 0)
+			le.addStatusEffect(new StatusEffectInstance(OceanMaze.SPONGE_WET, wet + 10));
 	}
 
 }

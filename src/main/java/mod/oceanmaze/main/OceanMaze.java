@@ -75,7 +75,7 @@ public class OceanMaze implements ModInitializer {
 
 	public static final Enchantment SPONGE_PROT = Registry.register(Registry.ENCHANTMENT,
 			new Identifier(MODID, "sponge_protection"), new SpongeProtectionEnchantment());
-	
+
 	public static final SpongeWetEffect SPONGE_WET = new SpongeWetEffect();
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
@@ -85,12 +85,12 @@ public class OceanMaze implements ModInitializer {
 		return () -> new ItemStack(Blocks.STONE);
 	}
 
-	private static BlockItem toBI(Block b) {
-		return new BlockItem(b, new FabricItemSettings().group(IG_GENERAL));
-	}
-
 	private static FabricItemSettings newFIS() {
 		return new FabricItemSettings().group(IG_GENERAL);
+	}
+
+	private static BlockItem toBI(Block b) {
+		return new BlockItem(b, new FabricItemSettings().group(IG_GENERAL));
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_boots"), I_DOM_BOOTS);
 
 		Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, "sponge_wet"), SPONGE_WET);
-		
+
 		OceanMazeStructureReg.onInit();
 	}
 }

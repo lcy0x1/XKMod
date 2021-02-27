@@ -25,8 +25,6 @@ import com.google.gson.stream.JsonWriter;
 
 public class ResourceManager {
 
-	private final AssetGen assetgen;
-
 	private class AssetGen {
 
 		private final String path, BS_, IM_, BM_, IM_B, LT_;
@@ -450,33 +448,6 @@ public class ResourceManager {
 
 	}
 
-	private String MODID = "";
-	private final String PATH_PRE, PATH_ASSET, PATH_DATA;
-	private final String BS, BM, BT, BL, IM, IT, R;
-
-	public static void main(String[] strs) throws IOException {
-		new ResourceManager("xinke");
-		new ResourceManager("oceanmaze");
-	}
-
-	private ResourceManager(String modid) throws IOException {
-		MODID = modid;
-
-		PATH_PRE = "./src/main/resources/";
-		PATH_ASSET = PATH_PRE + "assets/" + MODID + "/";
-		PATH_DATA = PATH_PRE + "data/" + MODID + "/";
-		BS = PATH_ASSET + "blockstates/";
-		BM = PATH_ASSET + "models/block/";
-		BT = PATH_ASSET + "textures/block/";
-		BL = PATH_DATA + "loot_tables/blocks/";
-		IM = PATH_ASSET + "models/item/";
-		IT = PATH_ASSET + "textures/item/";
-		R = PATH_DATA + "recipes/";
-
-		assetgen = new AssetGen();
-		new AssetMove().organize();
-	}
-
 	public static void check(File f) throws IOException {
 		if (!f.getParentFile().exists())
 			f.getParentFile().mkdirs();
@@ -484,6 +455,10 @@ public class ResourceManager {
 			f.createNewFile();
 	}
 
+	public static void main(String[] strs) throws IOException {
+		new ResourceManager("xinke");
+		new ResourceManager("oceanmaze");
+	}
 	private static void delete(File f) {
 		if (!f.exists())
 			return;
@@ -492,7 +467,6 @@ public class ResourceManager {
 				delete(fi);
 		f.delete();
 	}
-
 	private static Map<String, List<String>> readJson(String path) throws IOException {
 		JsonElement e = readJsonFile(path);
 		Map<String, List<String>> ans = new HashMap<>();
@@ -525,6 +499,32 @@ public class ResourceManager {
 		JsonElement e = new JsonParser().parse(r);
 		r.close();
 		return e;
+	}
+
+	private final AssetGen assetgen;
+
+	private String MODID = "";
+
+	private final String PATH_PRE, PATH_ASSET, PATH_DATA;
+
+	private final String BS, BM, BT, BL, IM, IT, R;
+
+	private ResourceManager(String modid) throws IOException {
+		MODID = modid;
+
+		PATH_PRE = "./src/main/resources/";
+		PATH_ASSET = PATH_PRE + "assets/" + MODID + "/";
+		PATH_DATA = PATH_PRE + "data/" + MODID + "/";
+		BS = PATH_ASSET + "blockstates/";
+		BM = PATH_ASSET + "models/block/";
+		BT = PATH_ASSET + "textures/block/";
+		BL = PATH_DATA + "loot_tables/blocks/";
+		IM = PATH_ASSET + "models/item/";
+		IT = PATH_ASSET + "textures/item/";
+		R = PATH_DATA + "recipes/";
+
+		assetgen = new AssetGen();
+		new AssetMove().organize();
 	}
 
 }

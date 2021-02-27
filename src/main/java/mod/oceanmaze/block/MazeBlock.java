@@ -33,55 +33,62 @@ import net.minecraft.world.World;
 
 public class MazeBlock extends BaseBlock {
 
-	public static final Neighbor NEIGHBOR = new Neighbor();
-	public static final DireState HOR_DIRE_STATE = new DireState();
-	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
-	public static final FloorProt FLOOR_PROT = new FloorProt();
-	public static final Fatigue FATIGUE = new Fatigue();
-	public static final Spawner SPAWNER = new Spawner();
+	public static class AllDireState implements IState, IScheduledTick, IRotMir {
 
-	public static final int DELAY = 4;
-
-	public MazeBlock(BlockProp p, IImpl... impl) {
-		super(p, impl);
-	}
-
-	public static class Neighbor implements INeighbor {
-
-		@Override
-		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
-				boolean notify) {
-			if (world.isClient())
-				return;
-			world.getBlockTickScheduler().schedule(pos, state.getBlock(), DELAY);
-		}
-
-	}
-
-	public static class FloorProt implements IScheduledTick {
-
-		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMC_FLOOR.getDefaultState();
-			for (int dir = 0; dir < 4; dir++) {
-				BlockPos uppos = pos.offset(Direction.fromHorizontal(dir));
-				BlockState torep = world.getBlockState(uppos);
-				if (!torep.getMaterial().isReplaceable())
-					continue;
-				world.setBlockState(uppos, rep);
-			}
-		}
-
-	}
-
-	public static class DireState implements IState, IScheduledTick, IRotMir {
-
-		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.WEST,
-				Properties.EAST };
+		public static final BooleanProperty[] PROPS = { Properties.DOWN, Properties.UP, Properties.NORTH,
+				Properties.SOUTH, Properties.WEST, Properties.EAST };
 
 		@Override
 		public void fillStateContainer(Builder<Block, BlockState> builder) {
 			builder.add(PROPS);
+		}
+
+		@Override
+		public BlockState mirror(BlockState state, BlockMirror mirrorIn) {
+			BlockState ans = state;
+			for (int i = 2; i < 6; i++) {
+				Direction d0 = Direction.values()[i];
+				Direction d1 = mirrorIn.apply(d0);
+				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
+			}
+			return ans;
+		}
+
+		@Override
+		public BlockState rotate(BlockState state, BlockRotation rot) {
+			BlockState ans = state;
+			for (int i = 2; i < 6; i++) {
+				Direction d0 = Direction.values()[i];
+				Direction d1 = rot.rotate(d0);
+				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
+			}
+			return ans;
+		}
+
+		@Override
+		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			BlockState rep = OceanMaze.B_OMO_WALL.getDefaultState();
+			BlockState self = rep;
+			for (int i = 0; i < 6; i++) {
+				BlockPos uppos = pos.offset(Direction.values()[i]);
+				BlockState torep = world.getBlockState(uppos);
+				self = self.with(PROPS[i], torep.getBlock() != self.getBlock());
+				if (state.get(PROPS[i]))
+					continue;
+				if (World.isOutOfBuildLimitVertically(uppos))
+					continue;
+				if (torep.getMaterial().isReplaceable()) {
+					BlockState tar = rep;
+					for (int j = 0; j < 6; j++) {
+						BlockPos look = uppos.offset(Direction.values()[j]);
+						BlockState near = world.getBlockState(look);
+						tar = tar.with(PROPS[j], near.getBlock() != rep.getBlock());
+					}
+					world.setBlockState(uppos, tar);
+				}
+			}
+			if (self != state)
+				world.setBlockState(pos, self);
 		}
 
 		@Override
@@ -91,18 +98,15 @@ public class MazeBlock extends BaseBlock {
 			return bs;
 		}
 
+	}
+	public static class DireState implements IState, IScheduledTick, IRotMir {
+
+		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.WEST,
+				Properties.EAST };
+
 		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMC_WALL.getDefaultState();
-			for (BooleanProperty bp : PROPS)
-				rep = rep.with(bp, state.get(bp));
-			BlockPos uppos = pos.up();
-			if (World.isOutOfBuildLimitVertically(uppos))
-				return;
-			BlockState torep = world.getBlockState(uppos);
-			if (!torep.getMaterial().isReplaceable())
-				return;
-			world.setBlockState(uppos, rep);
+		public void fillStateContainer(Builder<Block, BlockState> builder) {
+			builder.add(PROPS);
 		}
 
 		@Override
@@ -127,8 +131,28 @@ public class MazeBlock extends BaseBlock {
 			return ans;
 		}
 
-	}
+		@Override
+		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			BlockState rep = OceanMaze.B_OMC_WALL.getDefaultState();
+			for (BooleanProperty bp : PROPS)
+				rep = rep.with(bp, state.get(bp));
+			BlockPos uppos = pos.up();
+			if (World.isOutOfBuildLimitVertically(uppos))
+				return;
+			BlockState torep = world.getBlockState(uppos);
+			if (!torep.getMaterial().isReplaceable())
+				return;
+			world.setBlockState(uppos, rep);
+		}
 
+		@Override
+		public BlockState setDefaultState(BlockState bs) {
+			for (BooleanProperty bp : PROPS)
+				bs = bs.with(bp, false);
+			return bs;
+		}
+
+	}
 	public static class Fatigue implements IEntityCollision {
 
 		@Override
@@ -142,8 +166,47 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
+	public static class FloorProt implements IScheduledTick {
 
+		@Override
+		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			BlockState rep = OceanMaze.B_OMC_FLOOR.getDefaultState();
+			for (int dir = 0; dir < 4; dir++) {
+				BlockPos uppos = pos.offset(Direction.fromHorizontal(dir));
+				BlockState torep = world.getBlockState(uppos);
+				if (!torep.getMaterial().isReplaceable())
+					continue;
+				world.setBlockState(uppos, rep);
+			}
+		}
+
+	}
+	public static class Neighbor implements INeighbor {
+
+		@Override
+		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
+				boolean notify) {
+			if (world.isClient())
+				return;
+			world.getBlockTickScheduler().schedule(pos, state.getBlock(), DELAY);
+		}
+
+	}
 	public static class Spawner implements INeighbor, IScheduledTick, IState {
+
+		@Override
+		public void fillStateContainer(Builder<Block, BlockState> builder) {
+			builder.add(Properties.POWERED);
+		}
+
+		@Override
+		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
+				boolean notify) {
+			if (world.isClient())
+				return;
+			if (state.get(Properties.POWERED) != world.isReceivingRedstonePower(pos))
+				world.getBlockTickScheduler().schedule(pos, state.getBlock(), 2);
+		}
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
@@ -181,91 +244,28 @@ public class MazeBlock extends BaseBlock {
 		}
 
 		@Override
-		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
-				boolean notify) {
-			if (world.isClient())
-				return;
-			if (state.get(Properties.POWERED) != world.isReceivingRedstonePower(pos))
-				world.getBlockTickScheduler().schedule(pos, state.getBlock(), 2);
-		}
-
-		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
-			builder.add(Properties.POWERED);
-		}
-
-		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			return bs.with(Properties.POWERED, false);
 		}
 
 	}
 
-	public static class AllDireState implements IState, IScheduledTick, IRotMir {
+	public static final Neighbor NEIGHBOR = new Neighbor();
 
-		public static final BooleanProperty[] PROPS = { Properties.DOWN, Properties.UP, Properties.NORTH,
-				Properties.SOUTH, Properties.WEST, Properties.EAST };
+	public static final DireState HOR_DIRE_STATE = new DireState();
 
-		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
-			builder.add(PROPS);
-		}
+	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
 
-		@Override
-		public BlockState setDefaultState(BlockState bs) {
-			for (BooleanProperty bp : PROPS)
-				bs = bs.with(bp, false);
-			return bs;
-		}
+	public static final FloorProt FLOOR_PROT = new FloorProt();
 
-		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMO_WALL.getDefaultState();
-			BlockState self = rep;
-			for (int i = 0; i < 6; i++) {
-				BlockPos uppos = pos.offset(Direction.values()[i]);
-				BlockState torep = world.getBlockState(uppos);
-				self = self.with(PROPS[i], torep.getBlock() != self.getBlock());
-				if (state.get(PROPS[i]))
-					continue;
-				if (World.isOutOfBuildLimitVertically(uppos))
-					continue;
-				if (torep.getMaterial().isReplaceable()) {
-					BlockState tar = rep;
-					for (int j = 0; j < 6; j++) {
-						BlockPos look = uppos.offset(Direction.values()[j]);
-						BlockState near = world.getBlockState(look);
-						tar = tar.with(PROPS[j], near.getBlock() != rep.getBlock());
-					}
-					world.setBlockState(uppos, tar);
-				}
-			}
-			if (self != state)
-				world.setBlockState(pos, self);
-		}
+	public static final Fatigue FATIGUE = new Fatigue();
 
-		@Override
-		public BlockState mirror(BlockState state, BlockMirror mirrorIn) {
-			BlockState ans = state;
-			for (int i = 2; i < 6; i++) {
-				Direction d0 = Direction.values()[i];
-				Direction d1 = mirrorIn.apply(d0);
-				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
-			}
-			return ans;
-		}
+	public static final Spawner SPAWNER = new Spawner();
 
-		@Override
-		public BlockState rotate(BlockState state, BlockRotation rot) {
-			BlockState ans = state;
-			for (int i = 2; i < 6; i++) {
-				Direction d0 = Direction.values()[i];
-				Direction d1 = rot.rotate(d0);
-				ans = ans.with(PROPS[d1.ordinal()], state.get(PROPS[d0.ordinal()]));
-			}
-			return ans;
-		}
+	public static final int DELAY = 4;
 
+	public MazeBlock(BlockProp p, IImpl... impl) {
+		super(p, impl);
 	}
 
 }

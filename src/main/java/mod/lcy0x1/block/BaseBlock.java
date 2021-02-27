@@ -131,18 +131,18 @@ public class BaseBlock extends Block {
 
 	}
 
-	public static interface IImpl {
-	}
-
 	public static interface IEntityCollision extends IImpl {
 
 		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity);
 
 	}
 
-	public static interface IScheduledTick extends IImpl {
+	public static interface IImpl {
+	}
 
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r);
+	public static interface ILight extends IImpl {
+
+		public int getLightValue(BlockState bs);
 
 	}
 
@@ -153,15 +153,22 @@ public class BaseBlock extends Block {
 
 	}
 
-	public static interface ILight extends IImpl {
-
-		public int getLightValue(BlockState bs);
-
-	}
-
 	public static interface IRep extends IImpl {
 
 		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving);
+
+	}
+
+	public static interface IRotMir extends IImpl {
+
+		public BlockState mirror(BlockState state, BlockMirror mirrorIn);
+
+		public BlockState rotate(BlockState state, BlockRotation rot);
+	}
+
+	public static interface IScheduledTick extends IImpl {
+
+		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r);
 
 	}
 
@@ -244,13 +251,6 @@ public class BaseBlock extends Block {
 
 		public int getWeakPower(BlockState bs, BlockView r, BlockPos pos, Direction d);
 
-	}
-
-	public static interface IRotMir extends IImpl {
-
-		public BlockState mirror(BlockState state, BlockMirror mirrorIn);
-
-		public BlockState rotate(BlockState state, BlockRotation rot);
 	}
 
 	private static interface ITE extends IImpl {
@@ -379,6 +379,20 @@ public class BaseBlock extends Block {
 	}
 
 	@Override
+	public final void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
+			boolean notify) {
+		super.neighborUpdate(state, world, pos, block, fromPos, notify);
+		if (impl.neigh != null)
+			impl.neigh.neighborUpdate(state, world, pos, block, fromPos, notify);
+	}
+
+	@Override
+	public final void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+		if (impl.entcoll != null)
+			impl.entcoll.onEntityCollision(state, world, pos, entity);
+	}
+
+	@Override
 	public final void onStateReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState,
 			boolean isMoving) {
 		for (IRep irep : impl.repList)
@@ -408,29 +422,18 @@ public class BaseBlock extends Block {
 	}
 
 	@Override
-	protected final void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		impl = TEMP;
-		TEMP = null;
-		for (IState is : impl.stateList)
-			is.fillStateContainer(builder);
-	}
-
-	public final void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
-			boolean notify) {
-		super.neighborUpdate(state, world, pos, block, fromPos, notify);
-		if (impl.neigh != null)
-			impl.neigh.neighborUpdate(state, world, pos, block, fromPos, notify);
-	}
-
 	public final void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
 		super.scheduledTick(state, world, pos, r);
 		for (IScheduledTick ticker : impl.schetickList)
 			ticker.scheduledTick(state, world, pos, r);
 	}
 
-	public final void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-		if (impl.entcoll != null)
-			impl.entcoll.onEntityCollision(state, world, pos, entity);
+	@Override
+	protected final void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+		impl = TEMP;
+		TEMP = null;
+		for (IState is : impl.stateList)
+			is.fillStateContainer(builder);
 	}
 
 }
