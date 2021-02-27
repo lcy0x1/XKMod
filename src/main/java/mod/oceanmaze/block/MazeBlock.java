@@ -10,14 +10,10 @@ import mod.oceanmaze.main.OceanMaze;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
@@ -153,19 +149,6 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
-	public static class Fatigue implements IEntityCollision {
-
-		@Override
-		public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-			if (world.isClient())
-				return;
-			if (entity instanceof PlayerEntity) {
-				PlayerEntity le = (PlayerEntity) entity;
-				le.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 2, 6000));
-			}
-		}
-
-	}
 	public static class FloorProt implements IScheduledTick {
 
 		@Override
@@ -257,8 +240,6 @@ public class MazeBlock extends BaseBlock {
 	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
 
 	public static final FloorProt FLOOR_PROT = new FloorProt();
-
-	public static final Fatigue FATIGUE = new Fatigue();
 
 	public static final Spawner SPAWNER = new Spawner();
 

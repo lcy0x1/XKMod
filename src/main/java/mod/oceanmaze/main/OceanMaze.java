@@ -8,6 +8,7 @@ import mod.oceanmaze.effects.SpongeWetEffect;
 import mod.oceanmaze.enchantment.SpongeProtectionEnchantment;
 import mod.oceanmaze.item.OceanMetalArmor;
 import mod.oceanmaze.item.OMArmorMat;
+import mod.oceanmaze.item.OceanMazeMap;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -73,6 +74,8 @@ public class OceanMaze implements ModInitializer {
 	public static final Item I_DOM_LEGGINGS = new OceanMetalArmor(OMArmorMat.DEEP, EquipmentSlot.LEGS, newFIS());
 	public static final Item I_DOM_BOOTS = new OceanMetalArmor(OMArmorMat.DEEP, EquipmentSlot.FEET, newFIS());
 
+	public static final Item I_MAZE_MAP = new OceanMazeMap(newFIS().maxCount(1));
+	
 	public static final Enchantment SPONGE_PROT = Registry.register(Registry.ENCHANTMENT,
 			new Identifier(MODID, "sponge_protection"), new SpongeProtectionEnchantment());
 
@@ -133,8 +136,11 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_leggings"), I_DOM_LEGGINGS);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_boots"), I_DOM_BOOTS);
 
+		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_map"), I_MAZE_MAP);
+		
 		Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, "sponge_wet"), SPONGE_WET);
 
 		OceanMazeStructureReg.onInit();
+		LootInjector.injector();
 	}
 }

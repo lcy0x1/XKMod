@@ -5,7 +5,10 @@ import net.minecraft.block.MaterialColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapState;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -16,6 +19,21 @@ public class OceanMazeMap extends FilledMapItem {
 
 	public OceanMazeMap(Settings settings) {
 		super(settings);
+	}
+
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack itemStack = user.getStackInHand(hand);
+		if (itemStack.getSubTag("map") == null) {
+			int i = world.getNextMapId();
+			MapState mapState = new MapState(getMapName(i));
+			int x = MathHelper.floor(user.getX());
+			int z = MathHelper.floor(user.getZ());
+			mapState.init(x, z, 0, true, false, world.getRegistryKey());
+			world.putMapState(mapState);
+			itemStack.getOrCreateTag().putInt("map", i);
+			return TypedActionResult.success(itemStack, world.isClient());
+		} else
+			return TypedActionResult.pass(itemStack);
 	}
 
 	@Override

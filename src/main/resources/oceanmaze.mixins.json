@@ -6,9 +6,12 @@
   "mixins": [
     "NoiseChunkGeneratorMixin",
     "StatusEffectInstanceAccessor",
-    "LivingEntityAccessor"
+    "LivingEntityAccessor",
+    "EntityMixin"
   ],
   "client": [
+    "HeldItemRendererAccessor",
+    "HeldItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

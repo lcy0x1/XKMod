@@ -20,7 +20,7 @@ public class ItemRendererMixin {
 	@Inject(at = @At("TAIL"), method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
 	public void renderGuiItemOverlay(TextRenderer tr, ItemStack stack, int x, int y, String str, CallbackInfo info) {
 		ItemRendererAccessor self = (ItemRendererAccessor) this;
-		if (XinkeEnergyItem.getMaxEnergy(stack) > 0) {
+		if (XinkeEnergyItem.isXinkeEnergyItem(stack)) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.disableTexture();
 			RenderSystem.disableAlphaTest();
