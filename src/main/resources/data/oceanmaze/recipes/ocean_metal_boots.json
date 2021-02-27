@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "# #",
+        "#o#"
+    ],
+    "key": {
+        "#": {
+            "item": "oceanmaze:ocean_metal_ingot"
+        },
+        "o": {
+            "item": "minecraft:diamond_boots"
+        }
+    },
+    "result": {
+        "item": "oceanmaze:ocean_metal_boots"
+    }
+}

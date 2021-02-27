@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#x#",
+        "#o#"
+    ],
+    "key": {
+        "#": {
+            "item": "oceanmaze:ocean_metal_ingot"
+        },
+        "o": {
+            "item": "minecraft:turtle_shell"
+        },
+        "x": {
+            "item": "minecraft:diamond_helmet"
+        }
+    },
+    "result": {
+        "item": "oceanmaze:ocean_metal_helmet"
+    }
+}

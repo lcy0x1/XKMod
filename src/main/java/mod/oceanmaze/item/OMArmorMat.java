@@ -8,13 +8,13 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
-public class OceanMetalArmorMaterial implements ArmorMaterial {
+public class OMArmorMat implements ArmorMaterial {
 
-	public static final OceanMetalArmorMaterial AM_WATER_METAL = new OceanMetalArmorMaterial("water_metal",
+	public static final OMArmorMat WATER = new OMArmorMat("water_metal",
 			OceanMaze.I_WATER_METAL_INGOT, 0);
-	public static final OceanMetalArmorMaterial AM_OCEAN_METAL = new OceanMetalArmorMaterial("ocean_metal",
+	public static final OMArmorMat OCEAN = new OMArmorMat("ocean_metal",
 			OceanMaze.I_OCEAN_METAL_INGOT, 1);
-	public static final OceanMetalArmorMaterial AM_DEEP_OCEAN_METAL = new OceanMetalArmorMaterial("deep_ocean_metal",
+	public static final OMArmorMat DEEP = new OMArmorMat("deep_ocean_metal",
 			OceanMaze.I_DEEP_OCEAN_METAL_INGOT, 2);
 
 	private static final int[] PROT = { 2, 4, 4, 2 };
@@ -24,7 +24,7 @@ public class OceanMetalArmorMaterial implements ArmorMaterial {
 	private final Item repair;
 	private final int lv;
 
-	public OceanMetalArmorMaterial(String name, Item repair, int lv) {
+	public OMArmorMat(String name, Item repair, int lv) {
 		this.name = name;
 		this.repair = repair;
 		this.lv = lv;

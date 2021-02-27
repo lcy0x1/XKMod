@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#x#",
+        "#o#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "item": "oceanmaze:deep_ocean_metal_ingot"
+        },
+        "x": {
+            "item": "oceanmaze:ocean_metal_chestplate"
+        },
+        "o": {
+            "item": "minecraft:wet_sponge"
+        }
+    },
+    "result": {
+        "item": "oceanmaze:deep_ocean_metal_chestplate"
+    }
+}

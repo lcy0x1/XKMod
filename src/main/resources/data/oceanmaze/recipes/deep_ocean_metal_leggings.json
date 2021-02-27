@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#o#",
+        "#x#",
+        "#x#"
+    ],
+    "key": {
+        "#": {
+            "item": "oceanmaze:deep_ocean_metal_ingot"
+        },
+        "o": {
+            "item": "oceanmaze:ocean_metal_leggings"
+        },
+        "x": {
+            "item": "minecraft:wet_sponge"
+        }
+    },
+    "result": {
+        "item": "oceanmaze:deep_ocean_metal_leggings"
+    }
+}

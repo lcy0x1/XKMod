@@ -1,12 +1,15 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "mod.oceanmaze.mixin",
+  "package": "mod.xinke.main.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "NoiseChunkGeneratorMixin"
+    "LivingEntityMixin"
   ],
   "client": [
+    "MainMixin",
+    "ItemRendererMixin",
+    "ItemRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
