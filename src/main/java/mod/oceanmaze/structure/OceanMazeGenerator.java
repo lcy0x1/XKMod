@@ -1,5 +1,6 @@
 package mod.oceanmaze.structure;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -7,6 +8,8 @@ import mod.lcy0x1.util.maze.MazeConfig;
 import mod.lcy0x1.util.maze.MazeGen;
 import mod.lcy0x1.util.maze.MazeGen.Debugger;
 import mod.oceanmaze.main.OceanMazeStructureReg;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -57,10 +60,34 @@ public class OceanMazeGenerator {
 		@Override
 		protected void handleMetadata(String str, BlockPos pos, ServerWorldAccess world, Random random,
 				BlockBox boundingBox) {
-			Identifier id = new Identifier("oceanmaze:chests/" + str.substring(10));
-			BlockEntity be = world.getBlockEntity(pos.offset(Direction.DOWN));
-			if (be instanceof LootableContainerBlockEntity)
-				((LootableContainerBlockEntity) be).setLootTable(id, random.nextLong());
+			Identifier id = new Identifier(str);
+			if (str.startsWith("oceanmaze:chests/")) {
+				BlockEntity be = world.getBlockEntity(pos.offset(Direction.DOWN));
+				if (be instanceof LootableContainerBlockEntity)
+					((LootableContainerBlockEntity) be).setLootTable(id, random.nextLong());
+			} else if (str.startsWith("oceanmaze:blocks/")) {
+				String type = str.substring(17);
+				BlockState bs = null;
+				if (type.equals("top")) {
+					int r = random.nextInt(100);
+					if (r < 5)
+						bs = Blocks.NETHERITE_BLOCK.getDefaultState();
+					else if (r < 50)
+						bs = Blocks.GOLD_BLOCK.getDefaultState();
+					else
+						bs = Blocks.CRYING_OBSIDIAN.getDefaultState();
+				} else if (type.equals("bottom")) {
+					int r = random.nextInt(100);
+					if (r < 10)
+						bs = Blocks.NETHERITE_BLOCK.getDefaultState();
+					else if (r < 70)
+						bs = Blocks.GOLD_BLOCK.getDefaultState();
+					else
+						bs = Blocks.CRYING_OBSIDIAN.getDefaultState();
+				} else
+					bs = Blocks.NETHERRACK.getDefaultState();
+				world.setBlockState(pos, bs, 2);
+			}
 		}
 
 		@Override
@@ -81,7 +108,6 @@ public class OceanMazeGenerator {
 
 	}
 
-	public static final Identifier CORE = new Identifier("oceanmaze:oceanmaze/end_0");
 	public static final Identifier STRAIGHT = new Identifier("oceanmaze:oceanmaze/straight");
 	public static final Identifier CORNER = new Identifier("oceanmaze:oceanmaze/corner");
 	public static final Identifier T_WAY = new Identifier("oceanmaze:oceanmaze/t_way");
@@ -90,20 +116,33 @@ public class OceanMazeGenerator {
 	public static final Identifier END_LV1 = new Identifier("oceanmaze:oceanmaze/end_1");
 	public static final Identifier END_LV2 = new Identifier("oceanmaze:oceanmaze/end_2");
 	public static final Identifier END_LV3 = new Identifier("oceanmaze:oceanmaze/end_3");
+	public static final Identifier CORE = new Identifier("oceanmaze:oceanmaze/core");
+	public static final Identifier DEGRADE = new Identifier("oceanmaze:oceanmaze/degrade");
 
 	public static final Identifier SIDE_EDGE = new Identifier("oceanmaze:oceanmaze/side_edge");
 	public static final Identifier SIDE_CORNER = new Identifier("oceanmaze:oceanmaze/side_corner");
 	public static final Identifier LAST_SIDE_EDGE = new Identifier("oceanmaze:oceanmaze/last_side_edge");
 	public static final Identifier LAST_SIDE_CORNER = new Identifier("oceanmaze:oceanmaze/last_side_corner");
-	public static final Identifier TOP_FACE = new Identifier("oceanmaze:oceanmaze/top_face");
+
 	public static final Identifier TOP_EDGE = new Identifier("oceanmaze:oceanmaze/top_edge");
 	public static final Identifier TOP_CORNER = new Identifier("oceanmaze:oceanmaze/top_corner");
-	public static final Identifier BOTTOM_FACE = new Identifier("oceanmaze:oceanmaze/bottom_face");
 	public static final Identifier BOTTOM_EDGE = new Identifier("oceanmaze:oceanmaze/bottom_edge");
 	public static final Identifier BOTTOM_CORNER = new Identifier("oceanmaze:oceanmaze/bottom_corner");
 
+	public static final Identifier TOP_FACE_CORE = new Identifier("oceanmaze:oceanmaze/top_core");
+	public static final Identifier TOP_FACE = new Identifier("oceanmaze:oceanmaze/top_face");
+	public static final Identifier TOP_FACE_0 = new Identifier("oceanmaze:oceanmaze/top_face_0");
+	public static final Identifier TOP_FACE_1 = new Identifier("oceanmaze:oceanmaze/top_face_1");
+	public static final Identifier TOP_FACE_2 = new Identifier("oceanmaze:oceanmaze/top_face_2");
+	public static final Identifier TOP_FACE_B = new Identifier("oceanmaze:oceanmaze/top_face_staff");
+
+	public static final Identifier BOTTOM_FACE = new Identifier("oceanmaze:oceanmaze/bottom_face");
+	public static final Identifier BOTTOM_FACE_0 = new Identifier("oceanmaze:oceanmaze/bottom_face_0");
+	public static final Identifier BOTTOM_FACE_1 = new Identifier("oceanmaze:oceanmaze/bottom_face_1");
+	public static final Identifier BOTTOM_FACE_2 = new Identifier("oceanmaze:oceanmaze/bottom_face_2");
+	public static final Identifier BOTTOM_FACE_B = new Identifier("oceanmaze:oceanmaze/bottom_face_staff");
+
 	public static final int[] LAYERS = { 8, 9, 10, 11, 12 };
-	public static final int[] WEIGHTS = { 5, 10, 15 };
 
 	public static void addPieces(StructureManager manager, BlockPos pos, List<StructurePiece> children, ChunkRandom r,
 			MazeConfig conf) {
@@ -111,12 +150,43 @@ public class OceanMazeGenerator {
 		for (int i = 0; i < LAYERS.length; i++) {
 			mazes[i] = new MazeGen(LAYERS[i], r, conf, new Debugger());
 			mazes[i].gen();
+			int d = mazes[i].r;
 			int[][] map = mazes[i].ans;
+			List<int[]> list = new ArrayList<>();
+			for (int x = 0; x < mazes[i].w; x++)
+				for (int z = 0; z < mazes[i].w; z++) {
+					int dire = map[x][z];
+					if (parse_ct(dire) == CellType.END)
+						list.add(new int[] { x, z });
+				}
+			Object[] arr00 = list.stream().filter(a -> a[0] < d && a[1] < d).toArray();
+			Object[] arr01 = list.stream().filter(a -> a[0] < d && a[1] > d).toArray();
+			Object[] arr10 = list.stream().filter(a -> a[0] > d && a[1] < d).toArray();
+			Object[] arr11 = list.stream().filter(a -> a[0] > d && a[1] > d).toArray();
+			if (arr00.length == 0)
+				arr00 = new int[][] { { -1, -1 } };
+			if (arr01.length == 0)
+				arr01 = new int[][] { { -1, -1 } };
+			if (arr10.length == 0)
+				arr10 = new int[][] { { -1, -1 } };
+			if (arr11.length == 0)
+				arr11 = new int[][] { { -1, -1 } };
+			int[] a00 = (int[]) arr00[r.nextInt(arr00.length)];
+			int[] a01 = (int[]) arr01[r.nextInt(arr01.length)];
+			int[] a10 = (int[]) arr10[r.nextInt(arr10.length)];
+			int[] a11 = (int[]) arr11[r.nextInt(arr11.length)];
+
 			for (int x = 0; x < mazes[i].w; x++)
 				for (int z = 0; z < mazes[i].w; z++) {
 					int dire = map[x][z];
 					CellType ct = parse_ct(dire);
-					Identifier id = parse_id(ct, r, Math.abs(x - mazes[i].r), Math.abs(z - mazes[i].r));
+
+					Identifier id;
+					if (x == a00[0] && z == a00[1] || x == a01[0] && z == a01[1] || x == a10[0] && z == a10[1]
+							|| x == a11[0] && z == a11[1])
+						id = i == mazes.length - 1 ? DEGRADE : CORE;
+					else
+						id = parse_id(ct, r, Math.abs(x - mazes[i].r), Math.abs(z - mazes[i].r));
 					children.add(new Piece(manager, pos.add((x - mazes[i].r) * 5, -i * 5, (z - mazes[i].r) * 5), id,
 							parse_rot(dire), id != CORE));
 				}
@@ -131,14 +201,42 @@ public class OceanMazeGenerator {
 		}
 		for (int x = 0; x < mazes[0].w; x++)
 			for (int z = 0; z < mazes[0].w; z++) {
-				children.add(new Piece(manager, pos.add((x - mazes[0].r) * 5, 5, (z - mazes[0].r) * 5), TOP_FACE,
+				Identifier id;
+				if (x == mazes[0].r && z == x)
+					id = TOP_FACE_CORE;
+				else {
+					int rand = r.nextInt(100) + 100 * (x + z & 1);
+					if (rand < 5)
+						id = TOP_FACE_B;
+					else if (rand < 10)
+						id = TOP_FACE_0;
+					else if (rand < 15)
+						id = TOP_FACE_1;
+					else if (rand < 20)
+						id = TOP_FACE_2;
+					else
+						id = TOP_FACE;
+				}
+				children.add(new Piece(manager, pos.add((x - mazes[0].r) * 5, 5, (z - mazes[0].r) * 5), id,
 						BlockRotation.NONE, false));
 			}
 		int ln = LAYERS.length - 1;
 		for (int x = 0; x < mazes[ln].w; x++)
 			for (int z = 0; z < mazes[ln].w; z++) {
+				Identifier id;
+				int rand = r.nextInt(100) + 100 * (x + z & 1);
+				if (rand < 5)
+					id = BOTTOM_FACE_B;
+				else if (rand < 10)
+					id = BOTTOM_FACE_0;
+				else if (rand < 15)
+					id = BOTTOM_FACE_1;
+				else if (rand < 20)
+					id = BOTTOM_FACE_2;
+				else
+					id = BOTTOM_FACE;
 				children.add(new Piece(manager, pos.add((x - mazes[ln].r) * 5, -(ln + 1) * 5, (z - mazes[ln].r) * 5),
-						BOTTOM_FACE, BlockRotation.NONE, false));
+						id, BlockRotation.NONE, false));
 			}
 		for (int j = 0; j < mazes[ln].w; j++) {
 		}
@@ -187,14 +285,12 @@ public class OceanMazeGenerator {
 		if (ct == CellType.CROSS)
 			return CROSS;
 		if (ct == CellType.END) {
-			if (x == 0 && z == 0)
-				return CORE;
 			int rand = r.nextInt(x + z);
-			if (rand < WEIGHTS[0])
+			if (rand < 5)
 				return END_LV0;
-			if (rand < WEIGHTS[1])
+			if (rand < 10)
 				return END_LV1;
-			if (rand < WEIGHTS[2])
+			if (rand < 15)
 				return END_LV2;
 			return END_LV3;
 		}

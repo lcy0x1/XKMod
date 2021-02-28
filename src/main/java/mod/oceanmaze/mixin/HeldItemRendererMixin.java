@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
 
-	@Inject(at = @At("HEAD"), method = 
+	@Inject(at = @At("HEAD"), cancellable = true, method = 
 			"renderFirstPersonItem(Lnet/minecraft/client/network/AbstractClientPlayerEntity;"
 			+ "FFLnet/minecraft/util/Hand;FLnet/minecraft/item/ItemStack;"
 			+ "FLnet/minecraft/client/util/math/MatrixStack;"
@@ -28,7 +28,6 @@ public class HeldItemRendererMixin {
 		HeldItemRendererAccessor self = (HeldItemRendererAccessor) this;
 		boolean bl = hand == Hand.MAIN_HAND;
 		Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
-		System.out.println(item.getTag());
 		if (item.getItem() == OceanMaze.I_MAZE_MAP && item.hasTag()) {
 			mat.push();
 			if (bl && self.getOffHand().isEmpty())
@@ -36,6 +35,7 @@ public class HeldItemRendererMixin {
 			else
 				self.invokeRenderMapInOneHand(mat, vc, light, ep, arm, sp, item);
 			mat.pop();
+			info.cancel();
 		}
 	}
 

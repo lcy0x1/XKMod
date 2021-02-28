@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "": {
+            "model": "oceanmaze:block/maze_degrade"
+        }
+    }
+}
+

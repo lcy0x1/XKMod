@@ -25,6 +25,7 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 
 public class MazeBlock extends BaseBlock {
@@ -95,6 +96,7 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
+
 	public static class DireState implements IState, IScheduledTick, IRotMir {
 
 		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.WEST,
@@ -149,6 +151,7 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
+
 	public static class FloorProt implements IScheduledTick {
 
 		@Override
@@ -164,6 +167,7 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
+
 	public static class Neighbor implements INeighbor {
 
 		@Override
@@ -175,6 +179,7 @@ public class MazeBlock extends BaseBlock {
 		}
 
 	}
+
 	public static class Spawner implements INeighbor, IScheduledTick, IState {
 
 		@Override
@@ -193,17 +198,30 @@ public class MazeBlock extends BaseBlock {
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			if (world.getDifficulty() == Difficulty.PEACEFUL)
+				return;
 			boolean pow = world.isReceivingRedstonePower(pos);
 			if (state.get(Properties.POWERED) != pow)
 				world.setBlockState(pos, state.with(Properties.POWERED, pow));
 			if (!pow)
 				return;
-			int count = world.getEntitiesByType(EntityType.DROWNED, new Box(pos).offset(0, 2, 0).expand(2),
+			Direction dir = null;
+			for (int i = 0; i < 4; i++) {
+				Direction diri = Direction.fromHorizontal(i);
+				if (world.getBlockState(pos.offset(diri, 2).up()).getBlock() instanceof MazeBlock)
+					continue;
+				dir = diri;
+				break;
+			}
+			if (dir == null)
+				return;
+			pos = pos.offset(dir, 5).up();
+			int count = world.getEntitiesByType(EntityType.DROWNED, new Box(pos).offset(0, 1, 0).expand(2),
 					Predicates.alwaysTrue()).size();
 			if (count > 0)
 				return;
 			DrownedEntity e = EntityType.DROWNED.create(world);
-			e.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0, 0);
+			e.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
 			ItemStack trident = new ItemStack(Items.TRIDENT);
 			e.equipStack(EquipmentSlot.MAINHAND, trident);
@@ -233,13 +251,13 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
-	public static final Neighbor NEIGHBOR = new Neighbor();
+	public static final Neighbor NEI = new Neighbor();
 
-	public static final DireState HOR_DIRE_STATE = new DireState();
+	public static final DireState HOR = new DireState();
 
 	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
 
-	public static final FloorProt FLOOR_PROT = new FloorProt();
+	public static final FloorProt FLOOR = new FloorProt();
 
 	public static final Spawner SPAWNER = new Spawner();
 

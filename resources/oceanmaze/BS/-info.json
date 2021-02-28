@@ -1,14 +1,15 @@
 {
     "": {
         "-setup": {
-            "": [
-            ]
+            "": []
         },
         "": {
             "": [
                 "water_metal_block",
                 "ocean_metal_block",
-                "deep_ocean_metal_block"
+                "deep_ocean_metal_block",
+                "maze_open",
+                "maze_degrade"
             ]
         }
     }

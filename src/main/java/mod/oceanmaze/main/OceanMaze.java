@@ -3,7 +3,9 @@ package mod.oceanmaze.main;
 import java.util.function.Supplier;
 
 import mod.lcy0x1.block.BlockProp;
+import mod.oceanmaze.block.DegradeBlock;
 import mod.oceanmaze.block.MazeBlock;
+import mod.oceanmaze.block.OpenBlock;
 import mod.oceanmaze.effects.SpongeWetEffect;
 import mod.oceanmaze.enchantment.SpongeProtectionEnchantment;
 import mod.oceanmaze.item.OceanMetalArmor;
@@ -33,20 +35,23 @@ public class OceanMaze implements ModInitializer {
 			itemGroupIcon("general"));
 
 	public static final BlockProp BP_OM = new BlockProp(FabricBlockSettings.of(Material.STONE).dropsNothing(), 20, 100);
+	public static final BlockProp BP_OMT = new BlockProp(FabricBlockSettings.of(Material.STONE).dropsNothing().ticksRandomly(), 20, 100);
 	public static final FabricBlockSettings BP_METAL = FabricBlockSettings.copyOf(Blocks.IRON_BLOCK);
 
-	public static final Block B_OMC_CORE = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.HOR_DIRE_STATE,
-			MazeBlock.FLOOR_PROT);
-	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.HOR_DIRE_STATE);
-	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.FLOOR_PROT);
+	public static final Block B_OMC_CORE = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.HOR, MazeBlock.FLOOR);
+	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.HOR);
+	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.FLOOR);
 	public static final Block B_OMC_SPAWNER = new MazeBlock(BP_OM, MazeBlock.SPAWNER);
-	public static final Block B_OMO_WALL = new MazeBlock(BP_OM, MazeBlock.NEIGHBOR, MazeBlock.ALL_DIRE_STATE);
-
+	public static final Block B_OMO_WALL = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.ALL_DIRE_STATE);
+	public static final Block B_OMO_OPEN = new OpenBlock(BP_OMT);
+	public static final Block B_OMO_DEGRADE = new DegradeBlock(BP_OMT);
 	public static final BlockItem BI_OMC_CORE = toBI(B_OMC_CORE);
 	public static final BlockItem BI_OMC_WALL = toBI(B_OMC_WALL);
 	public static final BlockItem BI_OMC_FLOOR = toBI(B_OMC_FLOOR);
 	public static final BlockItem BI_OMC_SPAWNER = toBI(B_OMC_SPAWNER);
 	public static final BlockItem BI_OMO_WALL = toBI(B_OMO_WALL);
+	public static final BlockItem BI_OMO_OPEN = toBI(B_OMO_OPEN);
+	public static final BlockItem BI_OMO_DEGRADE = toBI(B_OMO_DEGRADE);
 
 	public static final Block B_WATER_METAL_BLOCK = new Block(BP_METAL);
 	public static final Block B_OCEAN_METAL_BLOCK = new Block(BP_METAL);
@@ -60,7 +65,6 @@ public class OceanMaze implements ModInitializer {
 	public static final Item I_WATER_METAL_NUGGET = new Item(newFIS());
 	public static final Item I_OCEAN_METAL_NUGGET = new Item(newFIS());
 	public static final Item I_DEEP_OCEAN_METAL_NUGGET = new Item(newFIS());
-
 	public static final Item I_WM_HELMET = new OceanMetalArmor(OMArmorMat.WATER, EquipmentSlot.HEAD, newFIS());
 	public static final Item I_WM_CHESTPLATE = new OceanMetalArmor(OMArmorMat.WATER, EquipmentSlot.CHEST, newFIS());
 	public static final Item I_WM_LEGGINGS = new OceanMetalArmor(OMArmorMat.WATER, EquipmentSlot.LEGS, newFIS());
@@ -75,7 +79,7 @@ public class OceanMaze implements ModInitializer {
 	public static final Item I_DOM_BOOTS = new OceanMetalArmor(OMArmorMat.DEEP, EquipmentSlot.FEET, newFIS());
 
 	public static final Item I_MAZE_MAP = new OceanMazeMap(newFIS().maxCount(1));
-	
+
 	public static final Enchantment SPONGE_PROT = Registry.register(Registry.ENCHANTMENT,
 			new Identifier(MODID, "sponge_protection"), new SpongeProtectionEnchantment());
 
@@ -103,12 +107,15 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_cell_floor"), B_OMC_FLOOR);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_cell_spawner"), B_OMC_SPAWNER);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_out_wall"), B_OMO_WALL);
-
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_open"), B_OMO_OPEN);
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "maze_degrade"), B_OMO_DEGRADE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_core"), BI_OMC_CORE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_wall"), BI_OMC_WALL);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_floor"), BI_OMC_FLOOR);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_cell_spawner"), BI_OMC_SPAWNER);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_out_wall"), BI_OMO_WALL);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_open"), BI_OMO_OPEN);
+		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_degrade"), BI_OMO_DEGRADE);
 
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "water_metal_block"), B_WATER_METAL_BLOCK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "ocean_metal_block"), B_OCEAN_METAL_BLOCK);
@@ -122,7 +129,6 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_nugget"), I_WATER_METAL_NUGGET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "ocean_metal_nugget"), I_OCEAN_METAL_NUGGET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_nugget"), I_DEEP_OCEAN_METAL_NUGGET);
-
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_helmet"), I_WM_HELMET);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_chestplate"), I_WM_CHESTPLATE);
 		Registry.register(Registry.ITEM, new Identifier(MODID, "water_metal_leggings"), I_WM_LEGGINGS);
@@ -137,7 +143,7 @@ public class OceanMaze implements ModInitializer {
 		Registry.register(Registry.ITEM, new Identifier(MODID, "deep_ocean_metal_boots"), I_DOM_BOOTS);
 
 		Registry.register(Registry.ITEM, new Identifier(MODID, "maze_map"), I_MAZE_MAP);
-		
+
 		Registry.register(Registry.STATUS_EFFECT, new Identifier(MODID, "sponge_wet"), SPONGE_WET);
 
 		OceanMazeStructureReg.onInit();
