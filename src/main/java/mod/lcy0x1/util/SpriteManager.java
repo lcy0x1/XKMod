@@ -1,4 +1,4 @@
-package dev.lcy0x1;
+package mod.lcy0x1.util;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

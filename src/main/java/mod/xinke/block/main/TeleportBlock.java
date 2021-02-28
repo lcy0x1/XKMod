@@ -2,8 +2,8 @@ package mod.xinke.block.main;
 
 import java.util.List;
 
-import dev.lcy0x1.SpriteManager;
-import dev.lcy0x1.SpriteManager.ScreenRenderer;
+import mod.lcy0x1.util.SpriteManager;
+import mod.lcy0x1.util.SpriteManager.ScreenRenderer;
 import mod.lcy0x1.block.AutoScreen;
 import mod.lcy0x1.block.BlockProp;
 import mod.lcy0x1.block.InvBlockEntity;
