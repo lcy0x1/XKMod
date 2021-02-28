@@ -59,7 +59,7 @@ public class OpenBlock extends BaseBlock {
 	}
 
 	public OpenBlock(BlockProp p) {
-		super(p, INSTANCE);
+		super(p, MazeBlock.CLICK, INSTANCE);
 	}
 
 }

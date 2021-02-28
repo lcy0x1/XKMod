@@ -102,7 +102,7 @@ public class OceanMazeGenerator {
 			Structure structure = structureManager.getStructureOrBlank(this.template);
 			StructurePlacementData placementData = (new StructurePlacementData()).setRotation(this.rotation)
 					.setMirror(BlockMirror.NONE).setPosition(new BlockPos(2, 0, 2))
-					.addProcessor(UnderWaterStructureProcessor.INSTANCE);
+					.addProcessor(inner ? UnderWaterStructureProcessor.INSTANCE : OnMazeStructureProcessor.INSTANCE);
 			this.setStructureData(structure, this.pos, placementData);
 		}
 
@@ -188,7 +188,7 @@ public class OceanMazeGenerator {
 					else
 						id = parse_id(ct, r, Math.abs(x - mazes[i].r), Math.abs(z - mazes[i].r));
 					children.add(new Piece(manager, pos.add((x - mazes[i].r) * 5, -i * 5, (z - mazes[i].r) * 5), id,
-							parse_rot(dire), id != CORE));
+							parse_rot(dire), true));
 				}
 		}
 		for (int i = 0; i < LAYERS.length - 1; i++) {
@@ -285,7 +285,7 @@ public class OceanMazeGenerator {
 		if (ct == CellType.CROSS)
 			return CROSS;
 		if (ct == CellType.END) {
-			int rand = r.nextInt(x + z);
+			int rand = r.nextInt((x + z) + 1);
 			if (rand < 5)
 				return END_LV0;
 			if (rand < 10)

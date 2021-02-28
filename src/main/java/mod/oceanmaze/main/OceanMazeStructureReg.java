@@ -2,6 +2,7 @@ package mod.oceanmaze.main;
 
 import mod.oceanmaze.structure.OceanMazeFeature;
 import mod.oceanmaze.structure.OceanMazeGenerator;
+import mod.oceanmaze.structure.OnMazeStructureProcessor;
 import mod.oceanmaze.structure.UnderWaterStructureProcessor;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.structure.v1.FabricStructureBuilder;
@@ -30,6 +31,9 @@ public class OceanMazeStructureReg {
 
 	public static final StructureProcessorType<UnderWaterStructureProcessor> SPCT_UW = StructureProcessorType
 			.register("oceanmaze:under_water", UnderWaterStructureProcessor.CODEC);
+	
+	public static final StructureProcessorType<OnMazeStructureProcessor> SPCT_OM = StructureProcessorType
+			.register("oceanmaze:on_maze", OnMazeStructureProcessor.CODEC);
 
 	public static void onInit() {
 		Registry.register(Registry.STRUCTURE_PIECE, new Identifier(OceanMaze.MODID, "oceanmaze"), SPT_OCEANMAZE);

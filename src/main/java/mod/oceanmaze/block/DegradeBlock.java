@@ -4,6 +4,7 @@ import java.util.Random;
 
 import mod.lcy0x1.block.BaseBlock;
 import mod.lcy0x1.block.BlockProp;
+import mod.oceanmaze.main.OceanMaze;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -37,7 +38,7 @@ public class DegradeBlock extends BaseBlock {
 			int min = 8;
 			for (Direction dir : Direction.values()) {
 				BlockState bs = world.getBlockState(pos.offset(dir));
-				if (bs.getBlock() instanceof MazeBlock) {
+				if (bs.getBlock() instanceof MazeBlock || bs.getBlock() == Blocks.SEA_LANTERN) {
 					min = Math.min(-1, min);
 					if (!world.isReceivingRedstonePower(pos.offset(dir)))
 						world.setBlockState(pos.offset(dir), state.with(Properties.DISTANCE_0_7, 0));
@@ -47,15 +48,20 @@ public class DegradeBlock extends BaseBlock {
 			min++;
 			if (min < 8 && state.get(Properties.DISTANCE_0_7) != min)
 				world.setBlockState(pos, state.with(Properties.DISTANCE_0_7, min));
-			else
-				world.setBlockState(pos, Blocks.WATER.getDefaultState());
+			else {
+				BlockState bs = world.getBlockState(pos.up());
+				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == OceanMaze.B_OMO_DEGRADE)
+					world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				else
+					world.setBlockState(pos, Blocks.PRISMARINE.getDefaultState());
+			}
 
 		}
 
 	}
 
 	public DegradeBlock(BlockProp p) {
-		super(p, INSTANCE);
+		super(p, MazeBlock.CLICK, INSTANCE);
 	}
 
 }

@@ -164,6 +164,25 @@ public class LootTableGenerator {
 
 	public static void main(String[] args) throws IOException {
 		{
+			LootTable lv0 = new LootTable();
+			lv0.pools.add(new RandomPool(5, 10)// break
+					.add(new PoolEntry(5, "minecraft:trident"))// break
+					.add(item("minecraft:golden_apple", 5, 1, 4))// break
+					.add(item("minecraft:prismarine_shard", 10, 1, 8))// break
+					.add(item("minecraft:prismarine_crystals", 10, 1, 4))// break
+					.add(item("minecraft:iron_ingot", 10, 1, 8))// break
+					.add(item("minecraft:diamond", 10, 1, 1))// break
+					.add(item("minecraft:nautilus_shell", 10, 1, 2))// break
+					.add(item("minecraft:scute", 10, 1, 2))// break
+					.add(item("oceanmaze:water_metal_ingot", 10, 1, 2))// break
+					.add(item("oceanmaze:ocean_metal_nugget", 10, 1, 4))// break
+					.add(item("oceanmaze:deep_ocean_metal_nugget", 10, 1, 1))// break
+			);
+			write(lv0, "top.json");
+		}
+
+		
+		{
 			LootTable lv1 = new LootTable();
 			lv1.pools.add(new StaticPool(1).add(new PoolEntry(10, "minecraft:heart_of_the_sea")));
 			Function.EnchantLevel enc = new Function.EnchantLevel(5, 10);

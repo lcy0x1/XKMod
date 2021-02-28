@@ -14,14 +14,18 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.DrownedEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -180,6 +184,17 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
+	public static class Click implements IClick {
+
+		@Override
+		public ActionResult onUse(BlockState bs, World w, BlockPos pos, PlayerEntity pl, Hand h, BlockHitResult hit) {
+			if (!w.isClient())
+				w.getBlockTickScheduler().schedule(pos, bs.getBlock(), DELAY);
+			return ActionResult.SUCCESS;
+		}
+
+	}
+
 	public static class Spawner implements INeighbor, IScheduledTick, IState {
 
 		@Override
@@ -252,14 +267,11 @@ public class MazeBlock extends BaseBlock {
 	}
 
 	public static final Neighbor NEI = new Neighbor();
-
 	public static final DireState HOR = new DireState();
-
 	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
-
 	public static final FloorProt FLOOR = new FloorProt();
-
 	public static final Spawner SPAWNER = new Spawner();
+	public static final Click CLICK = new Click();
 
 	public static final int DELAY = 4;
 
