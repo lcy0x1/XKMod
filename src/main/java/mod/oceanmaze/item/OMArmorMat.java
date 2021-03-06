@@ -1,6 +1,6 @@
 package mod.oceanmaze.item;
 
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
@@ -10,9 +10,9 @@ import net.minecraft.sound.SoundEvents;
 
 public class OMArmorMat implements ArmorMaterial {
 
-	public static final OMArmorMat WATER = new OMArmorMat("water_metal", OceanMaze.I_WATER_METAL_INGOT, 0);
-	public static final OMArmorMat OCEAN = new OMArmorMat("ocean_metal", OceanMaze.I_OCEAN_METAL_INGOT, 1);
-	public static final OMArmorMat DEEP = new OMArmorMat("deep_ocean_metal", OceanMaze.I_DEEP_OCEAN_METAL_INGOT, 2);
+	public static final OMArmorMat WATER = new OMArmorMat("water_metal", BIReg.I_WATER_METAL_INGOT, 0);
+	public static final OMArmorMat OCEAN = new OMArmorMat("ocean_metal", BIReg.I_OCEAN_METAL_INGOT, 1);
+	public static final OMArmorMat DEEP = new OMArmorMat("deep_ocean_metal", BIReg.I_DEEP_OCEAN_METAL_INGOT, 2);
 
 	private static final int[] PROT = { 2, 4, 4, 2 };
 	private static final int[] DUR = new int[] { 13, 15, 16, 11 };

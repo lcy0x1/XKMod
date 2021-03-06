@@ -4,7 +4,7 @@ import java.util.Random;
 
 import mod.lcy0x1.block.BaseBlock;
 import mod.lcy0x1.block.BlockProp;
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,7 +23,6 @@ public class DegradeBlock extends BaseBlock {
 		@Override
 		public void fillStateContainer(Builder<Block, BlockState> builder) {
 			builder.add(Properties.DISTANCE_0_7);
-
 		}
 
 		@Override
@@ -50,8 +49,11 @@ public class DegradeBlock extends BaseBlock {
 				world.setBlockState(pos, state.with(Properties.DISTANCE_0_7, min));
 			else {
 				BlockState bs = world.getBlockState(pos.up());
-				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == OceanMaze.B_OMO_DEGRADE)
-					world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == BIReg.B_OMO_DEGRADE)
+					if (r.nextDouble() < 1e-4)
+						world.setBlockState(pos, BIReg.B_CLEAR.getDefaultState());
+					else
+						world.setBlockState(pos, Blocks.WATER.getDefaultState());
 				else
 					world.setBlockState(pos, Blocks.PRISMARINE.getDefaultState());
 			}

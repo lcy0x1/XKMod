@@ -4,7 +4,7 @@ import java.util.Random;
 
 import mod.lcy0x1.block.BaseBlock;
 import mod.lcy0x1.block.BlockProp;
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerWorld;
@@ -46,13 +46,13 @@ public class OpenBlock extends BaseBlock {
 		}
 
 		private static void getState(BlockPos pos, ServerWorld world, BlockRotation rot, boolean upper) {
-			BlockState wall = OceanMaze.B_OMC_WALL.getDefaultState().with(Properties.SOUTH, true);
-			BlockState out = OceanMaze.B_OMO_WALL.getDefaultState().with(upper ? Properties.UP : Properties.DOWN, true)
+			BlockState wall = BIReg.B_OMC_WALL.getDefaultState().with(Properties.SOUTH, true);
+			BlockState out = BIReg.B_OMO_WALL.getDefaultState().with(upper ? Properties.UP : Properties.DOWN, true)
 					.with(Properties.SOUTH, true);
 			BlockState bs = world.getBlockState(pos);
-			if (bs.getBlock() == OceanMaze.B_OMC_CORE)
+			if (bs.getBlock() == BIReg.B_OMC_CORE)
 				world.setBlockState(pos, wall.rotate(rot));
-			else if (bs.getBlock() == OceanMaze.B_OMC_FLOOR || bs.getBlock() == OceanMaze.B_OMO_WALL)
+			else if (bs.getBlock() == BIReg.B_OMC_FLOOR || bs.getBlock() == BIReg.B_OMO_WALL)
 				world.setBlockState(pos, out.rotate(rot));
 		}
 

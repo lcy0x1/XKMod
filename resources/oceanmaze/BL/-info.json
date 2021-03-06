@@ -6,7 +6,15 @@
                 "maze_cell_wall",
                 "maze_cell_spawner",
                 "maze_cell_floor",
-                "maze_out_wall"
+                "maze_out_wall",
+                "maze_open",
+                "maze_degrade",
+                "clear_water",
+                "clear_lava",
+                "clear_stone",
+                "clear_sand",
+                "clear_nether",
+                "clear_end"
             ]
         }
     }

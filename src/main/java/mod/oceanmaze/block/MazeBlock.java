@@ -6,7 +6,7 @@ import com.google.common.base.Predicates;
 
 import mod.lcy0x1.block.BaseBlock;
 import mod.lcy0x1.block.BlockProp;
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
@@ -68,7 +68,7 @@ public class MazeBlock extends BaseBlock {
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMO_WALL.getDefaultState();
+			BlockState rep = BIReg.B_OMO_WALL.getDefaultState();
 			BlockState self = rep;
 			for (int i = 0; i < 6; i++) {
 				BlockPos uppos = pos.offset(Direction.values()[i]);
@@ -135,7 +135,7 @@ public class MazeBlock extends BaseBlock {
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMC_WALL.getDefaultState();
+			BlockState rep = BIReg.B_OMC_WALL.getDefaultState();
 			for (BooleanProperty bp : PROPS)
 				rep = rep.with(bp, state.get(bp));
 			BlockPos uppos = pos.up();
@@ -160,7 +160,7 @@ public class MazeBlock extends BaseBlock {
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = OceanMaze.B_OMC_FLOOR.getDefaultState();
+			BlockState rep = BIReg.B_OMC_FLOOR.getDefaultState();
 			for (int dir = 0; dir < 4; dir++) {
 				BlockPos uppos = pos.offset(Direction.fromHorizontal(dir));
 				BlockState torep = world.getBlockState(uppos);
@@ -240,19 +240,19 @@ public class MazeBlock extends BaseBlock {
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
 			ItemStack trident = new ItemStack(Items.TRIDENT);
 			e.equipStack(EquipmentSlot.MAINHAND, trident);
-			ItemStack helmet = new ItemStack(OceanMaze.I_DOM_HELMET);
+			ItemStack helmet = new ItemStack(BIReg.I_DOM_HELMET);
 			helmet.addEnchantment(Enchantments.PROTECTION, 4);
 			helmet.addEnchantment(Enchantments.THORNS, 3);
 			e.equipStack(EquipmentSlot.HEAD, helmet);
-			ItemStack chestplate = new ItemStack(OceanMaze.I_DOM_CHESTPLATE);
+			ItemStack chestplate = new ItemStack(BIReg.I_DOM_CHESTPLATE);
 			chestplate.addEnchantment(Enchantments.PROTECTION, 4);
 			chestplate.addEnchantment(Enchantments.THORNS, 3);
 			e.equipStack(EquipmentSlot.CHEST, chestplate);
-			ItemStack leggings = new ItemStack(OceanMaze.I_DOM_LEGGINGS);
+			ItemStack leggings = new ItemStack(BIReg.I_DOM_LEGGINGS);
 			leggings.addEnchantment(Enchantments.PROTECTION, 4);
 			leggings.addEnchantment(Enchantments.THORNS, 3);
 			e.equipStack(EquipmentSlot.LEGS, leggings);
-			ItemStack boots = new ItemStack(OceanMaze.I_DOM_BOOTS);
+			ItemStack boots = new ItemStack(BIReg.I_DOM_BOOTS);
 			boots.addEnchantment(Enchantments.PROTECTION, 4);
 			boots.addEnchantment(Enchantments.THORNS, 3);
 			e.equipStack(EquipmentSlot.FEET, boots);

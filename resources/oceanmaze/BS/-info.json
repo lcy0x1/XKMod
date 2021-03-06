@@ -9,7 +9,14 @@
                 "ocean_metal_block",
                 "deep_ocean_metal_block",
                 "maze_open",
-                "maze_degrade"
+                "maze_degrade",
+                "clear",
+                "clear_water",
+                "clear_lava",
+                "clear_stone",
+                "clear_sand",
+                "clear_nether",
+                "clear_end"
             ]
         }
     }

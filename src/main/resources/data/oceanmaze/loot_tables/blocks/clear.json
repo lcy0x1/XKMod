@@ -6,7 +6,7 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "name": "oceanmaze:maze_open"
+                    "name": "oceanmaze:clear"
                 }
             ],
             "conditions": [

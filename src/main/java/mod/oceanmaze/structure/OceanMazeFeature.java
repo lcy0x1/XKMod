@@ -47,8 +47,7 @@ public class OceanMazeFeature extends StructureFeature<DefaultFeatureConfig> {
 	public static final List<SpawnSettings.SpawnEntry> MOB;
 
 	static {
-		MOB = ImmutableList.of(new SpawnEntry(EntityType.ELDER_GUARDIAN, 1, 1, 1),
-				new SpawnEntry(EntityType.GUARDIAN, 4, 2, 4));
+		MOB = ImmutableList.of(new SpawnEntry(EntityType.GUARDIAN, 4, 4, 4));
 	}
 
 	public OceanMazeFeature(Codec<DefaultFeatureConfig> codec) {

@@ -21,6 +21,7 @@ public class OceanMazeMap extends FilledMapItem {
 		super(settings);
 	}
 
+	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		if (itemStack.getSubTag("map") == null) {

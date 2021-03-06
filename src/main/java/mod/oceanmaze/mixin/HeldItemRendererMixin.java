@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -28,7 +28,7 @@ public class HeldItemRendererMixin {
 		HeldItemRendererAccessor self = (HeldItemRendererAccessor) this;
 		boolean bl = hand == Hand.MAIN_HAND;
 		Arm arm = bl ? player.getMainArm() : player.getMainArm().getOpposite();
-		if (item.getItem() == OceanMaze.I_MAZE_MAP && item.hasTag()) {
+		if (item.getItem() == BIReg.I_MAZE_MAP && item.hasTag()) {
 			mat.push();
 			if (bl && self.getOffHand().isEmpty())
 				self.invokeRenderMapInBothHands(mat, vc, light, pitch, ep, sp);

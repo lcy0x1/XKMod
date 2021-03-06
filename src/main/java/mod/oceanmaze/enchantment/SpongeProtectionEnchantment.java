@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import mod.oceanmaze.main.OceanMaze;
+import mod.oceanmaze.main.BIReg;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EquipmentSlot;
@@ -14,8 +14,8 @@ import net.minecraft.item.ItemStack;
 
 public class SpongeProtectionEnchantment extends Enchantment {
 
-	public static final Set<Item> SET = ImmutableSet.of(OceanMaze.I_OM_CHESTPLATE, OceanMaze.I_DOM_HELMET,
-			OceanMaze.I_DOM_CHESTPLATE, OceanMaze.I_DOM_LEGGINGS, OceanMaze.I_DOM_BOOTS);
+	public static final Set<Item> SET = ImmutableSet.of(BIReg.I_OM_CHESTPLATE, BIReg.I_DOM_HELMET,
+			BIReg.I_DOM_CHESTPLATE, BIReg.I_DOM_LEGGINGS, BIReg.I_DOM_BOOTS);
 
 	public SpongeProtectionEnchantment() {
 		super(Rarity.RARE, EnchantmentTarget.ARMOR, EquipmentSlot.values());

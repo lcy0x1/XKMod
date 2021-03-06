@@ -35,11 +35,10 @@ public class OceanMetalArmor extends ArmorItem {
 
 	private void applyEffects(LivingEntity le) {
 
-		boolean inWater = le.isSubmergedInWater();
+		boolean inWater = le.isTouchingWaterOrRain();
+		boolean striw = le.isSubmergedInWater();
 		int breath = 0;
 		int wet = 0;
-		boolean vi = false;
-		int hs = 0;
 		int res = 0;
 		int deep = 0;
 		int enc = 0;
@@ -47,16 +46,13 @@ public class OceanMetalArmor extends ArmorItem {
 		ItemStack is = le.getEquippedStack(EquipmentSlot.HEAD);
 		if (is.getItem() instanceof OceanMetalArmor) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
-			if (!inWater)
+			if (!striw)
 				breath = am == OMArmorMat.WATER ? 200 : am == OMArmorMat.OCEAN ? 600 : 1800;
-			else {
-				vi = am != OMArmorMat.WATER;
-				if (am == OMArmorMat.DEEP) {
-					hs++;
-					wet += 600;
-					deep += 5;
-				}
+			if (inWater && am == OMArmorMat.DEEP) {
+				wet += 600;
+				deep += 5;
 			}
+
 		}
 		is = le.getEquippedStack(EquipmentSlot.CHEST);
 		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
@@ -91,17 +87,13 @@ public class OceanMetalArmor extends ArmorItem {
 
 		wet = (int) (wet * (1 + enc / 4.0));
 
-		if (vi)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 215));
 		if (breath > 0)
 			le.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, breath + 14));
 		if (res > 0)
 			le.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 213, (res - 1) / 2));
 		if (deep >= 10)
 			le.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, 212));
-		if (hs > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 211, hs - 1));
-		if (wet > 0)
+		if (striw && wet > 0)
 			le.addStatusEffect(new StatusEffectInstance(OceanMaze.SPONGE_WET, wet + 10));
 	}
 
