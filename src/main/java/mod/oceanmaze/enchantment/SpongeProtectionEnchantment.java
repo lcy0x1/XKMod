@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import mod.oceanmaze.main.BIReg;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.enchantment.ProtectionEnchantment;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.Item;
@@ -40,12 +41,28 @@ public class SpongeProtectionEnchantment extends Enchantment {
 	public int getProtectionAmount(int level, DamageSource source) {
 		if (source.isFire() || source == DamageSource.FLY_INTO_WALL || source == DamageSource.FALL)
 			return level * 3;
-		return 0;
+		return level * 3 - 1;
 	}
 
 	@Override
 	public boolean isAcceptableItem(ItemStack is) {
 		return SET.contains(is.getItem());
+	}
+
+	public boolean canAccept(Enchantment enc) {
+		return !(enc instanceof ProtectionEnchantment);
+	}
+
+	public boolean isAvailableForEnchantedBookOffer() {
+		return false;
+	}
+
+	public boolean isAvailableForRandomSelection() {
+		return false;
+	}
+
+	public boolean isTreasure() {
+		return true;
 	}
 
 }

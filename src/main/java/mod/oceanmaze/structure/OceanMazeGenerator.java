@@ -205,7 +205,7 @@ public class OceanMazeGenerator {
 				if (x == mazes[0].r && z == x)
 					id = TOP_FACE_CORE;
 				else {
-					int rand = r.nextInt(100) + 100 * (x + z & 1);
+					int rand = r.nextInt(200) + 100 * (x + z & 1);
 					if (rand < 5)
 						id = TOP_FACE_B;
 					else if (rand < 10)
@@ -224,7 +224,7 @@ public class OceanMazeGenerator {
 		for (int x = 0; x < mazes[ln].w; x++)
 			for (int z = 0; z < mazes[ln].w; z++) {
 				Identifier id;
-				int rand = r.nextInt(100) + 100 * (x + z & 1);
+				int rand = r.nextInt(200) + 100 * (x + z & 1);
 				if (rand < 5)
 					id = BOTTOM_FACE_B;
 				else if (rand < 10)

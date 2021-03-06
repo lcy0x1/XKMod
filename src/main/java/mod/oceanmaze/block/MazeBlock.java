@@ -1,20 +1,28 @@
 package mod.oceanmaze.block;
 
+import java.util.List;
 import java.util.Random;
 
 import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableList;
 
 import mod.lcy0x1.block.BaseBlock;
 import mod.lcy0x1.block.BlockProp;
 import mod.oceanmaze.main.BIReg;
+import mod.oceanmaze.main.OceanMaze;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
+import net.minecraft.entity.mob.GuardianEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
@@ -238,30 +246,82 @@ public class MazeBlock extends BaseBlock {
 			DrownedEntity e = EntityType.DROWNED.create(world);
 			e.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
-			ItemStack trident = new ItemStack(Items.TRIDENT);
-			e.equipStack(EquipmentSlot.MAINHAND, trident);
-			ItemStack helmet = new ItemStack(BIReg.I_DOM_HELMET);
-			helmet.addEnchantment(Enchantments.PROTECTION, 4);
-			helmet.addEnchantment(Enchantments.THORNS, 3);
-			e.equipStack(EquipmentSlot.HEAD, helmet);
-			ItemStack chestplate = new ItemStack(BIReg.I_DOM_CHESTPLATE);
-			chestplate.addEnchantment(Enchantments.PROTECTION, 4);
-			chestplate.addEnchantment(Enchantments.THORNS, 3);
-			e.equipStack(EquipmentSlot.CHEST, chestplate);
-			ItemStack leggings = new ItemStack(BIReg.I_DOM_LEGGINGS);
-			leggings.addEnchantment(Enchantments.PROTECTION, 4);
-			leggings.addEnchantment(Enchantments.THORNS, 3);
-			e.equipStack(EquipmentSlot.LEGS, leggings);
-			ItemStack boots = new ItemStack(BIReg.I_DOM_BOOTS);
-			boots.addEnchantment(Enchantments.PROTECTION, 4);
-			boots.addEnchantment(Enchantments.THORNS, 3);
-			e.equipStack(EquipmentSlot.FEET, boots);
+			if (r.nextBoolean()) {
+				e.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 0.22f);
+			} else {
+				ItemStack is = new ItemStack(Items.IRON_SWORD);
+				is.addEnchantment(Enchantments.SHARPNESS, 5);
+				e.equipStack(EquipmentSlot.MAINHAND, is);
+				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 1f);
+			}
+			addEnc(BIReg.I_DOM_HELMET, e, r, EquipmentSlot.HEAD);
+			addEnc(BIReg.I_DOM_CHESTPLATE, e, r, EquipmentSlot.CHEST);
+			addEnc(BIReg.I_DOM_LEGGINGS, e, r, EquipmentSlot.LEGS);
+			addEnc(BIReg.I_DOM_BOOTS, e, r, EquipmentSlot.FEET);
+			e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 6000, 2, false, false));
+			e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 6000, 3, false, false));
+			e.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 6000, 1, false, false));
 			world.spawnEntity(e);
 		}
 
 		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			return bs.with(Properties.POWERED, false);
+		}
+
+		private void addEnc(Item i, DrownedEntity e, Random r, EquipmentSlot s) {
+			ItemStack is = new ItemStack(i);
+			if (r.nextBoolean())
+				is.addEnchantment(OceanMaze.SPONGE_PROT, r.nextInt(2) + 1);
+			else
+				is.addEnchantment(Enchantments.PROTECTION, 4);
+			is.addEnchantment(Enchantments.THORNS, 3);
+			if (r.nextBoolean()) {
+				is.addEnchantment(Enchantments.BINDING_CURSE, 1);
+				e.setEquipmentDropChance(s, 1f);
+			} else
+				e.setEquipmentDropChance(s, 0.22f);
+			e.equipStack(s, is);
+		}
+
+	}
+
+	public static class RandomTick implements IRandomTick {
+
+		public static final ImmutableList<EntityType<? extends MobEntity>> LIST = ImmutableList
+				.of(EntityType.ELDER_GUARDIAN);
+
+		@Override
+		public boolean randomTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+			convert(LIST.get(r.nextInt(LIST.size())), 4, world, pos, r);
+			return false;
+		}
+
+		public <T extends MobEntity> void convert(EntityType<T> type, int size, ServerWorld world, BlockPos pos,
+				Random r) {
+			List<T> le = world.getEntitiesByType(type, new Box(pos).expand(32), (e) -> true);
+			if (le.size() > size)
+				return;
+			List<GuardianEntity> lg = world.getEntitiesByType(EntityType.GUARDIAN, new Box(pos).expand(10),
+					(e) -> true);
+			GuardianEntity ge = lg.get(r.nextInt(lg.size()));
+			ge.remove();
+			T ege = type.create(world);
+			ege.refreshPositionAndAngles(ge.getX(), ge.getY(), ge.getZ(), ge.yaw, ge.pitch);
+			ege.initialize(world, world.getLocalDifficulty(pos), SpawnReason.CONVERSION, null, null);
+			if (ge.hasCustomName()) {
+				ege.setCustomName(ge.getCustomName());
+				ege.setCustomNameVisible(ge.isCustomNameVisible());
+			}
+			ege.setPersistent();
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 600, 3, false, false));
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 6000, 1, false, false));
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 600, 3, false, false));
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 6000, 1, false, false));
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 6000, 0, false, false));
+			ege.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 6000, 1, false, false));
+			world.spawnEntityAndPassengers(ege);
 		}
 
 	}
@@ -272,6 +332,7 @@ public class MazeBlock extends BaseBlock {
 	public static final FloorProt FLOOR = new FloorProt();
 	public static final Spawner SPAWNER = new Spawner();
 	public static final Click CLICK = new Click();
+	public static final RandomTick RANDOM = new RandomTick();
 
 	public static final int DELAY = 4;
 

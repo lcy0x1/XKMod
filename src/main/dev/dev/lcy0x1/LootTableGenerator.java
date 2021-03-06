@@ -167,6 +167,7 @@ public class LootTableGenerator {
 			LootTable lv0 = new LootTable();
 			lv0.pools.add(new RandomPool(5, 10)// break
 					.add(new PoolEntry(5, "minecraft:trident"))// break
+					.add(item("minecraft:wet_sponge", 5, 1, 2))// break
 					.add(item("minecraft:golden_apple", 5, 1, 4))// break
 					.add(item("minecraft:prismarine_shard", 10, 1, 8))// break
 					.add(item("minecraft:prismarine_crystals", 10, 1, 4))// break
@@ -181,7 +182,6 @@ public class LootTableGenerator {
 			write(lv0, "top.json");
 		}
 
-		
 		{
 			LootTable lv1 = new LootTable();
 			lv1.pools.add(new StaticPool(1).add(new PoolEntry(10, "minecraft:heart_of_the_sea")));
@@ -190,6 +190,7 @@ public class LootTableGenerator {
 			lv1.pools.add(new RandomPool(5, 10)// break
 					.add(new PoolEntry(1, "minecraft:enchanted_golden_apple"))// break
 					.add(new PoolEntry(4, "minecraft:trident"))// break
+					.add(item("minecraft:wet_sponge", 5, 1, 2))// break
 					.add(item("minecraft:golden_apple", 5, 1, 4))// break
 					.add(item("minecraft:prismarine_shard", 10, 1, 32))// break
 					.add(item("minecraft:prismarine_crystals", 10, 1, 16))// break
@@ -212,6 +213,7 @@ public class LootTableGenerator {
 			lv2.pools.add(new RandomPool(10, 20)// break
 					.add(new PoolEntry(1, "minecraft:enchanted_golden_apple"))// break
 					.add(new PoolEntry(9, "minecraft:trident"))// break
+					.add(item("minecraft:wet_sponge", 5, 1, 4))// break
 					.add(item("minecraft:golden_apple", 5, 1, 4))// break
 					.add(item("minecraft:prismarine_shard", 5, 1, 32))// break
 					.add(item("minecraft:prismarine_crystals", 5, 1, 16))// break
@@ -232,9 +234,9 @@ public class LootTableGenerator {
 			Function.EnchantLevel enc = new Function.EnchantLevel(20, 40);
 			lv3.pools.add(injectEquips(new StaticPool(1), enc, 2, 10));
 			lv3.pools.add(new RandomPool(15, 25)// break
-					.add(new PoolEntry(1, "minecraft:elytra"))// break
-					.add(new PoolEntry(2, "minecraft:enchanted_golden_apple"))// break
+					.add(new PoolEntry(3, "minecraft:enchanted_golden_apple"))// break
 					.add(new PoolEntry(7, "minecraft:trident"))// break
+					.add(item("minecraft:wet_sponge", 5, 1, 8))// break
 					.add(item("minecraft:diamond", 10, 1, 8))// break
 					.add(item("oceanmaze:water_metal_block", 5, 1, 8))// break
 					.add(item("oceanmaze:ocean_metal_ingot", 5, 1, 16))// break

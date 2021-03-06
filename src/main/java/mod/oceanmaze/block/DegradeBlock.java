@@ -49,12 +49,19 @@ public class DegradeBlock extends BaseBlock {
 				world.setBlockState(pos, state.with(Properties.DISTANCE_0_7, min));
 			else {
 				BlockState bs = world.getBlockState(pos.up());
-				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == BIReg.B_OMO_DEGRADE)
-					if (r.nextDouble() < 1e-4)
-						world.setBlockState(pos, BIReg.B_CLEAR.getDefaultState());
-					else
-						world.setBlockState(pos, Blocks.WATER.getDefaultState());
-				else
+				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == BIReg.B_OMO_DEGRADE) {
+					BlockState rep = Blocks.WATER.getDefaultState();
+					double ra = r.nextDouble();
+					if (ra < 1e-4)
+						rep = BIReg.B_CLEAR.getDefaultState();
+					else if (ra < 3e-4)
+						rep = Blocks.ANCIENT_DEBRIS.getDefaultState();
+					else if (ra < 7e-4)
+						rep = Blocks.CRYING_OBSIDIAN.getDefaultState();
+					else if (ra < 15e-4)
+						rep = Blocks.OBSIDIAN.getDefaultState();
+					world.setBlockState(pos, rep);
+				} else
 					world.setBlockState(pos, Blocks.PRISMARINE.getDefaultState());
 			}
 

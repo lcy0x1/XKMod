@@ -36,7 +36,8 @@ public class BIReg {
 			FabricBlockSettings.copyOf(Blocks.STONE).dropsNothing().ticksRandomly());
 	public static final FabricBlockSettings BP_METAL = FabricBlockSettings.copyOf(Blocks.IRON_BLOCK);
 
-	public static final Block B_OMC_CORE = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.HOR, MazeBlock.FLOOR);
+	public static final Block B_OMC_CORE = new MazeBlock(BP_OMT, MazeBlock.NEI, MazeBlock.HOR, MazeBlock.FLOOR,
+			MazeBlock.RANDOM);
 	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.HOR);
 	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.FLOOR);
 	public static final Block B_OMC_SPAWNER = new MazeBlock(BP_OM, MazeBlock.SPAWNER);
@@ -55,7 +56,7 @@ public class BIReg {
 	public static final Block B_WATER_METAL_BLOCK = new Block(BP_METAL);
 	public static final Block B_OCEAN_METAL_BLOCK = new Block(BP_METAL);
 	public static final Block B_DEEP_OCEAN_METAL_BLOCK = new Block(BP_METAL);
-	
+
 	public static final Item I_WATER_METAL_INGOT = new Item(newFIS());
 	public static final Item I_OCEAN_METAL_INGOT = new Item(newFIS());
 	public static final Item I_DEEP_OCEAN_METAL_INGOT = new Item(newFIS());
@@ -96,51 +97,49 @@ public class BIReg {
 		Registry.register(Registry.BLOCK, new Identifier(OceanMaze.MODID, id), b);
 		regItem(id, toBI(b));
 	}
-	
+
 	private static void regItem(String id, Item i) {
 		Registry.register(Registry.ITEM, new Identifier(OceanMaze.MODID, id), i);
 	}
-	
-	
 
 	public static void init() {
-		regBlock( "maze_cell_core", B_OMC_CORE);
-		regBlock( "maze_cell_wall", B_OMC_WALL);
-		regBlock( "maze_cell_floor", B_OMC_FLOOR);
-		regBlock( "maze_cell_spawner", B_OMC_SPAWNER);
-		regBlock( "maze_out_wall", B_OMO_WALL);
-		regBlock( "maze_open", B_OMO_OPEN);
-		regBlock( "maze_degrade", B_OMO_DEGRADE);
-		regBlock( "clear", B_CLEAR);
-		regBlock( "clear_water", B_CLEAR_WATER);
-		regBlock( "clear_lava", B_CLEAR_LAVA);
-		regBlock( "clear_stone", B_CLEAR_STONE);
-		regBlock( "clear_sand", B_CLEAR_SAND);
-		regBlock( "clear_nether", B_CLEAR_NETHER);
-		regBlock( "clear_end", B_CLEAR_END);
-		regBlock( "water_metal_block", B_WATER_METAL_BLOCK);
-		regBlock( "ocean_metal_block", B_OCEAN_METAL_BLOCK);
-		regBlock( "deep_ocean_metal_block", B_DEEP_OCEAN_METAL_BLOCK);
-		
-		regItem( "water_metal_ingot", I_WATER_METAL_INGOT);
-		regItem( "ocean_metal_ingot", I_OCEAN_METAL_INGOT);
-		regItem( "deep_ocean_metal_ingot", I_DEEP_OCEAN_METAL_INGOT);
-		regItem( "water_metal_nugget", I_WATER_METAL_NUGGET);
-		regItem( "ocean_metal_nugget", I_OCEAN_METAL_NUGGET);
-		regItem( "deep_ocean_metal_nugget", I_DEEP_OCEAN_METAL_NUGGET);
-		regItem( "water_metal_helmet", I_WM_HELMET);
-		regItem( "water_metal_chestplate", I_WM_CHESTPLATE);
-		regItem( "water_metal_leggings", I_WM_LEGGINGS);
-		regItem( "water_metal_boots", I_WM_BOOTS);
-		regItem( "ocean_metal_helmet", I_OM_HELMET);
-		regItem( "ocean_metal_chestplate", I_OM_CHESTPLATE);
-		regItem( "ocean_metal_leggings", I_OM_LEGGINGS);
-		regItem( "ocean_metal_boots", I_OM_BOOTS);
-		regItem( "deep_ocean_metal_helmet", I_DOM_HELMET);
-		regItem( "deep_ocean_metal_chestplate", I_DOM_CHESTPLATE);
-		regItem( "deep_ocean_metal_leggings", I_DOM_LEGGINGS);
-		regItem( "deep_ocean_metal_boots", I_DOM_BOOTS);
-		regItem( "maze_map", I_MAZE_MAP);
+		regBlock("maze_cell_core", B_OMC_CORE);
+		regBlock("maze_cell_wall", B_OMC_WALL);
+		regBlock("maze_cell_floor", B_OMC_FLOOR);
+		regBlock("maze_cell_spawner", B_OMC_SPAWNER);
+		regBlock("maze_out_wall", B_OMO_WALL);
+		regBlock("maze_open", B_OMO_OPEN);
+		regBlock("maze_degrade", B_OMO_DEGRADE);
+		regBlock("clear", B_CLEAR);
+		regBlock("clear_water", B_CLEAR_WATER);
+		regBlock("clear_lava", B_CLEAR_LAVA);
+		regBlock("clear_stone", B_CLEAR_STONE);
+		regBlock("clear_sand", B_CLEAR_SAND);
+		regBlock("clear_nether", B_CLEAR_NETHER);
+		regBlock("clear_end", B_CLEAR_END);
+		regBlock("water_metal_block", B_WATER_METAL_BLOCK);
+		regBlock("ocean_metal_block", B_OCEAN_METAL_BLOCK);
+		regBlock("deep_ocean_metal_block", B_DEEP_OCEAN_METAL_BLOCK);
+
+		regItem("water_metal_ingot", I_WATER_METAL_INGOT);
+		regItem("ocean_metal_ingot", I_OCEAN_METAL_INGOT);
+		regItem("deep_ocean_metal_ingot", I_DEEP_OCEAN_METAL_INGOT);
+		regItem("water_metal_nugget", I_WATER_METAL_NUGGET);
+		regItem("ocean_metal_nugget", I_OCEAN_METAL_NUGGET);
+		regItem("deep_ocean_metal_nugget", I_DEEP_OCEAN_METAL_NUGGET);
+		regItem("water_metal_helmet", I_WM_HELMET);
+		regItem("water_metal_chestplate", I_WM_CHESTPLATE);
+		regItem("water_metal_leggings", I_WM_LEGGINGS);
+		regItem("water_metal_boots", I_WM_BOOTS);
+		regItem("ocean_metal_helmet", I_OM_HELMET);
+		regItem("ocean_metal_chestplate", I_OM_CHESTPLATE);
+		regItem("ocean_metal_leggings", I_OM_LEGGINGS);
+		regItem("ocean_metal_boots", I_OM_BOOTS);
+		regItem("deep_ocean_metal_helmet", I_DOM_HELMET);
+		regItem("deep_ocean_metal_chestplate", I_DOM_CHESTPLATE);
+		regItem("deep_ocean_metal_leggings", I_DOM_LEGGINGS);
+		regItem("deep_ocean_metal_boots", I_DOM_BOOTS);
+		regItem("maze_map", I_MAZE_MAP);
 
 	}
 

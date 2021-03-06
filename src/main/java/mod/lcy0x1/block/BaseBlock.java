@@ -75,6 +75,7 @@ public class BaseBlock extends Block {
 		private final List<IState> stateList = new ArrayList<>();
 		private final List<IRep> repList = new ArrayList<>();
 		private final List<IScheduledTick> schetickList = new ArrayList<>();
+		private final List<IRandomTick> randomtickList = new ArrayList<>();
 
 		private IRotMir rotmir;
 		private IFace face;
@@ -95,6 +96,8 @@ public class BaseBlock extends Block {
 				repList.add((IRep) impl);
 			if (impl instanceof IScheduledTick)
 				schetickList.add((IScheduledTick) impl);
+			if (impl instanceof IRandomTick)
+				randomtickList.add((IRandomTick) impl);
 			if (impl instanceof STE)
 				impl = new TEPvd((STE) impl);
 			if (impl instanceof ILight)
@@ -122,6 +125,12 @@ public class BaseBlock extends Block {
 					addImpl(impl);
 			return this;
 		}
+
+	}
+
+	public static interface IRandomTick extends IImpl {
+
+		public boolean randomTick(BlockState state, ServerWorld world, BlockPos pos, Random r);
 
 	}
 
@@ -426,6 +435,15 @@ public class BaseBlock extends Block {
 		super.scheduledTick(state, world, pos, r);
 		for (IScheduledTick ticker : impl.schetickList)
 			ticker.scheduledTick(state, world, pos, r);
+	}
+
+	public final void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
+		boolean pass = true;
+		for (IRandomTick irt : impl.randomtickList)
+			pass &= irt.randomTick(state, world, pos, r);
+		if (pass)
+			super.randomTick(state, world, pos, r);
+
 	}
 
 	@Override
