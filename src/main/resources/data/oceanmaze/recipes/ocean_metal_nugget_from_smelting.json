@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": [
+      {
+        "item": "oceanmaze:ocean_metal_helmet"
+      },
+      {
+        "item": "oceanmaze:ocean_metal_chestplate"
+      },
+      {
+        "item": "oceanmaze:ocean_metal_leggings"
+      },
+      {
+        "item": "oceanmaze:ocean_metal_boots"
+      }
+    ],
+    "result": "oceanmaze:ocean_metal_nugget",
+    "experience": 0.1,
+    "cookingtime": 100
+  }

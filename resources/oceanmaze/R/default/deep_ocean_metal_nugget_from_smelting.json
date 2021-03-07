@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:blasting",
+    "ingredient": [
+      {
+        "item": "oceanmaze:deep_ocean_metal_helmet"
+      },
+      {
+        "item": "oceanmaze:deep_ocean_metal_chestplate"
+      },
+      {
+        "item": "oceanmaze:deep_ocean_metal_leggings"
+      },
+      {
+        "item": "oceanmaze:deep_ocean_metal_boots"
+      },
+      {
+        "item": "oceanmaze:trident_bow"
+      },
+      {
+        "item": "minecraft:trident"
+      }
+    ],
+    "result": "oceanmaze:deep_ocean_metal_nugget",
+    "experience": 0.1,
+    "cookingtime": 100
+  }
