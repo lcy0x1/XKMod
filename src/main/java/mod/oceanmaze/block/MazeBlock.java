@@ -48,7 +48,7 @@ public class MazeBlock extends BaseBlock {
 				Properties.SOUTH, Properties.WEST, Properties.EAST };
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(PROPS);
 		}
 
@@ -115,7 +115,7 @@ public class MazeBlock extends BaseBlock {
 				Properties.EAST };
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(PROPS);
 		}
 
@@ -206,7 +206,7 @@ public class MazeBlock extends BaseBlock {
 	public static class Spawner implements INeighbor, IScheduledTick, IState {
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(Properties.POWERED);
 		}
 
@@ -246,15 +246,7 @@ public class MazeBlock extends BaseBlock {
 			DrownedEntity e = EntityType.DROWNED.create(world);
 			e.refreshPositionAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
 			e.initialize(world, world.getLocalDifficulty(pos), SpawnReason.SPAWNER, null, null);
-			if (r.nextBoolean()) {
-				e.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
-				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 0.22f);
-			} else {
-				ItemStack is = new ItemStack(Items.IRON_SWORD);
-				is.addEnchantment(Enchantments.SHARPNESS, 5);
-				e.equipStack(EquipmentSlot.MAINHAND, is);
-				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 1f);
-			}
+			hand(e, r);
 			addEnc(BIReg.I_DOM_HELMET, e, r, EquipmentSlot.HEAD);
 			addEnc(BIReg.I_DOM_CHESTPLATE, e, r, EquipmentSlot.CHEST);
 			addEnc(BIReg.I_DOM_LEGGINGS, e, r, EquipmentSlot.LEGS);
@@ -268,6 +260,29 @@ public class MazeBlock extends BaseBlock {
 		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			return bs.with(Properties.POWERED, false);
+		}
+
+		private void hand(DrownedEntity e, Random r) {
+			if (r.nextBoolean()) {
+				ItemStack is = new ItemStack(Items.TRIDENT);
+				is.addEnchantment(OceanMaze.TRIDENT_SHARP, r.nextInt(4) + 1);
+				e.equipStack(EquipmentSlot.MAINHAND, is);
+				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 0.22f);
+			} else {
+				ItemStack is = new ItemStack(Items.IRON_SWORD);
+				is.addEnchantment(Enchantments.SHARPNESS, 5);
+				e.equipStack(EquipmentSlot.MAINHAND, is);
+				e.setEquipmentDropChance(EquipmentSlot.MAINHAND, 1f);
+			}
+			if (r.nextBoolean()) {
+				ItemStack is = new ItemStack(BIReg.I_TRIDENT_BOW);
+				is.addEnchantment(OceanMaze.TRIDENT_BOW, r.nextInt(2) + 1);
+				e.equipStack(EquipmentSlot.OFFHAND, is);
+				e.setEquipmentDropChance(EquipmentSlot.OFFHAND, 0.22f);
+			} else {
+				e.equipStack(EquipmentSlot.OFFHAND, new ItemStack(Items.NAUTILUS_SHELL));
+				e.setEquipmentDropChance(EquipmentSlot.OFFHAND, 1f);
+			}
 		}
 
 		private void addEnc(Item i, DrownedEntity e, Random r, EquipmentSlot s) {

@@ -90,6 +90,11 @@ public class BaseBlock extends Block {
 		}
 
 		public BlockImplementor addImpl(IImpl impl) {
+			if (impl instanceof STE)
+				impl = new TEPvd((STE) impl);
+			if (impl instanceof ILight)
+				props.luminance(((ILight) impl)::getLightValue);
+			
 			if (impl instanceof IState)
 				stateList.add((IState) impl);
 			if (impl instanceof IRep)
@@ -98,10 +103,7 @@ public class BaseBlock extends Block {
 				schetickList.add((IScheduledTick) impl);
 			if (impl instanceof IRandomTick)
 				randomtickList.add((IRandomTick) impl);
-			if (impl instanceof STE)
-				impl = new TEPvd((STE) impl);
-			if (impl instanceof ILight)
-				props.luminance(((ILight) impl)::getLightValue);
+			
 			if (impl instanceof IRotMir)
 				rotmir = (IRotMir) impl;
 			if (impl instanceof IFace)
@@ -114,8 +116,10 @@ public class BaseBlock extends Block {
 				neigh = (INeighbor) impl;
 			if (impl instanceof IEntityCollision)
 				entcoll = (IEntityCollision) impl;
+			
 			if (impl instanceof IClick && (!(impl instanceof TEPvd) || click == null))
 				click = (IClick) impl;
+			
 			return this;
 		}
 
@@ -164,7 +168,7 @@ public class BaseBlock extends Block {
 
 	public static interface IRep extends IImpl {
 
-		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving);
+		public void onStateReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving);
 
 	}
 
@@ -183,7 +187,7 @@ public class BaseBlock extends Block {
 
 	public static interface IState extends IImpl {
 
-		public void fillStateContainer(StateManager.Builder<Block, BlockState> builder);
+		public void appendProperties(StateManager.Builder<Block, BlockState> builder);
 
 		public BlockState setDefaultState(BlockState bs);
 
@@ -203,12 +207,12 @@ public class BaseBlock extends Block {
 		}
 
 		@Override
-		public void fillStateContainer(StateManager.Builder<Block, BlockState> builder) {
+		public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 			builder.add(FACING);
 		}
 
 		@Override
-		public BlockState getStateForPlacement(BlockState def, ItemPlacementContext context) {
+		public BlockState getPlacementState(BlockState def, ItemPlacementContext context) {
 			return def.with(FACING, context.getPlayerLookDirection().getOpposite());
 		}
 
@@ -225,12 +229,12 @@ public class BaseBlock extends Block {
 		}
 
 		@Override
-		public void fillStateContainer(StateManager.Builder<Block, BlockState> builder) {
+		public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 			builder.add(HORIZONTAL_FACING);
 		}
 
 		@Override
-		public BlockState getStateForPlacement(BlockState def, ItemPlacementContext context) {
+		public BlockState getPlacementState(BlockState def, ItemPlacementContext context) {
 			return def.with(HORIZONTAL_FACING, context.getPlayerFacing().getOpposite());
 		}
 
@@ -252,7 +256,7 @@ public class BaseBlock extends Block {
 
 	private static interface IFace extends IImpl {
 
-		public BlockState getStateForPlacement(BlockState def, ItemPlacementContext context);
+		public BlockState getPlacementState(BlockState def, ItemPlacementContext context);
 
 	}
 
@@ -274,7 +278,7 @@ public class BaseBlock extends Block {
 		}
 
 		@Override
-		public void fillStateContainer(StateManager.Builder<Block, BlockState> builder) {
+		public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
 			builder.add(POWER_0_15);
 		}
 
@@ -367,7 +371,7 @@ public class BaseBlock extends Block {
 	public final BlockState getPlacementState(ItemPlacementContext context) {
 		if (impl.face == null)
 			return getDefaultState();
-		return impl.face.getStateForPlacement(getDefaultState(), context);
+		return impl.face.getPlacementState(getDefaultState(), context);
 	}
 
 	@Override
@@ -405,7 +409,7 @@ public class BaseBlock extends Block {
 	public final void onStateReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState,
 			boolean isMoving) {
 		for (IRep irep : impl.repList)
-			irep.onReplaced(state, worldIn, pos, newState, isMoving);
+			irep.onStateReplaced(state, worldIn, pos, newState, isMoving);
 		if (impl.ite != null && state.getBlock() != newState.getBlock()) {
 			BlockEntity blockentity = worldIn.getBlockEntity(pos);
 			if (blockentity != null) {
@@ -451,7 +455,7 @@ public class BaseBlock extends Block {
 		impl = TEMP;
 		TEMP = null;
 		for (IState is : impl.stateList)
-			is.fillStateContainer(builder);
+			is.appendProperties(builder);
 	}
 
 }

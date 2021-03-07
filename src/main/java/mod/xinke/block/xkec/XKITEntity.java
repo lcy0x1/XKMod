@@ -2,6 +2,7 @@ package mod.xinke.block.xkec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -11,6 +12,8 @@ import mod.xinke.block.CTESReg;
 import mod.xinke.main.XinkeMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -231,6 +234,10 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 		validatePlayer();
 		if (conn == null)
 			return;
+		if (token != null && token.stack.isEmpty())
+			token = null;
+		if (source != null && source.stack.isEmpty())
+			source = null;
 		updateTemperature();
 		updateItemMove();
 	}
@@ -329,6 +336,24 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 					return true;
 			return false;
 		}
+		if (inv.getItem() == Items.ENCHANTED_BOOK) {
+			for (Map.Entry<Enchantment, Integer> ent : EnchantmentHelper.get(inv).entrySet()) {
+				if (EnchantmentHelper.getLevel(ent.getKey(), item) >= ent.getValue())
+					return true;
+			}
+			return false;
+		}
+		if (item.getItem() == inv.getItem()) {
+			Map<Enchantment, Integer> map = EnchantmentHelper.get(inv);
+			if (map.size() == 0)
+				return true;
+			for (Map.Entry<Enchantment, Integer> ent : map.entrySet()) {
+				if (EnchantmentHelper.getLevel(ent.getKey(), item) < ent.getValue()) {
+					return false;
+				}
+			}
+			return true;
+		}
 		return item.getItem() == inv.getItem();
 	}
 
@@ -342,6 +367,7 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 			insert();
 		if (token != null) {
 			int count = 0;
+			int late = 0;
 			for (BlockPos pos : conn) {
 				BlockEntity be = getWorld().getBlockEntity(pos);
 				if (be instanceof XKITEntity) {
@@ -350,24 +376,49 @@ public class XKITEntity extends AbstractXKECBlockEntity<XKITEntity> implements T
 						continue;
 					if (!xkit.isItemValid(token.stack))
 						continue;
-					count++;
+					late++;
+					if (xkit.inv != null && !xkit.inv.isEmpty())
+						count++;
 				}
 			}
-			int ran = (int) (Math.random() * count);
-			for (BlockPos pos : conn) {
-				BlockEntity be = getWorld().getBlockEntity(pos);
-				if (be instanceof XKITEntity) {
-					XKITEntity xkit = (XKITEntity) be;
-					if (temperature - xkit.temperature < THRESHOD || xkit.token != null)
-						continue;
-					if (!xkit.isItemValid(token.stack))
-						continue;
-					if (ran == 0) {
-						xkit.token = token;
-						token = null;
-						break;
+			if (count > 0) {
+				int ran = (int) (Math.random() * count);
+				for (BlockPos pos : conn) {
+					BlockEntity be = getWorld().getBlockEntity(pos);
+					if (be instanceof XKITEntity) {
+						XKITEntity xkit = (XKITEntity) be;
+						if (temperature - xkit.temperature < THRESHOD || xkit.token != null)
+							continue;
+						if (xkit.inv == null || xkit.inv.isEmpty())
+							continue;
+						if (!xkit.isItemValid(token.stack))
+							continue;
+						if (ran == 0) {
+							xkit.token = token;
+							token = null;
+							break;
+						}
+						ran--;
 					}
-					ran--;
+				}
+			} else if (late > 0) {
+				int ran = (int) (Math.random() * late);
+				for (BlockPos pos : conn) {
+					BlockEntity be = getWorld().getBlockEntity(pos);
+					if (be instanceof XKITEntity) {
+						XKITEntity xkit = (XKITEntity) be;
+						if (temperature - xkit.temperature < THRESHOD || xkit.token != null)
+							continue;
+						if (!xkit.isItemValid(token.stack))
+							continue;
+						if (ran == 0) {
+							xkit.token = token;
+							token = null;
+							break;
+						}
+						ran--;
+					}
+
 				}
 			}
 		}

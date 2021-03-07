@@ -1,0 +1,6 @@
+{
+    "parent": "oceanmaze:item/trident_bow",
+    "textures": {
+        "layer0": "oceanmaze:item/trident_bow_pulling_1"
+    }
+}

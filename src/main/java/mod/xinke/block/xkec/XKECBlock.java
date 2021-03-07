@@ -26,7 +26,7 @@ public class XKECBlock extends BaseBlockWithEntity {
 		private static XKECUse INSTANCE = new XKECUse();
 
 		@Override
-		public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+		public void onStateReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
 			if (worldIn.isClient)
 				return;
 			if (state.getBlock() == newState.getBlock())
@@ -68,7 +68,7 @@ public class XKECBlock extends BaseBlockWithEntity {
 		public static final XKState INSTANCE = new XKState();
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(Properties.LIT);
 		}
 

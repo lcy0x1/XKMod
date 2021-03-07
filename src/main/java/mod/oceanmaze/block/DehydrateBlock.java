@@ -42,7 +42,7 @@ public class DehydrateBlock extends BaseBlock {
 		}
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(PROP);
 		}
 

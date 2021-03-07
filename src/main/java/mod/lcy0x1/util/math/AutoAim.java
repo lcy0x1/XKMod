@@ -40,6 +40,14 @@ public class AutoAim {
 		public float pullProgress;
 		public boolean omitConsume;
 
+		public float maxVelo = 3;
+		public double power = 0.5;
+		public int punch = 1;
+		public int firetime = 100;
+		public PersistentProjectileEntity ppe = null;
+		public ProjectileEntity pe = null;
+		public Entity e = null;
+
 		public double g, k;
 		public int r, t;
 		public float velo;
@@ -54,13 +62,15 @@ public class AutoAim {
 	}
 
 	public static Entity getEntity(ShootConfig config) {
-		config.velo = MathHelper.clamp(config.pullProgress, 0f, 1f) * 3;
+		config.velo = MathHelper.clamp(config.pullProgress, 0f, 1f) * config.maxVelo;
 		if (config.ammo.getItem() == Items.TNT)
 			return getTNTEntity(config);
 		return getProcessedPE(config);
 	}
 
 	private static PersistentProjectileEntity getPersistentProjectileEntity(ShootConfig config) {
+		if (config.ppe != null)
+			return config.ppe;
 		if (config.ammo.getItem() instanceof ArrowItem) {
 			return ((ArrowItem) config.ammo.getItem()).createArrow(config.world, config.ammo, config.player);
 		}
@@ -75,8 +85,8 @@ public class AutoAim {
 		EstiResult er = setAim(config.player, config.velo, config.r, e, config.g, config.k, config.t);
 		if (er.getType() == EstiType.ZERO)
 			e.setVelocity(er.getVec());
-		else if (er.getType() == EstiType.FAIL)
-			e.setProperties(config.player, config.player.pitch, config.player.yaw, 0, config.velo, 0);
+		else
+			e.setProperties(config.player, config.player.pitch, config.player.yaw, 0, config.velo, 1);
 		return e;
 	}
 
@@ -86,12 +96,12 @@ public class AutoAim {
 			entity.setCritical(true);
 		int j = EnchantmentHelper.getLevel(Enchantments.POWER, config.bow);
 		if (j > 0)
-			entity.setDamage(entity.getDamage() + j * 0.5D + 0.5D);
+			entity.setDamage(entity.getDamage() + (j + 1) * config.power);
 		int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, config.bow);
 		if (k > 0)
-			entity.setPunch(k);
+			entity.setPunch(k * config.punch);
 		if (EnchantmentHelper.getLevel(Enchantments.FLAME, config.bow) > 0)
-			entity.setOnFireFor(100);
+			entity.setOnFireFor(config.firetime);
 		if (config.omitConsume || config.player.abilities.creativeMode)
 			entity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 		return entity;
@@ -105,6 +115,8 @@ public class AutoAim {
 			return p;
 		}
 		config.setData(0.03, 0.01, 128, 120);
+		if (config.pe != null)
+			return config.pe;
 		if (config.ammo.getItem() == Items.ENDER_PEARL)
 			return new EnderPearlEntity(config.world, config.player);
 		if (config.ammo.getItem() == Items.SNOWBALL)

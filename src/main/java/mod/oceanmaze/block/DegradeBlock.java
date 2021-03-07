@@ -21,7 +21,7 @@ public class DegradeBlock extends BaseBlock {
 	public static class Degrade implements IState, IScheduledTick {
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(Properties.DISTANCE_0_7);
 		}
 

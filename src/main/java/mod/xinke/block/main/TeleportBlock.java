@@ -152,7 +152,7 @@ public class TeleportBlock extends BaseBlockWithEntity {
 		public static final TeleState INSTANCE = new TeleState();
 
 		@Override
-		public void fillStateContainer(Builder<Block, BlockState> builder) {
+		public void appendProperties(Builder<Block, BlockState> builder) {
 			builder.add(Properties.LIT);
 		}
 

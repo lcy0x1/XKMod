@@ -10,6 +10,7 @@ import mod.oceanmaze.block.OpenBlock;
 import mod.oceanmaze.item.OMArmorMat;
 import mod.oceanmaze.item.OceanMazeMap;
 import mod.oceanmaze.item.OceanMetalArmor;
+import mod.oceanmaze.item.TridentBow;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -77,6 +78,7 @@ public class BIReg {
 	public static final Item I_DOM_BOOTS = new OceanMetalArmor(OMArmorMat.DEEP, EquipmentSlot.FEET, newFIS());
 
 	public static final Item I_MAZE_MAP = new OceanMazeMap(newFIS().maxCount(1));
+	public static final Item I_TRIDENT_BOW = new TridentBow(newFIS().maxDamage(500));
 
 	private static Supplier<ItemStack> itemGroupIcon(String id) {
 		if (id.equals("general")) {
@@ -139,7 +141,9 @@ public class BIReg {
 		regItem("deep_ocean_metal_chestplate", I_DOM_CHESTPLATE);
 		regItem("deep_ocean_metal_leggings", I_DOM_LEGGINGS);
 		regItem("deep_ocean_metal_boots", I_DOM_BOOTS);
+		
 		regItem("maze_map", I_MAZE_MAP);
+		regItem("trident_bow", I_TRIDENT_BOW);
 
 	}
 
