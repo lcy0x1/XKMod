@@ -12,6 +12,7 @@ import mod.oceanmaze.main.BIReg;
 import mod.oceanmaze.main.OceanMaze;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -42,7 +43,7 @@ import net.minecraft.world.World;
 
 public class MazeBlock extends BaseBlock {
 
-	public static class AllDireState implements IState, IScheduledTick, IRotMir {
+	public static class AllDireState implements IState, IRotMir {
 
 		public static final BooleanProperty[] PROPS = { Properties.DOWN, Properties.UP, Properties.NORTH,
 				Properties.SOUTH, Properties.WEST, Properties.EAST };
@@ -75,32 +76,6 @@ public class MazeBlock extends BaseBlock {
 		}
 
 		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = BIReg.B_OMO_WALL.getDefaultState();
-			BlockState self = rep;
-			for (int i = 0; i < 6; i++) {
-				BlockPos uppos = pos.offset(Direction.values()[i]);
-				BlockState torep = world.getBlockState(uppos);
-				self = self.with(PROPS[i], torep.getBlock() != self.getBlock());
-				if (state.get(PROPS[i]))
-					continue;
-				if (World.isOutOfBuildLimitVertically(uppos))
-					continue;
-				if (torep.getMaterial().isReplaceable()) {
-					BlockState tar = rep;
-					for (int j = 0; j < 6; j++) {
-						BlockPos look = uppos.offset(Direction.values()[j]);
-						BlockState near = world.getBlockState(look);
-						tar = tar.with(PROPS[j], near.getBlock() != rep.getBlock());
-					}
-					world.setBlockState(uppos, tar);
-				}
-			}
-			if (self != state)
-				world.setBlockState(pos, self);
-		}
-
-		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			for (BooleanProperty bp : PROPS)
 				bs = bs.with(bp, false);
@@ -109,7 +84,7 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
-	public static class DireState implements IState, IScheduledTick, IRotMir {
+	public static class DireState implements IState, IRotMir {
 
 		public static final BooleanProperty[] PROPS = { Properties.NORTH, Properties.SOUTH, Properties.WEST,
 				Properties.EAST };
@@ -142,52 +117,10 @@ public class MazeBlock extends BaseBlock {
 		}
 
 		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = BIReg.B_OMC_WALL.getDefaultState();
-			for (BooleanProperty bp : PROPS)
-				rep = rep.with(bp, state.get(bp));
-			BlockPos uppos = pos.up();
-			if (World.isOutOfBuildLimitVertically(uppos))
-				return;
-			BlockState torep = world.getBlockState(uppos);
-			if (!torep.getMaterial().isReplaceable())
-				return;
-			world.setBlockState(uppos, rep);
-		}
-
-		@Override
 		public BlockState setDefaultState(BlockState bs) {
 			for (BooleanProperty bp : PROPS)
 				bs = bs.with(bp, false);
 			return bs;
-		}
-
-	}
-
-	public static class FloorProt implements IScheduledTick {
-
-		@Override
-		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			BlockState rep = BIReg.B_OMC_FLOOR.getDefaultState();
-			for (int dir = 0; dir < 4; dir++) {
-				BlockPos uppos = pos.offset(Direction.fromHorizontal(dir));
-				BlockState torep = world.getBlockState(uppos);
-				if (!torep.getMaterial().isReplaceable())
-					continue;
-				world.setBlockState(uppos, rep);
-			}
-		}
-
-	}
-
-	public static class Neighbor implements INeighbor {
-
-		@Override
-		public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos,
-				boolean notify) {
-			if (world.isClient())
-				return;
-			world.getBlockTickScheduler().schedule(pos, state.getBlock(), DELAY);
 		}
 
 	}
@@ -215,6 +148,10 @@ public class MazeBlock extends BaseBlock {
 				boolean notify) {
 			if (world.isClient())
 				return;
+			if (!fromPos.equals(pos.up())) {
+				world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				return;
+			}
 			if (state.get(Properties.POWERED) != world.isReceivingRedstonePower(pos))
 				world.getBlockTickScheduler().schedule(pos, state.getBlock(), 2);
 		}
@@ -288,7 +225,7 @@ public class MazeBlock extends BaseBlock {
 		private void addEnc(Item i, DrownedEntity e, Random r, EquipmentSlot s) {
 			ItemStack is = new ItemStack(i);
 			if (r.nextBoolean())
-				is.addEnchantment(OceanMaze.SPONGE_PROT, r.nextInt(2) + 1);
+				is.addEnchantment(OceanMaze.SPONGE_PROT, r.nextInt(4) + 1);
 			else
 				is.addEnchantment(Enchantments.PROTECTION, 4);
 			is.addEnchantment(Enchantments.THORNS, 3);
@@ -320,6 +257,8 @@ public class MazeBlock extends BaseBlock {
 				return;
 			List<GuardianEntity> lg = world.getEntitiesByType(EntityType.GUARDIAN, new Box(pos).expand(10),
 					(e) -> true);
+			if (lg.size() == 0)
+				return;
 			GuardianEntity ge = lg.get(r.nextInt(lg.size()));
 			ge.remove();
 			T ege = type.create(world);
@@ -341,10 +280,8 @@ public class MazeBlock extends BaseBlock {
 
 	}
 
-	public static final Neighbor NEI = new Neighbor();
 	public static final DireState HOR = new DireState();
 	public static final AllDireState ALL_DIRE_STATE = new AllDireState();
-	public static final FloorProt FLOOR = new FloorProt();
 	public static final Spawner SPAWNER = new Spawner();
 	public static final Click CLICK = new Click();
 	public static final RandomTick RANDOM = new RandomTick();

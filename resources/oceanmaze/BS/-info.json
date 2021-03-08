@@ -8,15 +8,24 @@
                 "water_metal_block",
                 "ocean_metal_block",
                 "deep_ocean_metal_block",
-                "maze_open",
-                "maze_degrade",
-                "clear",
-                "clear_water",
-                "clear_lava",
-                "clear_stone",
-                "clear_sand",
-                "clear_nether",
-                "clear_end"
+                "clear"
+            ],
+            "maze": [
+                "_cell_core",
+                "_cell_wall",
+                "_cell_floor",
+                "_cell_spawner",
+                "_out_wall",
+                "_open",
+                "_degrade"
+            ],
+            "clear": [
+                "_water",
+                "_lava",
+                "_stone",
+                "_sand",
+                "_nether",
+                "_end"
             ]
         }
     }

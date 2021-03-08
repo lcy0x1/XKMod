@@ -22,31 +22,32 @@ public class DegradeBlock extends BaseBlock {
 
 		@Override
 		public void appendProperties(Builder<Block, BlockState> builder) {
+			builder.add(Properties.PERSISTENT);
 			builder.add(Properties.DISTANCE_0_7);
 		}
 
 		@Override
 		public BlockState setDefaultState(BlockState bs) {
-			return bs.with(Properties.DISTANCE_0_7, 0);
+			return bs.with(Properties.PERSISTENT, true).with(Properties.DISTANCE_0_7, 0);
 		}
 
 		@Override
 		public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random r) {
-			if (world.isReceivingRedstonePower(pos))
+			BlockState drep = state.with(Properties.PERSISTENT, false);
+			if (state.get(Properties.PERSISTENT) && world.isReceivingRedstonePower(pos))
 				return;
 			int min = 8;
 			for (Direction dir : Direction.values()) {
 				BlockState bs = world.getBlockState(pos.offset(dir));
 				if (bs.getBlock() instanceof MazeBlock || bs.getBlock() == Blocks.SEA_LANTERN) {
 					min = Math.min(-1, min);
-					if (!world.isReceivingRedstonePower(pos.offset(dir)))
-						world.setBlockState(pos.offset(dir), state.with(Properties.DISTANCE_0_7, 0));
+					world.setBlockState(pos.offset(dir), drep.with(Properties.DISTANCE_0_7, 0));
 				} else if (bs.getBlock() instanceof DegradeBlock)
 					min = Math.min(bs.get(Properties.DISTANCE_0_7), min);
 			}
 			min++;
 			if (min < 8 && state.get(Properties.DISTANCE_0_7) != min)
-				world.setBlockState(pos, state.with(Properties.DISTANCE_0_7, min));
+				world.setBlockState(pos, drep.with(Properties.DISTANCE_0_7, min));
 			else {
 				BlockState bs = world.getBlockState(pos.up());
 				if (bs.isAir() || bs.getBlock() == Blocks.WATER || bs.getBlock() == BIReg.B_OMO_DEGRADE) {

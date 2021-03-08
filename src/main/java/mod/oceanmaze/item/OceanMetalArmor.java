@@ -22,6 +22,8 @@ public class OceanMetalArmor extends ArmorItem {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient())
 			return;
+		if (world.getTimeOfDay() % 10 != 0)
+			return;
 		if (!(entity instanceof LivingEntity))
 			return;
 		LivingEntity le = (LivingEntity) entity;
@@ -34,7 +36,6 @@ public class OceanMetalArmor extends ArmorItem {
 	}
 
 	private void applyEffects(LivingEntity le) {
-
 		boolean inWater = le.isTouchingWaterOrRain();
 		boolean striw = le.isSubmergedInWater();
 		int breath = 0;
@@ -44,6 +45,7 @@ public class OceanMetalArmor extends ArmorItem {
 		int enc = 0;
 
 		ItemStack is = le.getEquippedStack(EquipmentSlot.HEAD);
+		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
 		if (is.getItem() instanceof OceanMetalArmor) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			if (!striw)
@@ -65,7 +67,6 @@ public class OceanMetalArmor extends ArmorItem {
 		}
 		is = le.getEquippedStack(EquipmentSlot.LEGS);
 		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
-		enc += EnchantmentHelper.getLevel(OceanMaze.SPONGE_PROT, is);
 		if ((is.getItem() instanceof OceanMetalArmor) && inWater) {
 			OMArmorMat am = (OMArmorMat) ((OceanMetalArmor) is.getItem()).getMaterial();
 			res += am == OMArmorMat.WATER ? 1 : am == OMArmorMat.OCEAN ? 2 : 3;
@@ -85,16 +86,15 @@ public class OceanMetalArmor extends ArmorItem {
 			}
 		}
 
-		wet = (int) (wet * (1 + enc / 4.0));
-
+		wet = (int) (wet * (1 + enc / 10.0));
 		if (breath > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, breath + 14));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, breath + 19));
 		if (res > 0)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 213, (res - 1) / 2));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 218, (res - 1) / 2));
 		if (deep >= 10)
-			le.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, 212));
+			le.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, 217));
 		if (striw && wet > 0)
-			le.addStatusEffect(new StatusEffectInstance(OceanMaze.SPONGE_WET, wet + 10));
+			le.addStatusEffect(new StatusEffectInstance(OceanMaze.SPONGE_WET, wet + 16));
 	}
 
 }

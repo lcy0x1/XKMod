@@ -1,6 +1,7 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "oceanmaze:block/maze_core_out"
+        "all": "oceanmaze:block/maze_cell_spawner"
     }
 }
+

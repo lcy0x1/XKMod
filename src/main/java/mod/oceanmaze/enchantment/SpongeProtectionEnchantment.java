@@ -24,7 +24,7 @@ public class SpongeProtectionEnchantment extends Enchantment {
 
 	@Override
 	public int getMaxLevel() {
-		return 2;
+		return 5;
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class SpongeProtectionEnchantment extends Enchantment {
 	@Override
 	public int getProtectionAmount(int level, DamageSource source) {
 		if (source.isFire() || source == DamageSource.FLY_INTO_WALL || source == DamageSource.FALL)
-			return level * 3;
-		return level * 3 - 1;
+			return level * 2;
+		return level;
 	}
 
 	@Override

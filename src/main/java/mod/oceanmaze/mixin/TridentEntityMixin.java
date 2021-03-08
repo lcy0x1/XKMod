@@ -31,7 +31,7 @@ public class TridentEntityMixin {
 		PersistentProjectileEntityAccessor pself = (PersistentProjectileEntityAccessor) this;
 		Entity target = entityHitResult.getEntity();
 		double f = self.getDamage();
-		if (f > 3) {
+		if (f > 7.5f) {
 			if (target instanceof LivingEntity) {
 				LivingEntity targetle = (LivingEntity) target;
 				f += EnchantmentHelper.getAttackDamage(tself.getTridentStack(), targetle.getGroup());

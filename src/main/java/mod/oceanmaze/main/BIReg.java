@@ -16,6 +16,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -30,19 +31,19 @@ public class BIReg {
 	public static final ItemGroup IG_GENERAL = FabricItemGroupBuilder.build(new Identifier(OceanMaze.MODID, "general"),
 			itemGroupIcon("general"));
 
-	public static final BlockProp BP_OM = new BlockProp(FabricBlockSettings.copyOf(Blocks.OBSIDIAN).dropsNothing());
+	public static final BlockProp BP_OM = new BlockProp(FabricBlockSettings.of(Material.STONE).dropsNothing(), -1,
+			3600000);
 	public static final BlockProp BP_OMT = new BlockProp(
-			FabricBlockSettings.copyOf(Blocks.OBSIDIAN).dropsNothing().ticksRandomly());
+			FabricBlockSettings.of(Material.STONE).dropsNothing().ticksRandomly(), -1, 3600000);
 	public static final BlockProp BP_DEH = new BlockProp(
 			FabricBlockSettings.copyOf(Blocks.STONE).dropsNothing().ticksRandomly());
 	public static final FabricBlockSettings BP_METAL = FabricBlockSettings.copyOf(Blocks.IRON_BLOCK);
 
-	public static final Block B_OMC_CORE = new MazeBlock(BP_OMT, MazeBlock.NEI, MazeBlock.HOR, MazeBlock.FLOOR,
-			MazeBlock.RANDOM);
-	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.HOR);
-	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.FLOOR);
+	public static final Block B_OMC_CORE = new MazeBlock(BP_OMT, MazeBlock.HOR, MazeBlock.RANDOM);
+	public static final Block B_OMC_WALL = new MazeBlock(BP_OM, MazeBlock.HOR);
+	public static final Block B_OMC_FLOOR = new MazeBlock(BP_OM);
 	public static final Block B_OMC_SPAWNER = new MazeBlock(BP_OM, MazeBlock.SPAWNER);
-	public static final Block B_OMO_WALL = new MazeBlock(BP_OM, MazeBlock.NEI, MazeBlock.ALL_DIRE_STATE);
+	public static final Block B_OMO_WALL = new MazeBlock(BP_OM, MazeBlock.ALL_DIRE_STATE);
 	public static final Block B_OMO_OPEN = new OpenBlock(BP_OMT);
 	public static final Block B_OMO_DEGRADE = new DegradeBlock(BP_OMT);
 
@@ -141,7 +142,7 @@ public class BIReg {
 		regItem("deep_ocean_metal_chestplate", I_DOM_CHESTPLATE);
 		regItem("deep_ocean_metal_leggings", I_DOM_LEGGINGS);
 		regItem("deep_ocean_metal_boots", I_DOM_BOOTS);
-		
+
 		regItem("maze_map", I_MAZE_MAP);
 		regItem("trident_bow", I_TRIDENT_BOW);
 
